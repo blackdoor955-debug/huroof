@@ -27,7 +27,10 @@ button,input{font-family:var(--body);color:inherit}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
 .brand b{font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,36px);background:linear-gradient(180deg,#fff,#ffd96b 60%,#ff9a1f);-webkit-background-clip:text;background-clip:text;color:transparent}
-.school{height:56px;width:auto;max-width:120px;object-fit:contain;background:#fff;border-radius:14px;padding:4px}
+/* the emblem sits at (350,232) with a ~390px diameter inside the 640x427 logo image */
+.schoolbox{--b:64px;position:relative;width:var(--b);height:var(--b);border-radius:50%;overflow:hidden;background:#fff;flex:none;box-shadow:0 0 0 3px rgba(255,200,58,.6)}
+.school{position:absolute;max-width:none;height:auto;width:calc(var(--b) * 640 / 390);left:calc(var(--b) / 2 - var(--b) * 350 / 390);top:calc(var(--b) / 2 - var(--b) * 232 / 390)}
+.heroLogo{--b:130px;box-shadow:0 0 0 4px rgba(255,200,58,.7),0 10px 30px rgba(0,0,0,.35)}
 .sch{display:block;font-size:14px;color:var(--muted);font-weight:700}
 .credits{text-align:center;color:var(--muted);font-size:14px;line-height:1.8;padding-top:6px}
 .credits b{color:var(--ink)}
@@ -106,7 +109,7 @@ td b{font-size:17px}
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="brand"><img class="school" src="logo.png" alt="شعار مدارس الفيصلية الأهلية" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="logo" hidden>أ</div><div><b>مغامرات الحروف</b><small class="sch">مدارس الفيصلية الأهلية</small></div></div>
+    <div class="brand"><span class="schoolbox"><img class="school" src="logo.avif" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true;this.parentElement.nextElementSibling.hidden=false"></span><div class="logo" hidden>أ</div><div><b>مغامرات الحروف</b><small class="sch">مدارس الفيصلية الأهلية</small></div></div>
     <div class="who" id="who" hidden><span id="whoName"></span><button class="btn sm" id="btnHome">🏠 الرئيسية</button><button class="btn sm" id="btnLogout">خروج</button></div>
   </header>
 
@@ -114,7 +117,7 @@ td b{font-size:17px}
 
   <!-- sign in / sign up -->
   <section id="vAuth" hidden>
-    <div class="hero"><h1>تعلّم الحروف باللعب</h1><p>أربع ألعاب ثلاثية الأبعاد: الحروف، وأشكالها، والحركات، وضم المقاطع. يُحفظ تقدّم كل طالب في السحابة ويظهر على أي جهاز.</p></div>
+    <div class="hero"><span class="schoolbox heroLogo"><img class="school" src="logo.avif" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true"></span><h1>تعلّم الحروف باللعب</h1><p>أربع ألعاب ثلاثية الأبعاد: الحروف، وأشكالها، والحركات، وضم المقاطع. يُحفظ تقدّم كل طالب في السحابة ويظهر على أي جهاز.</p></div>
     <div class="auth panel form">
       <div class="tabs" role="tablist"><button role="tab" id="tabIn" aria-selected="true">تسجيل الدخول</button><button role="tab" id="tabUp" aria-selected="false">حساب جديد</button></div>
       <form id="fAuth" class="form" novalidate>
