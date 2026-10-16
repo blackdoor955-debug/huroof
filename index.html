@@ -237,7 +237,7 @@ function summarize(data){ // data: {game:{key:jsonString}}
  const bp=parse(g('blend').blend_progress)||{}; s.blend=['m2','m3','race'].filter(k=>bp[k]).length; s.bMedals=+(parse(g('blend').blend_medals)||0);
  s.medals=s.hMedals+s.bMedals; return s; }
 const bar=(n,of)=>`<div class="bar" title="${AR(n)} من ${AR(of)}"><i style="width:${Math.round(100*Math.min(1,n/of))}%"></i></div><small>${AR(n)} / ${AR(of)}</small>`;
-async function readProgress(sid){ const out={}; const qs=await db.collection('students/'+sid+'/progress').get(); qs.forEach(d=>out[d.id]=(d.data().data)||{}); return out; }
+async function readProgress(sid){ const out={}; const docs=await Promise.all(Object.keys(GAMEKEYS).map(g=>db.doc(`students/${sid}/progress/${g}`).get())); docs.forEach(d=>{ if(d.exists) out[d.id]=(d.data().data)||{}; }); return out; }
 
 /* ---------- teacher ---------- */
 async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="8"><div class="spin"></div></td></tr>';
@@ -255,7 +255,7 @@ $('#btnRefresh').onclick=loadTeacher;
 $('#tBody').addEventListener('click',async e=>{ const c=e.target.closest('[data-copy]'), p=e.target.closest('[data-play]'), d=e.target.closest('[data-del]');
  if(c){ const t='رمز الدعوة لمنصة مغامرات الحروف: '+fmtCode(c.dataset.copy); try{ await navigator.clipboard.writeText(t); c.textContent='✓ نُسخ'; }catch(_){ c.textContent=fmtCode(c.dataset.copy); } setTimeout(()=>c.textContent='نسخ',2000); }
  if(p) startPlayer({sid:p.dataset.play,name:p.dataset.name});
- if(d){ if(await ask('حذف '+d.dataset.name+'؟','سيُحذف الطالب وكل تقدّمه، ولن يستطيع ولي الأمر رؤيته بعد ذلك. لا يمكن التراجع.')){ try{ const qs=await db.collection('students/'+d.dataset.del+'/progress').get(); for(const x of qs.docs) await x.ref.delete(); await db.doc('students/'+d.dataset.del).delete(); loadTeacher(); }catch(err){ alertMsg(errText(err)); } } } });
+ if(d){ if(await ask('حذف '+d.dataset.name+'؟','سيُحذف الطالب وكل تقدّمه، ولن يستطيع ولي الأمر رؤيته بعد ذلك. لا يمكن التراجع.')){ try{ for(const g of Object.keys(GAMEKEYS)) await db.doc(`students/${d.dataset.del}/progress/${g}`).delete(); await db.doc('students/'+d.dataset.del).delete(); loadTeacher(); }catch(err){ alertMsg(errText(err)); } } } });
 function ask(t,x){ return new Promise(res=>{ $('#cTitle').textContent=t; $('#cText').textContent=x; $('#confirmBox').hidden=false; $('#cNo').focus(); $('#cYes').onclick=()=>{ $('#confirmBox').hidden=true; res(true); }; $('#cNo').onclick=()=>{ $('#confirmBox').hidden=true; res(false); }; }); }
 function alertMsg(t){ msg($('#addMsg'),t); }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -279,7 +279,7 @@ function clearKeys(){ for(const k of ALLKEYS) localStorage.removeItem(k); }
 async function startPlayer(p){ await stopPlayer(); view('vLoading');
  try{ if(p.guest){ for(const k of ALLKEYS){ const v=localStorage.getItem('guest_'+k); if(v!=null) localStorage.setItem(k,v); else localStorage.removeItem(k); } lastSaved={}; }
   else { clearKeys(); const pr=await readProgress(p.sid); for(const g in pr) for(const k in pr[g]) if(GAMEKEYS[g]&&GAMEKEYS[g].includes(k)) localStorage.setItem(k,pr[g][k]); lastSaved={}; for(const g in GAMEKEYS) lastSaved[g]=JSON.stringify(snapshot(g)); }
- }catch(e){ view(me?(me.teacher?'vTeacher':'vParent'):'vAuth'); alertMsg(errText(e)); return; }
+ }catch(e){ console.error('[huroof] startPlayer',e); if(me) home(); else view('vAuth'); setTimeout(()=>{ const t='تعذّر فتح ملف الطالب: '+errText(e); if(me&&!me.teacher) msg($('#linkMsg'),t); else alertMsg(t); },300); return; }
  player=p; const a=avatarOf(p.sid||'guest'); $('#pAv').textContent=a.e; $('#pAv').style.setProperty('--c',a.c); $('#pName').textContent=p.name; setSync(p.guest?'يُحفظ على هذا الجهاز فقط':'☁️ متصل: التقدّم يُحفظ في السحابة',!p.guest); showHubProgress(); view('vHub');
  if(!p.guest) syncTimer=setInterval(syncNow,6000); }
 function setSync(t,on){ const s=$('#syncState'); s.textContent=t; s.classList.toggle('on',!!on); }
