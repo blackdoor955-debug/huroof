@@ -27,6 +27,12 @@ button,input{font-family:var(--body);color:inherit}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
 .brand b{font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,36px);background:linear-gradient(180deg,#fff,#ffd96b 60%,#ff9a1f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.school{height:56px;width:auto;max-width:120px;object-fit:contain;background:#fff;border-radius:14px;padding:4px}
+.sch{display:block;font-size:14px;color:var(--muted);font-weight:700}
+.credits{text-align:center;color:var(--muted);font-size:14px;line-height:1.8;padding-top:6px}
+.credits b{color:var(--ink)}
+.sect{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:clamp(24px,4vw,30px);color:var(--gold);margin-top:6px}
+.sect::after{content:"";flex:1;height:2px;background:var(--line)}
 .logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-family:var(--display);font-size:30px;background:radial-gradient(circle at 35% 30%,#ffe08a,#ff9a1f 70%);color:#fff;padding-top:6px}
 .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:15px}
 .panel{background:var(--glass);border:1px solid var(--line);border-radius:26px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 24px 60px rgba(0,0,0,.35);padding:22px}
@@ -100,7 +106,7 @@ td b{font-size:17px}
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="brand"><div class="logo">أ</div><b>مغامرات الحروف</b></div>
+    <div class="brand"><img class="school" src="logo.png" alt="شعار مدارس الفيصلية الأهلية" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="logo" hidden>أ</div><div><b>مغامرات الحروف</b><small class="sch">مدارس الفيصلية الأهلية</small></div></div>
     <div class="who" id="who" hidden><span id="whoName"></span><button class="btn sm" id="btnHome">🏠 الرئيسية</button><button class="btn sm" id="btnLogout">خروج</button></div>
   </header>
 
@@ -151,7 +157,7 @@ td b{font-size:17px}
     </div>
     <div class="panel">
       <div class="tbl-wrap"><table>
-        <thead><tr><th>الطالب</th><th>رمز الدعوة لولي الأمر</th><th>مغامرات الحروف</th><th>أين يسكن الحرف</th><th>أبطال الحركات</th><th>فتحة يقرأ</th><th>الأوسمة</th><th></th></tr></thead>
+        <thead><tr><th>الطالب</th><th>رمز الدعوة لولي الأمر</th><th>مغامرات الحروف</th><th>أين يسكن الحرف</th><th>أبطال الحركات</th><th>فتحة يقرأ</th><th>الألوان</th><th>الأشكال</th><th>الأوسمة</th><th></th></tr></thead>
         <tbody id="tBody"></tbody>
       </table></div>
       <p class="note" id="teacherEmpty" hidden>أضف طلابك ليظهروا هنا. لكل طالب رمز دعوة ترسله لولي أمره ليتابع تقدّمه من البيت.</p>
@@ -161,15 +167,21 @@ td b{font-size:17px}
   <!-- the games hub for the chosen student -->
   <section id="vHub" hidden>
     <div class="panel player"><div class="av" id="pAv">🦁</div><div><b id="pName"></b><div class="sync" id="syncState"></div></div><span style="flex:1"></span><button class="btn sm" id="btnSwitch">تغيير الطالب</button></div>
+    <div class="sect">📚 اللغة العربية</div>
     <div class="games">
       <button class="game" data-game="huroof" style="--a:#3f98ea;--b:#2f6b2a"><span class="ic">🦁</span><h3>مغامرات الحروف</h3><p>من الألف إلى الياء في ٢٨ عالمًا.</p><span class="pr" data-pr="huroof"></span></button>
       <button class="game" data-game="ayn" style="--a:#38d27a;--b:#1b3a8a"><span class="ic">🧩</span><h3>أين يسكن الحرف؟</h3><p>أول الكلمة ووسطها وآخرها.</p><span class="pr" data-pr="ayn"></span></button>
       <button class="game" data-game="harakat" style="--a:#e3262f;--b:#2457d6"><span class="ic">🦸</span><h3>أبطال الحركات</h3><p>فتحة وضمة وكسرة.</p><span class="pr" data-pr="harakat"></span></button>
       <button class="game" data-game="blend" style="--a:#ff8a3d;--b:#7a1fd6"><span class="ic">📖</span><h3>فتحة يقرأ</h3><p>ضم المقاطع وقراءة الكلمات.</p><span class="pr" data-pr="blend"></span></button>
     </div>
+    <div class="sect">🔢 الرياضيات</div>
+    <div class="games">
+      <button class="game" data-game="math1" style="--a:#ff5a5a;--b:#1e88e5"><span class="ic">🎈</span><h3>عالم الألوان والأشكال</h3><p>المفاهيم ما قبل الأكاديمية: الألوان والأشكال الهندسية.</p><span class="pr" data-pr="math1"></span></button>
+    </div>
   </section>
 </div>
 
+<div class="wrap"><p class="credits">إعداد المعلم: <b>أحمد حازم عبد الله</b> · المشرف التربوي: <b>د. خالد محروس بكري</b><br>مدارس الفيصلية الأهلية</p></div>
 <div id="gameWrap" hidden><iframe id="gameFrame" title="اللعبة" allow="gamepad; fullscreen; autoplay"></iframe></div>
 <div class="update" id="updateBar" hidden>🔄 يوجد تحديث جديد للألعاب <button class="btn sm" id="btnUpdate" style="background:#fff;color:#14532d">تحديث الآن</button></div>
 <div class="confirm" id="confirmBox" hidden><div class="panel"><h3 id="cTitle"></h3><p id="cText" class="note"></p><div style="display:flex;gap:10px;justify-content:center"><button class="btn danger" id="cYes">نعم، احذف</button><button class="btn" id="cNo">إلغاء</button></div></div></div>
@@ -227,7 +239,7 @@ async function route(u){ view('vLoading'); let teacher=false; try{ teacher=(awai
 function home(){ if(!me){ view('vAuth'); return; } if(me.teacher){ view('vTeacher'); loadTeacher(); } else { view('vParent'); loadParent(); } }
 
 /* ---------- progress summaries ---------- */
-const GAMEKEYS={huroof:['huroof_progress'],ayn:['ayn_progress'],harakat:['hrk2_progress','hrk2_medals'],blend:['blend_progress','blend_medals']};
+const GAMEKEYS={huroof:['huroof_progress'],ayn:['ayn_progress'],harakat:['hrk2_progress','hrk2_medals'],blend:['blend_progress','blend_medals'],math1:['math1_progress']};
 const parse=v=>{ try{ return v?JSON.parse(v):null; }catch(e){ return null; } };
 function summarize(data){ // data: {game:{key:jsonString}}
  const g=k=>data[k]||{}; const s={};
@@ -235,19 +247,20 @@ function summarize(data){ // data: {game:{key:jsonString}}
  const ap=parse(g('ayn').ayn_progress)||{}; s.aynLesson=(ap.lesson||[]).filter(x=>x>0).length; s.aynRace=Object.keys(ap.race||{}).length; s.aynBuild=Object.keys(ap.build||{}).length;
  const kp=parse(g('harakat').hrk2_progress)||{}; s.harakat=Object.keys(kp).filter(k=>k!=='*').length; s.hMedals=+(parse(g('harakat').hrk2_medals)||0);
  const bp=parse(g('blend').blend_progress)||{}; s.blend=['m2','m3','race'].filter(k=>bp[k]).length; s.bMedals=+(parse(g('blend').blend_medals)||0);
+ const mp=parse(g('math1').math1_progress)||{}; s.colors=((mp.colors||{}).mastered||[]).length; s.shapes=((mp.shapes||{}).mastered||[]).length;
  s.medals=s.hMedals+s.bMedals; return s; }
 const bar=(n,of)=>`<div class="bar" title="${AR(n)} من ${AR(of)}"><i style="width:${Math.round(100*Math.min(1,n/of))}%"></i></div><small>${AR(n)} / ${AR(of)}</small>`;
 async function readProgress(sid){ const out={}; const docs=await Promise.all(Object.keys(GAMEKEYS).map(g=>db.doc(`students/${sid}/progress/${g}`).get())); docs.forEach(d=>{ if(d.exists) out[d.id]=(d.data().data)||{}; }); return out; }
 
 /* ---------- teacher ---------- */
-async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="8"><div class="spin"></div></td></tr>';
+async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="10"><div class="spin"></div></td></tr>';
  try{ const qs=await db.collection('students').where('teacherUid','==',me.uid).get(); const rows=[]; for(const d of qs.docs){ const st=d.data(); const pr=await readProgress(d.id).catch(()=>({})); rows.push({id:d.id,name:st.name,parents:(st.parentUids||[]).length,s:summarize(pr)}); }
   rows.sort((a,b)=>a.name.localeCompare(b.name,'ar')); $('#teacherEmpty').hidden=rows.length>0;
   tb.innerHTML=rows.map(r=>{ const a=avatarOf(r.id); return `<tr><td><b>${a.e} ${esc(r.name)}</b><br><small class="note">${r.parents?`مرتبط بـ ${AR(r.parents)} ولي أمر`:'لم يرتبط ولي أمر بعد'}</small></td>
    <td><span class="code">${fmtCode(r.id)}</span> <button class="btn sm" data-copy="${r.id}">نسخ</button></td>
-   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
+   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
    <td style="white-space:nowrap"><button class="btn sm primary" data-play="${r.id}" data-name="${esc(r.name)}">▶ العب</button> <button class="btn sm danger" data-del="${r.id}" data-name="${esc(r.name)}">حذف</button></td></tr>`; }).join('');
- }catch(e){ tb.innerHTML=`<tr><td colspan="8"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
+ }catch(e){ tb.innerHTML=`<tr><td colspan="10"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
 $('#fAdd').addEventListener('submit',async e=>{ e.preventDefault(); const name=$('#inStudent').value.trim(); if(!name){ msg($('#addMsg'),'اكتب اسم الطالب.'); return; } $('#btnAdd').disabled=true;
  try{ const id=genCode(10); await db.doc('students/'+id).set({name,teacherUid:me.uid,parentUids:[],createdAt:TS()}); $('#inStudent').value=''; msg($('#addMsg'),`أُضيف ${name}. رمز الدعوة لولي أمره: ${fmtCode(id)}`,true); loadTeacher(); }catch(err){ msg($('#addMsg'),errText(err)); }
  $('#btnAdd').disabled=false; });
@@ -288,7 +301,7 @@ async function syncNow(){ if(!player||player.guest) return; const jobs=[]; for(c
 async function stopPlayer(){ closeGame(); if(!player) return; clearInterval(syncTimer); if(player.guest){ for(const k of ALLKEYS){ const v=localStorage.getItem(k); if(v!=null) localStorage.setItem('guest_'+k,v); } } else await syncNow(); clearKeys(); player=null; }
 function showHubProgress(){ const data={}; for(const g in GAMEKEYS) data[g]=snapshot(g); const s=summarize(data);
  const set=(g,t)=>{ const el=$(`[data-pr="${g}"]`); el.textContent=t; };
- set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
+ set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
 $('#btnSwitch').onclick=async()=>{ const wasGuest=player&&player.guest; await stopPlayer(); if(wasGuest&&!me) view('vAuth'); else home(); };
 $('#btnGuest').onclick=()=>startPlayer({guest:true,name:'لاعب ضيف'});
 $$('.game').forEach(b=>b.onclick=()=>openGame(b.dataset.game));

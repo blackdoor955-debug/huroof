@@ -1,0 +1,371 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>عالم الألوان والأشكال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Lalezar&display=swap">
+<style>
+:root{
+  /* Layout: menus on the platform's night glass; each activity is a bright full-screen "play table" (sky, wooden board, street). */
+  --night:#0a1030; --glass:rgba(11,17,50,.82); --glass2:rgba(255,255,255,.08); --line:rgba(255,255,255,.18);
+  --ink:#f7f4ff; --muted:#b9c0ea; --gold:#ffc83a; --good:#3fe0a2;
+  --wood1:#d9a066; --wood2:#b07a42; --wood3:#7a4f26;
+  --display:'Lalezar','Baloo Bhaijaan 2',Tahoma,sans-serif; --body:'Baloo Bhaijaan 2',Tahoma,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--night);color:var(--ink);font-family:var(--body);-webkit-user-select:none;user-select:none}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0;line-height:1.6}
+button{font-family:var(--body);color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;padding-block:20px;padding-inline:16px;display:flex;align-items:center;justify-content:center;z-index:10;background:radial-gradient(ellipse at 20% 0%,#24307a 0%,var(--night) 60%)}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.wrap{width:min(980px,100%);padding:24px;display:flex;flex-direction:column;gap:18px;margin-block:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:19px;font-weight:700;color:var(--ink);background:var(--glass2);border:1px solid var(--line);border-radius:16px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.btn:hover,.btn:focus-visible{background:rgba(255,255,255,.15)}
+.btn.primary{background:linear-gradient(180deg,#ffd75e,#ff9f1c);color:#2a1600;border-color:transparent;box-shadow:0 6px 0 #b8620a}
+.btn.sm{font-size:15px;padding:7px 12px}
+.eyebrow{font-size:15px;color:var(--gold);font-weight:700}
+.title{font-family:var(--display);font-size:clamp(44px,9vw,80px);line-height:1;background:linear-gradient(180deg,#fff 10%,#ffd96b 55%,#ff9a1f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 5px 0 rgba(80,30,0,.55))}
+.lead{color:var(--muted);font-size:18px;max-width:60ch}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.act{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:right;padding:18px;border-radius:24px;border:2px solid rgba(255,255,255,.18);background:linear-gradient(160deg,var(--a),var(--b));cursor:pointer;min-width:0;box-shadow:inset 0 -50px 60px rgba(0,0,0,.22);transition:transform .15s}
+.act:hover,.act:focus-visible{transform:translateY(-4px)}
+.act .ic{font-size:46px;line-height:1}
+.act h3{font-size:26px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.act p{font-size:14px;color:#fff;opacity:.95;line-height:1.45}
+.act .pr{font-size:14px;font-weight:800;background:rgba(0,0,0,.25);padding:3px 10px;border-radius:999px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{width:38px;height:38px;border-radius:50%;border:3px solid rgba(255,255,255,.25);cursor:pointer;position:relative}
+.chip.done::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;font-weight:800;color:#fff;text-shadow:0 1px 3px #000}
+.chip[aria-pressed="true"]{border-color:#fff;box-shadow:0 0 0 3px var(--gold)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.note{color:var(--muted);font-size:14px;line-height:1.6}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-size:15px;font-weight:700;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--gold);color:#2a1600;border-color:var(--gold)}
+
+/* play stage */
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
+.sky{background:linear-gradient(180deg,#6ec6ff 0%,#bfe8ff 55%,#e8f7ff 100%)}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.9;filter:blur(.5px)}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:55%;height:160%;top:-70%;left:15%}.cloud::after{width:40%;height:130%;top:-45%;right:12%}
+.hud{position:fixed;z-index:20;top:calc(10px + env(safe-area-inset-top,0px));inset-inline:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.hud>*{pointer-events:auto}
+.goal{display:flex;align-items:center;gap:12px;padding:8px 18px 8px 10px;border-radius:22px;background:rgba(255,255,255,.92);color:#1a1a2e;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:clamp(20px,3.4vw,30px);font-weight:800}
+.goal .dot{width:clamp(44px,7vw,60px);height:clamp(44px,7vw,60px);border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.15)}
+.goal .shp{width:clamp(48px,7vw,64px);height:clamp(48px,7vw,64px)}
+.steps{display:flex;gap:6px}
+.steps i{width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.15)}
+.steps i.on{background:#ffb300;box-shadow:0 0 8px #ffb300}
+.tools{display:flex;gap:8px}
+.ib{width:52px;height:52px;border-radius:16px;border:0;background:rgba(255,255,255,.92);color:#1a1a2e;font-size:22px;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.say{position:fixed;z-index:25;left:50%;top:44%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(70px,16vw,170px);line-height:1;pointer-events:none;text-shadow:0 6px 0 rgba(0,0,0,.18),0 0 30px rgba(255,255,255,.9);animation:sayin 1.2s ease-out forwards}
+@keyframes sayin{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}20%{transform:translate(-50%,-50%) scale(1.15);opacity:1}70%{opacity:1}100%{transform:translate(-50%,-70%) scale(1);opacity:0}}
+.flash{position:fixed;inset:0;z-index:15;pointer-events:none;animation:flash .7s ease-out forwards}
+@keyframes flash{from{opacity:.55}to{opacity:0}}
+.balloon{position:absolute;width:var(--w,120px);cursor:pointer;will-change:transform;filter:drop-shadow(0 10px 12px rgba(0,40,80,.25))}
+.balloon svg{width:100%;display:block;overflow:visible}
+.balloon.hint svg ellipse.body{stroke:#fff;stroke-width:5;animation:pulse 1s infinite}
+@keyframes pulse{50%{stroke-width:10}}
+.balloon.nope{animation:nope .5s}
+@keyframes nope{25%{transform:translateX(-14px) rotate(-8deg)}75%{transform:translateX(14px) rotate(8deg)}}
+.shard{position:absolute;width:16px;height:22px;border-radius:40% 40% 10% 10%;pointer-events:none;transition:transform .6s cubic-bezier(.2,.8,.3,1),opacity .6s}
+.boom{position:absolute;pointer-events:none;font-family:var(--display);font-size:46px;color:#fff;-webkit-text-stroke:3px #1a1a2e;transform:translate(-50%,-50%);animation:boom .5s ease-out forwards}
+@keyframes boom{from{transform:translate(-50%,-50%) scale(.4)}to{transform:translate(-50%,-50%) scale(1.4);opacity:0}}
+#pin{position:fixed;z-index:30;width:58px;height:80px;pointer-events:none;transform:translate(-8px,-74px) rotate(-18deg);filter:drop-shadow(2px 6px 4px rgba(0,0,0,.35));transition:transform .08s}
+#pin.stab{transform:translate(-8px,-64px) rotate(-18deg) scale(.92)}
+#cursor{position:fixed;z-index:31;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 3px #1a1a2e,0 0 20px #fff;pointer-events:none}
+.on-stage{cursor:none}
+
+/* wooden puzzle */
+.desk{background:radial-gradient(ellipse at 50% 0%,#fff3d9 0%,#f2d3a6 60%,#d9ad73 100%)}
+.board{position:absolute;left:50%;top:clamp(92px,15vh,130px);transform:translateX(-50%);width:min(92vw,820px);padding:22px;border-radius:30px;background:linear-gradient(135deg,var(--wood1),var(--wood2));box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -6px 0 rgba(0,0,0,.2),0 18px 30px rgba(80,40,0,.35);display:grid;grid-template-columns:repeat(var(--cols,4),1fr);gap:16px;justify-items:center}
+.board::before{content:'';position:absolute;inset:0;border-radius:30px;background:repeating-linear-gradient(95deg,rgba(0,0,0,0) 0 18px,rgba(90,50,10,.08) 18px 21px);pointer-events:none}
+.hole{position:relative;width:var(--hs,120px);height:var(--hs,120px)}
+.hole svg{width:100%;height:100%;overflow:visible}
+.hole .sh{fill:#5a3818;filter:url(#inset)}
+.hole.hint .sh{animation:holepulse 1s infinite}
+@keyframes holepulse{50%{fill:#8a5a28}}
+.hole.filled .sh{fill:none}
+.tray{position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(96vw,980px);min-height:clamp(130px,22vh,190px);padding:14px;border-radius:26px;background:rgba(255,255,255,.55);box-shadow:inset 0 2px 8px rgba(0,0,0,.12);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px}
+.piece{position:relative;width:var(--ps,104px);height:var(--ps,104px);cursor:grab;touch-action:none;transition:transform .25s,filter .2s}
+.piece svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 6px rgba(0,0,0,.28))}
+.piece.target{z-index:3}
+.piece.sel svg{filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 22px #ffd600)}
+.piece.drag{position:fixed;z-index:40;pointer-events:none;transition:none}
+.piece.home{animation:back .35s}
+@keyframes back{50%{transform:translateX(10px)}}
+.placed{position:absolute;inset:0;animation:snap .35s cubic-bezier(.3,1.6,.6,1)}
+@keyframes snap{from{transform:scale(1.4)}}
+
+/* shape building */
+.street{background:linear-gradient(180deg,#8fd3ff 0%,#d8f1ff 62%,#9aa3ad 62%,#b9c0c8 100%)}
+.tower{position:absolute;z-index:2;bottom:22%;inset-inline-end:6%;width:clamp(150px,22vw,240px);height:52%;border-radius:12px 12px 0 0;background:linear-gradient(90deg,#e46a4a,#c94b2e);box-shadow:inset -14px 0 0 rgba(0,0,0,.12),0 10px 30px rgba(0,0,0,.2);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:58px 16px 16px}
+.tower i{background:linear-gradient(180deg,#bfe6ff,#7fb8e0);border-radius:6px;border:4px solid #fff3e0;min-height:34px}
+.roof{position:absolute;z-index:2;bottom:calc(22% + 52%);inset-inline-end:calc(6% - 10px);width:calc(clamp(150px,22vw,240px) + 20px);height:24px;border-radius:8px;background:#7a2a1a}
+.boy{position:absolute;z-index:2;bottom:calc(22% + 52% + 14px);inset-inline-end:calc(6% + clamp(150px,22vw,240px)*.32);font-size:clamp(54px,8vw,84px);line-height:1;transform-origin:bottom center}
+.boy.throw{animation:throw .5s}
+@keyframes throw{40%{transform:rotate(-14deg) translateY(-6px)}}
+.sorter{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom,0px));inset-inline-start:4%;width:min(64vw,700px);padding:16px 18px 20px;border-radius:24px;background:linear-gradient(180deg,#2f6fd6,#1f4fa8);box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 14px 26px rgba(0,0,0,.25);display:flex;justify-content:space-around;gap:12px}
+.sorter .hole .sh{fill:#0d2350}
+.faller{position:absolute;width:var(--fs,110px);height:var(--fs,110px);cursor:pointer;touch-action:none;z-index:5}
+.faller svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 6px rgba(0,0,0,.3))}
+.faller.sel svg{filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 24px #ffd600)}
+.reward{position:fixed;z-index:26;left:50%;top:42%;width:min(46vmin,320px);height:min(46vmin,320px);transform:translate(-50%,-50%);pointer-events:none;animation:reward 1.6s ease-out forwards}
+.reward svg{width:100%;height:100%;overflow:visible}
+@keyframes reward{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}25%{transform:translate(-50%,-50%) scale(1.08);opacity:1}75%{opacity:1}100%{transform:translate(-50%,-50%) scale(1.25);opacity:0}}
+
+/* generalisation baskets */
+.room{background:linear-gradient(180deg,#fff7e6 0%,#ffe9c7 60%,#e9c79a 60%,#d9b080 100%)}
+.baskets{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;gap:clamp(10px,3vw,30px);flex-wrap:wrap;justify-content:center;width:min(96vw,1000px)}
+.basket{width:clamp(110px,18vw,170px);height:clamp(90px,14vw,130px);border-radius:12px 12px 36px 36px;border:5px solid rgba(0,0,0,.18);display:grid;place-items:end center;padding-bottom:8px;font-weight:800;font-size:20px;cursor:pointer;box-shadow:inset 0 -14px 0 rgba(0,0,0,.12),0 10px 18px rgba(0,0,0,.18);position:relative}
+.basket::before{content:'';position:absolute;top:-22px;left:18%;right:18%;height:40px;border:6px solid rgba(0,0,0,.25);border-bottom:0;border-radius:60px 60px 0 0}
+.basket span{background:rgba(255,255,255,.9);color:#1a1a2e;padding:0 12px;border-radius:12px}
+.basket.hint{animation:holepulse2 1s infinite}
+@keyframes holepulse2{50%{box-shadow:0 0 0 8px #fff,0 0 30px #fff}}
+.thing{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);font-size:clamp(110px,20vw,190px);line-height:1;cursor:grab;touch-action:none;filter:drop-shadow(0 12px 10px rgba(0,0,0,.25));animation:bob 2s ease-in-out infinite}
+.thing.sel{filter:drop-shadow(0 0 16px #fff) drop-shadow(0 0 30px #ffd600)}
+@keyframes bob{50%{transform:translate(-50%,-56%)}}
+.thing.drag{position:fixed;animation:none;pointer-events:none;z-index:40}
+
+.endcard{width:min(520px,100%);padding:26px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.bigstars{font-size:58px;letter-spacing:6px;color:rgba(255,255,255,.2)}.bigstars b{color:var(--gold);font-weight:400}
+.toast{position:fixed;z-index:60;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);padding:10px 18px;font-size:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="inset" x="-20%" y="-20%" width="140%" height="140%"><feOffset dx="0" dy="4"/><feGaussianBlur stdDeviation="3" result="o"/><feComposite in="SourceGraphic" in2="o" operator="over"/></filter>
+  <radialGradient id="shine" cx="35%" cy="28%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/></radialGradient>
+</defs></svg>
+
+<section id="menu" class="screen" hidden dir="rtl">
+  <div class="wrap panel">
+    <div class="eyebrow">قسم الرياضيات · المفاهيم ما قبل الأكاديمية</div>
+    <div class="title">عالم الألوان<br>والأشكال</div>
+    <p class="lead">نتعلم الألوان بتفريقع البالونات، ثم نعمّمها على أشياء من حياتنا، ثم نتعلم الأشكال الهندسية بالبازل وعمارة الأشكال.</p>
+    <div class="acts">
+      <button class="act" data-go="colors" style="--a:#ff5a5a;--b:#c2185b"><span class="ic">🎈</span><h3>بالونات الألوان</h3><p>بالدبوس فرقع البالون باللون المطلوب.</p><span class="pr" id="prColors"></span></button>
+      <button class="act" data-go="gen" style="--a:#43a047;--b:#1e6fd9"><span class="ic">🎨</span><h3>تعميم الألوان</h3><p>ضع كل شيء في سلة لونه: التفاحة في الأحمر.</p><span class="pr" id="prGen"></span></button>
+      <button class="act" data-go="puzzle" style="--a:#d9a066;--b:#7a4f26"><span class="ic">🧩</span><h3>بازل الأشكال</h3><p>القطعة المطلوبة كبيرة في البداية ثم تصغر.</p><span class="pr" id="prPuzzle"></span></button>
+      <button class="act" data-go="tower" style="--a:#e46a4a;--b:#2f6fd6"><span class="ic">🏢</span><h3>عمارة الأشكال</h3><p>الولد يرمي شكلًا؛ التقطه وضعه في مكانه.</p><span class="pr" id="prTower"></span></button>
+    </div>
+    <div class="panel" style="padding:16px;border-radius:20px;display:flex;flex-direction:column;gap:10px">
+      <b>للمعلم: اختر اللون الذي يتدرب عليه الطالب الآن</b>
+      <div class="chips" id="colorChips"></div>
+      <div class="row"><span class="note">الوضع الهادئ (صوت أخف):</span><div class="seg" data-key="calm"><button data-v="false">عادي</button><button data-v="true">هادئ</button></div><span class="note">النطق:</span><div class="seg" data-key="voice"><button data-v="true">مفعّل</button><button data-v="false">مطفأ</button></div></div>
+      <p class="note" id="voiceNote"></p>
+    </div>
+    <div class="row"><a class="btn sm" id="mainLink" href="index.html" target="_top">🏠 العودة إلى المنصة</a></div>
+  </div>
+</section>
+
+<section id="end" class="screen" hidden dir="rtl">
+  <div class="endcard panel"><h2 id="eTitle"></h2><div class="bigstars" id="eStars"></div><p id="eMsg" style="font-size:19px"></p><div class="row" style="justify-content:center" id="eBtns"></div></div>
+</section>
+
+<div id="stage" hidden></div>
+<div class="hud" id="hud" hidden dir="rtl">
+  <div class="goal" id="goal"></div>
+  <div class="tools"><button class="ib" id="bSay" aria-label="اسمع">🔊</button><button class="ib" id="bHome" aria-label="القائمة">🏠</button></div>
+</div>
+<svg id="pin" hidden viewBox="0 0 60 84" aria-hidden="true"><defs><radialGradient id="pinhead" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#ff8a8a"/><stop offset="1" stop-color="#c40000"/></radialGradient><linearGradient id="needle" x1="0" x2="1"><stop offset="0" stop-color="#eee"/><stop offset="1" stop-color="#888"/></linearGradient></defs><rect x="27" y="40" width="6" height="42" rx="2" fill="url(#needle)"/><path d="M14 40h32l-6-10H20z" fill="#a00000"/><ellipse cx="30" cy="20" rx="20" ry="18" fill="url(#pinhead)"/><ellipse cx="23" cy="13" rx="6" ry="4" fill="#fff" opacity=".7"/></svg>
+<div id="cursor" hidden></div>
+<div class="toast panel" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('math1_'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem('math1_'+k,JSON.stringify(v));}catch(e){}}};
+const S=Object.assign({calm:false,voice:true},store.get('settings',{}));
+const PR=Object.assign({colors:{mastered:[],cur:'red'},gen:{best:0},shapes:{lvl:{},mastered:[]},tower:{done:{}}},store.get('progress',{}));
+const save=()=>store.set('progress',PR);
+const AR=n=>Number(n).toLocaleString('ar-EG');
+const rnd=Math.random, pick=a=>a[(rnd()*a.length)|0], shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=(rnd()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}, clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------- content ---------- */
+const COLORS=[
+ {k:'red',n:'أحمر',c:'#e53935',d:'#9e1b18',f:'حمراء'},{k:'yellow',n:'أصفر',c:'#fdd835',d:'#c79a00',f:'صفراء'},{k:'green',n:'أخضر',c:'#43a047',d:'#1b5e20',f:'خضراء'},
+ {k:'blue',n:'أزرق',c:'#1e88e5',d:'#0d47a1',f:'زرقاء'},{k:'orange',n:'برتقالي',c:'#fb8c00',d:'#bf5600',f:'برتقالية'},{k:'purple',n:'بنفسجي',c:'#8e24aa',d:'#4a0d63',f:'بنفسجية'},
+ {k:'pink',n:'وردي',c:'#f06292',d:'#ad1457',f:'وردية'},{k:'brown',n:'بني',c:'#8d5a3b',d:'#4e2c1a',f:'بنية'},{k:'black',n:'أسود',c:'#2b2b2b',d:'#000000',f:'سوداء'},{k:'white',n:'أبيض',c:'#fafafa',d:'#b0b8c4',f:'بيضاء'}];
+const CK=Object.fromEntries(COLORS.map(c=>[c.k,c]));
+// everyday things for generalisation: [emoji, name, colour]
+const THINGS=[['🍎','التفاحة','red'],['🍓','الفراولة','red'],['🍒','الكرز','red'],['🚒','سيارة الإطفاء','red'],['🍌','الموزة','yellow'],['🌻','زهرة الشمس','yellow'],['🍋','الليمونة','yellow'],['🐤','الكتكوت','yellow'],
+ ['🥒','الخيارة','green'],['🥦','البروكلي','green'],['🍀','الورقة','green'],['🐸','الضفدع','green'],['🐳','الحوت','blue'],['🫐','التوت','blue'],['💧','قطرة الماء','blue'],['🧢','القبعة','blue'],
+ ['🍊','البرتقالة','orange'],['🥕','الجزرة','orange'],['🎃','اليقطينة','orange'],['🏀','الكرة','orange'],['🍇','العنب','purple'],['🍆','الباذنجانة','purple'],['☂️','المظلة','purple'],
+ ['🌸','الزهرة','pink'],['🐷','الخنزير الصغير','pink'],['🎀','الشريطة','pink'],['🐻','الدب','brown'],['🍫','الشوكولاتة','brown'],['🥔','البطاطس','brown'],['🎱','الكرة','black'],['🕷️','العنكبوت','black'],['⛄','رجل الثلج','white'],['🥚','البيضة','white'],['☁️','الغيمة','white']];
+const SHAPES={circle:{n:'دائرة',svg:'<circle cx="50" cy="50" r="42"/>'},square:{n:'مربع',svg:'<rect x="10" y="10" width="80" height="80" rx="4"/>'},triangle:{n:'مثلث',svg:'<polygon points="50,8 93,88 7,88"/>'},
+ rectangle:{n:'مستطيل',svg:'<rect x="4" y="26" width="92" height="48" rx="4"/>'},star:{n:'نجمة',svg:'<polygon points="'+starPts(50,52,46,20,5)+'"/>'},heart:{n:'قلب',svg:'<path d="M50 90 C14 66 4 42 20 24 C33 10 47 18 50 30 C53 18 67 10 80 24 C96 42 86 66 50 90Z"/>'},
+ oval:{n:'شكل بيضاوي',svg:'<ellipse cx="50" cy="50" rx="46" ry="30"/>'},rhombus:{n:'معين',svg:'<polygon points="50,4 94,50 50,96 6,50"/>'},hexagon:{n:'شكل سداسي',svg:'<polygon points="'+starPts(50,50,46,46,6)+'"/>'}};
+const FEM=['circle','star'];
+const DEF={circle:'الدائرة',square:'المربع',triangle:'المثلث',rectangle:'المستطيل',star:'النجمة',heart:'القلب',oval:'الشكل البيضاوي',rhombus:'المعين',hexagon:'الشكل السداسي'};
+function starPts(cx,cy,R,r,n){ const p=[]; const m=R===r?n:n*2; for(let i=0;i<m;i++){ const rr=(R===r||i%2===0)?R:r, a=-Math.PI/2+i*Math.PI*2/m; p.push((cx+Math.cos(a)*rr).toFixed(1)+','+(cy+Math.sin(a)*rr).toFixed(1)); } return p.join(' '); }
+const SHAPE_SETS=[['circle','square','triangle','rectangle'],['circle','square','triangle','rectangle','star','heart','oval'],['circle','square','triangle','rectangle','star','heart','oval','rhombus','hexagon']];
+const PIECE_COL=['#ff5a5a','#ffb300','#43a047','#1e88e5','#8e24aa','#f06292','#00acc1','#fb8c00','#5c6bc0'];
+const shapeSVG=(k,fill,cls)=>`<svg viewBox="0 0 100 100"><g class="${cls||''}" fill="${fill}" stroke="rgba(0,0,0,.25)" stroke-width="2">${SHAPES[k].svg}</g>${cls==='sh'?'':`<g fill="url(#shine)">${SHAPES[k].svg}</g>`}</svg>`;
+
+/* ---------- sound & speech ---------- */
+const Snd=(()=>{ let ctx=null,out,nb; function init(){ if(ctx) return; try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); out=ctx.createGain(); out.gain.value=.9; out.connect(ctx.destination); nb=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate); const d=nb.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=rnd()*2-1; }catch(e){ctx=null;} }
+ const V=v=>v*(S.calm?.4:1);
+ function tone(f,d,type,v,w,to){ if(!ctx) return; if(ctx.state==='suspended') ctx.resume().catch(()=>{}); const t=ctx.currentTime+(w||0), o=ctx.createOscillator(), g=ctx.createGain(); o.type=type||'sine'; o.frequency.setValueAtTime(f,t); if(to) o.frequency.exponentialRampToValueAtTime(to,t+d); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(V(v||.2),t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(out); o.start(t); o.stop(t+d+.05); }
+ function noise(d,v,type,f,w){ if(!ctx) return; const t=ctx.currentTime+(w||0), s=ctx.createBufferSource(); s.buffer=nb; const fl=ctx.createBiquadFilter(); fl.type=type; fl.frequency.value=f; const g=ctx.createGain(); g.gain.setValueAtTime(V(v),t); g.gain.exponentialRampToValueAtTime(.0001,t+d); s.connect(fl); fl.connect(g); g.connect(out); s.start(t); s.stop(t+d+.05); }
+ const FX={ pop(){ noise(.18,1.0,'highpass',900); noise(.12,.9,'lowpass',500); tone(160,.18,'sine',.6,0,50); }, ok(){ [784,988,1175,1568].forEach((f,i)=>tone(f,.25,'triangle',.18,i*.07)); }, no(){ tone(300,.25,'sine',.14,0,200); }, snap(){ tone(600,.08,'square',.08); tone(900,.15,'triangle',.15,.06); }, whoosh(){ noise(.5,.15,'bandpass',900); }, win(){ [523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,.32,'triangle',.18,i*.12)); }, squeak(){ tone(900,.15,'sine',.1,0,1300); } };
+ return {init,play(n){ init(); FX[n]&&FX[n](); }}; })();
+const Speech={voice:null,init(){const p=()=>{try{const vs=speechSynthesis.getVoices();this.voice=vs.find(v=>/^ar/i.test(v.lang))||null;$('#voiceNote').textContent=this.voice?'الصوت: '+this.voice.name:'لا يوجد صوت عربي مثبّت في الجهاز؛ ستظهر الكلمات مكتوبة كبيرة على الشاشة.';}catch(e){}};p();try{speechSynthesis.onvoiceschanged=p;}catch(e){}},
+ say(t,rate){ if(!S.voice||!this.voice) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.voice=this.voice; u.lang=this.voice.lang; u.rate=rate||.8; u.pitch=1.1; speechSynthesis.speak(u);}catch(e){} }};
+function bigWord(text,color){ const d=document.createElement('div'); d.className='say'; d.textContent=text; d.style.color=color||'#fff'; if(color==='#fafafa') d.style.webkitTextStroke='3px #9aa5b4'; document.body.appendChild(d); setTimeout(()=>d.remove(),1300); }
+function toast(t){ const e=$('#toast'); e.textContent=t; e.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>e.hidden=true,2600); }
+const starsHTML=n=>[0,1,2].map(i=>i<n?'<b>★</b>':'★').join('');
+
+/* ---------- screens ---------- */
+let mode=null, loop=null;
+const stage=$('#stage');
+function showMenu(){ stopAct(); $('#menu').hidden=false; $('#end').hidden=true; refreshMenu(); setTimeout(()=>{ try{ $('#menu .act').focus({preventScroll:true}); }catch(e){} },50); }
+function refreshMenu(){ const m=PR.colors.mastered; $('#prColors').textContent=`${AR(m.length)} / ${AR(COLORS.length)} ألوان`; $('#prGen').textContent=PR.gen.best?`أفضل نتيجة: ${AR(PR.gen.best)} / ٨`:'بعد تعلّم لونين'; $('#prPuzzle').textContent=`${AR(PR.shapes.mastered.length)} / ${AR(9)} أشكال`; const td=Object.values(PR.tower.done).reduce((a,b)=>a+b,0); $('#prTower').textContent=`${AR(td)} شكلًا في مكانه`;
+ $('#colorChips').innerHTML=COLORS.map(c=>`<button class="chip ${m.includes(c.k)?'done':''}" data-color="${c.k}" style="background:${c.c}" aria-pressed="${PR.colors.cur===c.k}" aria-label="${c.n}"></button>`).join('');
+ $$('.seg').forEach(sg=>sg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(String(S[sg.dataset.key])===b.dataset.v)))); }
+function startAct(m){ Snd.init(); mode=m; $('#menu').hidden=true; $('#end').hidden=true; stage.hidden=false; $('#hud').hidden=false; stage.innerHTML=''; stage.className=''; ({colors:Colors,gen:Gen,puzzle:Puzzle,tower:Tower})[m].start(); }
+function stopAct(){ if(loop){ cancelAnimationFrame(loop); loop=null; } stage.hidden=true; stage.innerHTML=''; $('#hud').hidden=true; $('#pin').hidden=true; mode=null; try{speechSynthesis.cancel();}catch(e){} }
+function endCard(title,stars,msgText,btns){ stopAct(); Snd.play('win'); $('#eTitle').textContent=title; $('#eStars').innerHTML=starsHTML(stars); $('#eMsg').textContent=msgText; $('#eBtns').innerHTML=btns.map(([g,t,c],i)=>`<button class="btn ${c||''}" data-go="${g}">${t}</button>`).join(''); $('#end').hidden=false; Speech.say(title); setTimeout(()=>{ try{ $('#eBtns button').focus(); }catch(e){} },50); }
+function setGoal(html){ $('#goal').innerHTML=html; }
+const stepsHTML=(n,of)=>`<span class="steps">${Array.from({length:of},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>`;
+function clouds(){ for(let i=0;i<6;i++){ const c=document.createElement('div'); c.className='cloud'; const w=120+rnd()*160; c.style.cssText=`width:${w}px;height:${w*.32}px;top:${8+rnd()*60}%;left:${rnd()*90}%;opacity:${.6+rnd()*.35}`; stage.appendChild(c); } }
+
+/* ---------- 1) colour balloons with a pin ---------- */
+const Colors={ target:null, phase:1, count:0, errs:0, recent:[], balloons:[], last:0,
+ NEED:[0,5,4,6],   // correct pops needed in phase 1 (only target), 2 (one distractor), 3 (two-three distractors)
+ start(){ stage.className='sky on-stage'; clouds(); this.target=CK[PR.colors.cur]||COLORS[0]; this.phase=1; this.count=0; this.errs=0; this.recent=[]; this.balloons=[]; $('#pin').hidden=false; this.goal(); this.instruct(); this.last=performance.now(); this.wave(); const tick=t=>{ loop=requestAnimationFrame(tick); this.update(t); }; loop=requestAnimationFrame(tick); },
+ goal(){ const c=this.target; setGoal(`<span class="dot" style="background:${c.c}"></span><span>فرقع البالون ال${c.n==='أبيض'?'أبيض':c.n}</span>${stepsHTML(this.count,this.NEED[this.phase])}`); },
+ instruct(){ Speech.say('فرقع البالون ال'+this.target.n); },
+ distractorCount(){ return this.phase===1?0:this.phase===2?1:(rnd()<.5?2:3); },
+ wave(){ const n=this.phase===1?3:2; for(let i=0;i<n;i++) setTimeout(()=>this.spawn(this.target),i*700); const dn=this.distractorCount(); const others=COLORS.filter(c=>c.k!==this.target.k); for(let i=0;i<dn;i++) setTimeout(()=>this.spawn(pick(others)),350+i*700); },
+ spawn(col){ if(mode!=='colors') return; const el=document.createElement('div'); el.className='balloon'; const w=Math.round(clamp(innerWidth*.13,95,150)); el.style.setProperty('--w',w+'px'); const id='g'+Math.random().toString(36).slice(2,7);
+  el.innerHTML=`<svg viewBox="0 0 100 190"><defs><radialGradient id="${id}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".18" stop-color="${col.c}"/><stop offset="1" stop-color="${col.d}"/></radialGradient></defs><path d="M50 118 C44 135 58 150 48 168 C42 178 52 186 50 190" fill="none" stroke="#7a7a7a" stroke-width="2"/><ellipse class="body" cx="50" cy="58" rx="44" ry="54" fill="url(#${id})"${col.k==='white'?' stroke="#c8d0da" stroke-width="2"':''}/><path d="M43 111 L57 111 L50 120 Z" fill="${col.d}"/></svg>`;
+  const lane=this.freeLane(w); const b={el,col,x:lane,y:innerHeight+40+rnd()*60,w,h:w*1.9,vy:(S.calm?38:52)+rnd()*18,ph:rnd()*6,alive:true}; el.style.left='0'; el.style.top='0'; stage.appendChild(el); this.balloons.push(b); this.pos(b); },
+ freeLane(w){ const lanes=Math.max(3,Math.floor(innerWidth/(w*1.25))); const used=this.balloons.filter(b=>b.alive&&b.y>innerHeight*.4).map(b=>Math.round(b.x/(innerWidth/lanes))); const free=[...Array(lanes).keys()].filter(i=>!used.includes(i)); const i=free.length?pick(free):((rnd()*lanes)|0); return i*(innerWidth/lanes)+(innerWidth/lanes-w)/2; },
+ pos(b){ const sway=Math.sin(b.ph)*10; b.el.style.transform=`translate(${b.x+sway}px,${b.y}px) rotate(${Math.sin(b.ph*.8)*4}deg)`; },
+ update(t){ const dt=Math.min(.05,(t-this.last)/1000); this.last=t; for(const b of this.balloons){ if(!b.alive) continue; b.y-=b.vy*dt*(b.flee?3:1); b.ph+=dt*1.6; this.pos(b); if(b.y<-b.h-20){ b.alive=false; b.el.remove(); } }
+  this.balloons=this.balloons.filter(b=>b.alive); const targets=this.balloons.filter(b=>b.col.k===this.target.k&&!b.flee).length; if(targets===0&&!this.waiting){ this.waiting=true; setTimeout(()=>{ this.waiting=false; if(mode==='colors') this.wave(); },600); } },
+ tap(x,y){ const el=document.elementFromPoint(x,y); const be=el&&el.closest('.balloon'); if(!be) return; const b=this.balloons.find(q=>q.el===be&&q.alive); if(!b) return; const pin=$('#pin'); pin.classList.add('stab'); setTimeout(()=>pin.classList.remove('stab'),120);
+  if(b.col.k===this.target.k) this.pop(b,x,y); else this.wrong(b); },
+ pop(b,x,y){ b.alive=false; const r=b.el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.width*.6; b.el.remove(); Snd.play('pop'); rumble(160,.6,.6);
+  for(let i=0;i<14;i++){ const s=document.createElement('div'); s.className='shard'; s.style.background=b.col.c; s.style.left=cx+'px'; s.style.top=cy+'px'; stage.appendChild(s); const a=i/14*Math.PI*2, d=60+rnd()*90; requestAnimationFrame(()=>{ s.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px) rotate(${rnd()*360}deg)`; s.style.opacity='0'; }); setTimeout(()=>s.remove(),700); }
+  const bm=document.createElement('div'); bm.className='boom'; bm.textContent='بوم!'; bm.style.left=cx+'px'; bm.style.top=cy+'px'; stage.appendChild(bm); setTimeout(()=>bm.remove(),600);
+  if(!S.calm){ const f=document.createElement('div'); f.className='flash'; f.style.background=b.col.c; document.body.appendChild(f); setTimeout(()=>f.remove(),750); }
+  bigWord(b.col.n,b.col.c); Speech.say(b.col.n,.85); this.balloons.forEach(q=>q.el.classList.remove('hint'));
+  this.count++; this.recent.push(1); this.goal(); if(this.count>=this.NEED[this.phase]) this.nextPhase(); },
+ wrong(b){ Snd.play('squeak'); b.el.classList.remove('nope'); void b.el.offsetWidth; b.el.classList.add('nope'); b.flee=true; this.errs++; this.recent.push(0); Speech.say('هذا '+b.col.n+'. ابحث عن ال'+this.target.n); this.balloons.forEach(q=>{ if(q.col.k===this.target.k) q.el.classList.add('hint'); });
+  const last=this.recent.slice(-4); if(this.phase>1&&last.length>=4&&last.filter(v=>v===0).length>=3){ this.phase--; this.count=0; this.recent=[]; toast('نعود خطوة للخلف لنتدرب أكثر 🙂'); this.goal(); } },
+ nextPhase(){ if(this.phase<3){ this.phase++; this.count=0; this.goal(); Snd.play('ok'); toast(this.phase===2?'رائع! الآن ستظهر بالونات بألوان أخرى':'ممتاز! بالونات أكثر بألوان مختلفة'); setTimeout(()=>this.instruct(),900); return; }
+  const k=this.target.k; if(!PR.colors.mastered.includes(k)) PR.colors.mastered.push(k); const nx=COLORS.find(c=>!PR.colors.mastered.includes(c.k)); PR.colors.cur=nx?nx.k:k; save();
+  const errRate=this.errs/(this.errs+this.NEED[2]+this.NEED[3]); endCard(`أحسنت! تعلّمت اللون ال${this.target.n}`,errRate<.15?3:errRate<.35?2:1,nx?`اللون التالي: ال${nx.n}. ويمكنك تجربة «تعميم الألوان».`:'تعلّمت كل الألوان! جرّب «تعميم الألوان».',[[ 'colors',nx?'اللون التالي: '+nx.n:'العب مرة أخرى','primary'],['gen','تعميم الألوان'],['menu','القائمة']]); } };
+
+/* ---------- 2) generalisation: put everyday things in the basket of their colour ---------- */
+const Gen={ items:[], i:0, ok:0, first:true, sel:false, cols:[],
+ start(){ stage.className='room'; let m=PR.colors.mastered.slice(); if(m.length<2) m=['red','yellow']; this.cols=shuffle(m).slice(0,4); this.items=shuffle(THINGS.filter(t=>this.cols.includes(t[2]))).slice(0,8); this.i=0; this.ok=0;
+  stage.innerHTML=`<div class="baskets">${this.cols.map(k=>`<div class="basket" data-col="${k}" style="background:${CK[k].c}"><span>${CK[k].n}</span></div>`).join('')}</div>`; this.next(); },
+ next(){ if(this.i>=this.items.length) return this.finish(); const t=this.items[this.i]; this.first=true; this.sel=false; stage.querySelector('.thing')?.remove(); const d=document.createElement('div'); d.className='thing'; d.textContent=t[0]; stage.appendChild(d); this.el=d; drag(d,(x,y)=>this.drop(x,y),()=>this.select());
+  setGoal(`<span style="font-size:1.5em">${t[0]}</span><span>ضع ${t[1]} في سلة لونها</span>${stepsHTML(this.i,this.items.length)}`); Speech.say('ضع '+t[1]+' في سلة لونها'); },
+ select(){ this.sel=!this.sel; this.el.classList.toggle('sel',this.sel); },
+ tap(x,y){ const el=document.elementFromPoint(x,y); if(el&&el.closest('.thing')){ this.select(); return; } const bk=el&&el.closest('.basket'); if(bk&&this.sel) this.dropOn(bk); },
+ drop(x,y){ const el=document.elementFromPoint(x,y), bk=el&&el.closest('.basket'); if(bk) this.dropOn(bk); },
+ dropOn(bk){ const t=this.items[this.i], c=CK[t[2]];
+  if(bk.dataset.col===t[2]){ Snd.play('ok'); bigWord(c.n,c.c); Speech.say(t[1]+' '+c.f); if(this.first) this.ok++; $$('.basket').forEach(b=>b.classList.remove('hint')); this.el.style.transition='all .4s'; const r=bk.getBoundingClientRect(); this.el.style.left=(r.left+r.width/2)+'px'; this.el.style.top=(r.top+20)+'px'; this.el.style.transform='translate(-50%,-50%) scale(.4)'; this.el.style.opacity='0'; this.i++; setTimeout(()=>this.next(),1200); }
+  else { Snd.play('no'); this.first=false; this.sel=false; this.el.classList.remove('sel'); Speech.say('لونها '+c.n); $(`.basket[data-col="${t[2]}"]`).classList.add('hint'); } },
+ finish(){ PR.gen.best=Math.max(PR.gen.best,this.ok); save(); const st=this.ok>=7?3:this.ok>=5?2:1; endCard('ألوان حياتنا! 🎨',st,`وضعت ${AR(this.ok)} من ${AR(this.items.length)} في سلتها من أول مرة.`,[['gen','مرة أخرى','primary'],['colors','بالونات الألوان'],['menu','القائمة']]); } };
+
+/* ---------- drag helper: drag with mouse/touch, or tap to select ---------- */
+function drag(el,onDrop,onTap){ let sx=0,sy=0,moved=false,ghost=null,pid=null;
+ el.addEventListener('pointerdown',e=>{ if(gpActive) return; e.preventDefault(); pid=e.pointerId; sx=e.clientX; sy=e.clientY; moved=false; try{ el.setPointerCapture(pid); }catch(_){} });
+ el.addEventListener('pointermove',e=>{ if(e.pointerId!==pid) return; if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>10){ moved=true; ghost=el.cloneNode(true); ghost.classList.add('drag'); ghost.classList.remove('home'); const r=el.getBoundingClientRect(); ghost.style.width=r.width+'px'; ghost.style.height=r.height+'px'; ghost.style.fontSize=getComputedStyle(el).fontSize; document.body.appendChild(ghost); el.style.opacity='.25'; }
+  if(ghost){ ghost.style.left=(e.clientX-ghost.offsetWidth/2)+'px'; ghost.style.top=(e.clientY-ghost.offsetHeight/2)+'px'; ghost.style.transform='none'; } });
+ const up=e=>{ if(e.pointerId!==pid) return; pid=null; if(ghost){ ghost.remove(); ghost=null; el.style.opacity=''; onDrop(e.clientX,e.clientY); } else if(!moved) onTap(); };
+ el.addEventListener('pointerup',up); el.addEventListener('pointercancel',up); }
+
+/* ---------- 3) shape puzzle with a shrinking prompt ---------- */
+const PROMPT=[1.6,1.45,1.3,1.15,1.0];
+const Puzzle={ set:[], order:[], cur:null, first:true, selEl:null, correct:0,
+ start(){ stage.className='desk'; const m=PR.shapes.mastered.length; this.set=SHAPE_SETS[m>=7?2:m>=4?1:0]; this.correct=0; this.round(); },
+ round(){ this.order=shuffle(this.set.slice()); const cols=this.set.length<=4?4:this.set.length<=7?4:5; const hs=clamp(Math.min(innerWidth*.85/cols-16,innerHeight*.28),80,140);
+  stage.innerHTML=`<div class="board" style="--cols:${cols};--hs:${hs}px">${shuffle(this.set.slice()).map(k=>`<div class="hole" data-shape="${k}">${shapeSVG(k,'#5a3818','sh')}</div>`).join('')}</div><div class="tray" id="tray"></div>`;
+  const tray=$('#tray'), ps=Math.round(hs*.86); const cs=shuffle(PIECE_COL.slice()); shuffle(this.set.slice()).forEach((k,i)=>{ const p=document.createElement('div'); p.className='piece'; p.dataset.shape=k; p.style.setProperty('--ps',ps+'px'); p.innerHTML=shapeSVG(k,cs[i%cs.length]); tray.appendChild(p); drag(p,(x,y)=>this.dropAt(p,x,y),()=>this.select(p)); });
+  this.next(); },
+ next(){ if(!this.order.length){ return this.finish(); } this.cur=this.order.shift(); this.first=true; this.selEl=null; const lvl=PR.shapes.lvl[this.cur]||0, f=PROMPT[Math.min(lvl,PROMPT.length-1)];
+  $$('.piece').forEach(p=>{ p.classList.remove('target','sel'); p.style.transform=''; }); const tp=$(`.piece[data-shape="${this.cur}"]`); tp.classList.add('target'); tp.style.transform=`scale(${f})`;
+  setGoal(`<span class="shp">${shapeSVG(this.cur,'#ffb300')}</span><span>ضع ${DEF[this.cur]}</span>`); Speech.say('ضع '+DEF[this.cur]); },
+ select(p){ $$('.piece').forEach(q=>q.classList.toggle('sel',q===p&&!q.classList.contains('sel'))); this.selEl=p.classList.contains('sel')?p:null; if(this.selEl&&p.dataset.shape!==this.cur){ Speech.say('هذا '+SHAPES[p.dataset.shape].n+'. ابحث عن '+DEF[this.cur]); } },
+ tap(x,y){ const el=document.elementFromPoint(x,y); const p=el&&el.closest('.piece'); if(p){ this.select(p); return; } const h=el&&el.closest('.hole'); if(h&&this.selEl) this.place(this.selEl,h); },
+ dropAt(p,x,y){ const el=document.elementFromPoint(x,y), h=el&&el.closest('.hole'); if(h) this.place(p,h); else this.back(p); },
+ back(p){ p.classList.remove('home'); void p.offsetWidth; p.classList.add('home'); },
+ place(p,h){ const k=p.dataset.shape; if(h.classList.contains('filled')) return this.back(p);
+  if(k!==this.cur){ Snd.play('no'); this.back(p); this.first=false; Speech.say('ابحث عن '+DEF[this.cur]); p.classList.remove('sel'); this.selEl=null; return; }
+  if(h.dataset.shape!==k){ Snd.play('no'); this.back(p); this.first=false; Speech.say('ضع '+DEF[k]+' في مكان '+DEF[k]); $(`.hole[data-shape="${k}"]`).classList.add('hint'); p.classList.remove('sel'); this.selEl=null; return; }
+  Snd.play('snap'); rumble(120,.3,.4); h.classList.remove('hint'); h.classList.add('filled'); const fill=p.querySelector('g').getAttribute('fill'); h.insertAdjacentHTML('beforeend',`<div class="placed">${shapeSVG(k,fill)}</div>`); p.remove(); bigWord(SHAPES[k].n,'#7a3d00'); Speech.say(SHAPES[k].n);
+  if(this.first){ this.correct++; const L=(PR.shapes.lvl[k]||0)+1; PR.shapes.lvl[k]=L; if(L>=PROMPT.length&&!PR.shapes.mastered.includes(k)) PR.shapes.mastered.push(k); save(); }
+  setTimeout(()=>this.next(),1100); },
+ finish(){ const n=this.set.length, st=this.correct>=n?3:this.correct>=n*.7?2:1; endCard('أكملت البازل! 🧩',st,`وضعت ${AR(this.correct)} من ${AR(n)} أشكال من أول مرة. كلما تدربت أكثر تصغر القطع حتى تصبح مثل غيرها.`,[['puzzle','بازل جديد','primary'],['tower','عمارة الأشكال'],['menu','القائمة']]); } };
+
+/* ---------- 4) the shape tower: a boy throws a shape, the child catches it and posts it ---------- */
+const Tower={ total:8, n:0, ok:0, first:true, holes:2, cur:null, el:null, y:0, sel:false, last:0,
+ start(){ stage.className='street'; this.n=0; this.ok=0; const m=PR.shapes.mastered.length; this.pool=SHAPE_SETS[m>=4?1:0];
+  stage.innerHTML=`<div class="roof"></div><div class="tower">${'<i></i>'.repeat(15)}</div><div class="boy" id="boy">🧒</div><div class="sorter" id="sorter"></div>`; clouds(); this.throwNext(); this.last=performance.now(); const tick=t=>{ loop=requestAnimationFrame(tick); this.update(t); }; loop=requestAnimationFrame(tick); },
+ throwNext(){ if(this.n>=this.total) return this.finish(); this.holes=this.n<3?2:this.n<6?3:4; this.cur=pick(this.pool); const others=shuffle(this.pool.filter(k=>k!==this.cur)).slice(0,this.holes-1); const set=shuffle([this.cur,...others]);
+  const hs=clamp(innerWidth*.12,80,130); $('#sorter').innerHTML=set.map(k=>`<div class="hole" data-shape="${k}" style="--hs:${hs}px">${shapeSVG(k,'#0d2350','sh')}</div>`).join(''); this.first=true; this.sel=false;
+  const boy=$('#boy'); boy.classList.remove('throw'); void boy.offsetWidth; boy.classList.add('throw'); Snd.play('whoosh');
+  const r=boy.getBoundingClientRect(); const fs=Math.round(hs*1.0); const el=document.createElement('div'); el.className='faller'; el.style.setProperty('--fs',fs+'px'); el.innerHTML=shapeSVG(this.cur,pick(PIECE_COL)); el.style.left=(r.left+r.width/2-fs/2)+'px'; this.y=r.top; this.x=r.left+r.width/2-fs/2; this.stopY=innerHeight*.42; el.style.top=this.y+'px'; stage.appendChild(el); this.el=el;
+  drag(el,(x,y)=>this.dropAt(x,y),()=>this.select());
+  setGoal(`<span class="shp">${shapeSVG(this.cur,'#ffb300')}</span><span>التقط ${DEF[this.cur]} و${FEM.includes(this.cur)?'ضعها في مكانها':'ضعه في مكانه'}</span>${stepsHTML(this.n,this.total)}`); setTimeout(()=>Speech.say(DEF[this.cur]),300); },
+ update(t){ const dt=Math.min(.05,(t-this.last)/1000); this.last=t; if(this.el&&!this.sel&&this.y<this.stopY){ this.y+=(S.calm?70:110)*dt; this.el.style.top=this.y+'px'; this.el.style.left=(this.x+Math.sin(t/300)*14)+'px'; this.el.style.transform=`rotate(${Math.sin(t/400)*12}deg)`; } },
+ select(){ this.sel=!this.sel; this.el.classList.toggle('sel',this.sel); if(this.sel) Snd.play('snap'); },
+ tap(x,y){ const el=document.elementFromPoint(x,y); if(el&&el.closest('.faller')){ this.select(); return; } const h=el&&el.closest('.hole'); if(h&&this.sel) this.place(h); },
+ dropAt(x,y){ const el=document.elementFromPoint(x,y), h=el&&el.closest('.hole'); if(h) this.place(h); },
+ place(h){ if(h.dataset.shape!==this.cur){ Snd.play('no'); this.first=false; this.sel=false; this.el.classList.remove('sel'); Speech.say('ابحث عن مكان '+DEF[this.cur]); $(`#sorter .hole[data-shape="${this.cur}"]`).classList.add('hint'); return; }
+  const k=this.cur; Snd.play('ok'); rumble(160,.3,.6); h.classList.remove('hint'); h.classList.add('filled'); h.insertAdjacentHTML('beforeend',`<div class="placed">${shapeSVG(k,this.el.querySelector('g').getAttribute('fill'))}</div>`); this.el.remove(); this.el=null;
+  // reinforcement = the shape itself, big and glowing, with its name
+  const rw=document.createElement('div'); rw.className='reward'; rw.innerHTML=`<svg viewBox="-10 -10 120 120"><g fill="none" stroke="#fff" stroke-width="7" style="filter:drop-shadow(0 0 12px #ffd600)">${SHAPES[k].svg}</g></svg>`; document.body.appendChild(rw); setTimeout(()=>rw.remove(),1650); bigWord(SHAPES[k].n,'#ffd600'); Speech.say(SHAPES[k].n);
+  if(this.first) this.ok++; PR.tower.done[k]=(PR.tower.done[k]||0)+1; save(); this.n++; setTimeout(()=>this.throwNext(),1700); },
+ finish(){ const st=this.ok>=7?3:this.ok>=5?2:1; endCard('عمارة الأشكال اكتملت! 🏢',st,`وضعت ${AR(this.ok)} من ${AR(this.total)} أشكال من أول مرة.`,[['tower','العب مرة أخرى','primary'],['puzzle','بازل الأشكال'],['menu','القائمة']]); } };
+
+/* ---------- input: mouse/touch taps, the pin, and a PlayStation cursor ---------- */
+let gpActive=false, gp={x:innerWidth/2,y:innerHeight/2}, prevBtn={}, padIdx=null, navCd=0;
+stage.addEventListener('pointerdown',e=>{ if(e.target.closest('.piece,.thing,.faller')) return; Snd.init(); const A=mode&&({colors:Colors,gen:Gen,puzzle:Puzzle,tower:Tower})[mode]; if(A&&A.tap) A.tap(e.clientX,e.clientY); });
+addEventListener('pointermove',e=>{ if(mode==='colors'){ const p=$('#pin'); p.style.left=e.clientX+'px'; p.style.top=e.clientY+'px'; } if(gpActive&&e.pointerType!=='mouse') return; if(e.movementX||e.movementY){ gpActive=false; $('#cursor').hidden=true; } },{passive:true});
+addEventListener('pointerdown',e=>{ if(mode==='colors'){ const p=$('#pin'); p.style.left=e.clientX+'px'; p.style.top=e.clientY+'px'; } },{passive:true});
+function getPad(){ let ps=[]; try{ ps=navigator.getGamepads?navigator.getGamepads():[]; }catch(e){} if(padIdx!=null&&ps[padIdx]) return ps[padIdx]; for(const p of ps) if(p&&p.connected){ padIdx=p.index; return p; } return null; }
+addEventListener('gamepadconnected',e=>{ padIdx=e.gamepad.index; toast('🎮 تم توصيل يد التحكم: حرّك العصا واضغط ✕'); });
+function rumble(ms,s,w){ if(S.calm){s*=.4;w*=.4;} try{ const g=getPad(); if(g&&g.vibrationActuator) g.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:s,weakMagnitude:w}).catch(()=>{}); }catch(e){} }
+function padLoop(){ requestAnimationFrame(padLoop); const g=getPad(); if(!g) return; const bt=i=>!!(g.buttons[i]&&g.buttons[i].pressed); let ax=g.axes[0]||0, ay=g.axes[1]||0; if(bt(14)) ax=-1; if(bt(15)) ax=1; if(bt(12)) ay=-1; if(bt(13)) ay=1; if(Math.abs(ax)<.15) ax=0; if(Math.abs(ay)<.15) ay=0;
+ const a=bt(0), o=bt(1), aE=a&&!prevBtn.a, oE=o&&!prevBtn.o; prevBtn={a,o};
+ if(a||o||ax||ay) Snd.init();
+ if(mode){ if(ax||ay){ gpActive=true; gp.x=clamp(gp.x+ax*14,10,innerWidth-10); gp.y=clamp(gp.y+ay*14,10,innerHeight-10); }
+  const c=$('#cursor'); c.hidden=!gpActive||mode==='colors'; c.style.left=gp.x+'px'; c.style.top=gp.y+'px'; if(mode==='colors'&&gpActive){ const p=$('#pin'); p.style.left=gp.x+'px'; p.style.top=gp.y+'px'; }
+  if(aE&&gpActive){ const A=({colors:Colors,gen:Gen,puzzle:Puzzle,tower:Tower})[mode]; A.tap(gp.x,gp.y); } if(oE) showMenu(); }
+ else { navCd-=1/60; const vis=[...document.querySelectorAll('#menu:not([hidden]) button,#menu:not([hidden]) a.btn,#end:not([hidden]) button')]; if((ax||ay)&&navCd<=0&&vis.length){ navCd=.25; const cur=document.activeElement; let i=vis.indexOf(cur); i=i<0?0:clamp(i+((ax<0||ay>0)?1:-1),0,vis.length-1); vis[i].focus(); } if(!ax&&!ay) navCd=0; if(aE&&document.activeElement&&vis.includes(document.activeElement)) document.activeElement.click(); } }
+requestAnimationFrame(padLoop);
+
+/* ---------- clicks ---------- */
+document.addEventListener('click',e=>{ Snd.init();
+ const ml=e.target.closest('#mainLink'); if(ml&&window.parent!==window){ e.preventDefault(); try{speechSynthesis.cancel();}catch(_){} window.parent.postMessage('ayn-close','*'); return; }
+ const go=e.target.closest('[data-go]'); if(go){ const g=go.dataset.go; if(g==='menu') showMenu(); else startAct(g); return; }
+ const ch=e.target.closest('[data-color]'); if(ch){ PR.colors.cur=ch.dataset.color; save(); refreshMenu(); Speech.say(CK[ch.dataset.color].n); return; }
+ const sg=e.target.closest('.seg button'); if(sg){ const k=sg.parentElement.dataset.key; S[k]=sg.dataset.v==='true'; store.set('settings',S); refreshMenu(); return; } });
+$('#bHome').onclick=()=>showMenu();
+$('#bSay').onclick=()=>{ if(mode==='colors') Colors.instruct(); else if(mode==='gen'&&Gen.items[Gen.i]) Speech.say('ضع '+Gen.items[Gen.i][1]+' في سلة لونها'); else if(mode==='puzzle'&&Puzzle.cur) Speech.say('ضع '+DEF[Puzzle.cur]); else if(mode==='tower'&&Tower.cur) Speech.say(''+DEF[Tower.cur]); };
+addEventListener('keydown',e=>{ if(e.code==='Escape'&&mode) showMenu(); });
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) try{speechSynthesis.cancel();}catch(e){} });
+Speech.init(); showMenu();
+})();
+</script>
+
+</body>
+</html>
