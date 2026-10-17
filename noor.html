@@ -108,7 +108,7 @@ i.ps svg{width:20px;height:20px}
 .pop small{font-size:18px;color:var(--muted)}
 .pop{bottom:calc(200px + env(safe-area-inset-bottom,0px))}
 .cue .w{line-height:1.7}
-.picks{display:flex;gap:12px}.pk{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:100px;padding:4px 14px 10px;border-radius:22px;border:0;color:#fff;font-weight:800;font-size:19px;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.35);touch-action:manipulation}.pk .mk{font-size:54px;line-height:1.15}.pk i.ps{width:28px;height:28px}.pk.fa{background:linear-gradient(180deg,#ff5a5f,#c0141e)}.pk.da{background:linear-gradient(180deg,#5b8cff,#1b3fae)}.pk.ka{background:linear-gradient(180deg,#2fd06a,#0f7a3a)}.pk:active{transform:translateY(4px)}.pk.hint{animation:pkh .9s infinite}@keyframes pkh{50%{transform:scale(1.12);box-shadow:0 0 0 7px #ffc83a}}@media (max-width:700px){.pk{min-width:78px;font-size:16px}.pk .mk{font-size:42px}}.pop .big{line-height:1.6}</style>
+.picks{display:flex;gap:12px}.pk{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:100px;padding:4px 14px 10px;border-radius:22px;border:0;color:#fff;font-weight:800;font-size:19px;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.35);touch-action:manipulation}.pk .mk{font-size:54px;line-height:1.15}.pk i.ps{width:28px;height:28px}.pk.fa{background:linear-gradient(180deg,#ff5a5f,#c0141e)}.pk.da{background:linear-gradient(180deg,#5b8cff,#1b3fae)}.pk.ka{background:linear-gradient(180deg,#2fd06a,#0f7a3a)}.pk:active{transform:translateY(4px)}.pk.go{background:linear-gradient(180deg,#2fd06a,#0f7a3a)}.pk.stop{background:linear-gradient(180deg,#ff5a5f,#c0141e)}.pk.shd{background:linear-gradient(180deg,#d68af0,#7a1fd6)}.pk.hint{animation:pkh .9s infinite}@keyframes pkh{50%{transform:scale(1.12);box-shadow:0 0 0 7px #ffc83a}}@media (max-width:700px){.pk{min-width:78px;font-size:16px}.pk .mk{font-size:42px}}.pop .big{line-height:1.6}</style>
 
 <canvas id="gl" aria-label="مدينة نور البيان"></canvas>
 <section id="loading" class="screen"><div class="logo">نور البيان</div><div class="spin" role="status" aria-label="جارٍ التحميل"></div></section>
@@ -151,7 +151,7 @@ i.ps svg{width:20px;height:20px}
   <div class="score panel"><span class="medal" id="sMedal">🏅 ٠</span><small id="sRound">١ / ٦</small></div>
   <div class="cue panel" id="cue"><div class="w" id="cW"></div><div class="q" id="cQ"></div></div>
   <div class="tools"><button class="ib" data-act="pause" aria-label="إيقاف مؤقت">❚❚</button><button class="ib" data-act="repeat" aria-label="اسمع">🔊</button></div>
-  <div class="magbar" id="magbar"><div class="meter"><i id="meter"></i></div><button class="hold" id="hold"><i class="ps" data-b="x"></i>✋ اضغط باستمرار</button><div class="picks" id="picks" hidden><button class="pk fa" data-pick="fa"><span class="mk">ـَ</span>فتحة <i class="ps" data-b="t"></i></button><button class="pk da" data-pick="da"><span class="mk">ـُ</span>ضمة <i class="ps" data-b="o"></i></button><button class="pk ka" data-pick="ka"><span class="mk">ـِ</span>كسرة <i class="ps" data-b="x"></i></button></div><button class="btn" id="nextBtn" data-act="next" hidden><i class="ps" data-b="x"></i>التالي</button></div>
+  <div class="magbar" id="magbar"><div class="meter"><i id="meter"></i></div><button class="hold" id="hold"><i class="ps" data-b="x"></i>✋ اضغط باستمرار</button><div class="picks" id="picks" hidden><button class="pk fa" data-pick="fa"><span class="mk">ـَ</span>فتحة <i class="ps" data-b="t"></i></button><button class="pk da" data-pick="da"><span class="mk">ـُ</span>ضمة <i class="ps" data-b="o"></i></button><button class="pk ka" data-pick="ka"><span class="mk">ـِ</span>كسرة <i class="ps" data-b="x"></i></button></div><div class="picks" id="carbtns" hidden><button class="pk go" data-car="go"><span class="mk">🟢</span>انطلق <i class="ps" data-b="x"></i></button><button class="pk stop" data-car="stop"><span class="mk">🔴</span>قف <i class="ps" data-b="o"></i></button><button class="pk shd" data-car="shadda"><span class="mk">ـّ</span>شدة <i class="ps" data-b="t"></i></button></div><button class="btn" id="nextBtn" data-act="next" hidden><i class="ps" data-b="x"></i>التالي</button></div>
   <div class="lanes" id="lanes"><button data-lane="r" aria-label="يمين">➡️</button><button data-lane="l" aria-label="يسار">⬅️</button></div>
   <div class="pop panel" id="pop" hidden></div>
 </div>
@@ -330,10 +330,17 @@ const MARKS=/[ً-ْ]/g;
 const baseOf=s=>s.replace(MARKS,'');
 const lastBase=s=>{ const b=baseOf(s); return b[b.length-1]; };
 const clusters=w=>w.match(/[^ً-ْ][ً-ْ]*/g)||[];
-const vowelOf=c=>c.includes(KA)?'ka':c.includes(DA)?'da':'fa';
+const SUK='ْ', SHD='ّ', TAN={fa:'ً',da:'ٌ',ka:'ٍ'};
+const vowelOf=c=>/[ٍِ]/.test(c)?'ka':/[ٌُ]/.test(c)?'da':'fa';
+const isMadd=(c,p)=>c.length===1&&!!p&&(((c==='ا'||c==='ى')&&/[ًَ]$/.test(p))||(c==='و'&&p.endsWith(DA))||(c==='ي'&&p.endsWith(KA)));
 // a madd letter (ا after fatha, ي after kasra, و after damma) belongs to the syllable before it: قَا + لَ
-function syllables(w){ const out=[]; for(const c of clusters(w)){ const p=out[out.length-1]; if(p&&c.length===1&&(((c==='ا'||c==='ى')&&p.endsWith(FA))||(c==='و'&&p.endsWith(DA))||(c==='ي'&&p.endsWith(KA)))) out[out.length-1]=p+c; else out.push(c); } return out; }
-const partsOf=w=>{ const s=syllables(w); return s.length>1?s:clusters(w); };
+function syllables(w){ const out=[]; for(const c of clusters(w)){ const p=out[out.length-1]; if(isMadd(c,p)) out[out.length-1]=p+c; else out.push(c); } return out; }
+// syllable cars: a letter with a vowel takes a new car (green light), a letter with sukun stops and rides in the car before it (red light), shadda = a stopped twin + a moving twin
+function carSteps(w){ const C=clusters(w); return C.map((c,i)=>c.includes(SHD)?{t:'shadda',a:baseOf(c)+SUK,b:c.replace(SHD,'')}:c.includes(SUK)?{t:'stop',a:c}:isMadd(c,C[i-1])?{t:'ride',a:c}:{t:'go',a:c}); }
+function carSyl(w){ const out=[]; const add=a=>{ if(out.length) out[out.length-1]+=a; else out.push(a); }; carSteps(w).forEach(s=>{ if(s.t==='go') out.push(s.a); else if(s.t==='shadda'){ add(s.a); out.push(s.b); } else add(s.a); }); return out; }
+const partsOf=w=>{ if(GS.L&&GS.L.kind==='car') return carSyl(w); const s=syllables(w); return s.length>1?s:clusters(w); };
+// tanween is read as a vowel followed by a silent nun: بٌ ← بُنْ
+const tanRead=w=>w.replace(/ً[اى]?/g,'َنْ').replace(/ٌ/g,'ُنْ').replace(/ٍ/g,'ِنْ');
 const voc=w=>[...w].map(c=>c+FA).join('');
 // pieces shown apart, joined by a stretched line that shrinks as they come together
 function stretchParts(P,p,mode){ const k=Math.round((1-p)*6), gap=p<1?'&nbsp;'.repeat(Math.max(0,Math.round((1-p)*3))):''; return P.map((s,i)=>{ const jp=i>0&&!NONJOIN.includes(lastBase(P[i-1])), jn=i<P.length-1&&!NONJOIN.includes(lastBase(s)); const t=(jp?ZW:'')+s+(jn?'ـ'.repeat(k)+ZW:''); const col=mode==='sc'?SC[i%3]:mode==='vc'?VC[vowelOf(s)]:''; return `<span${col?` style="color:${col}"`:''}>${t}</span>`+(i<P.length-1&&!jn?gap:''); }).join(''); }
@@ -365,6 +372,14 @@ const RV=[[['جُرِحَ','hurt'],['وَشُفِيَ','happy']],[['رَضِيَ
 const MA=[ABC.map(c=>c+FA+'ا'),['قَالَ','كَادَ','ضَاقَ','تَابَ','طَالَ','زَاغَ','رَانَ','ذَاتُ','سَابِقُ','جَامِعُ','ثَالِثُ','هَاجَرَ','يَخَافُ','طَعَامُ']];
 const MY=[ABC.filter(c=>c!=='ي').map(c=>c+KA+'ي'),['أَبِي','أَخِي','فِيهَا','حِينَ','فِيمَ','بَنَاتِي','يُصِيبُ','يَزِيغُ','سَبِيلِي','حَدِيثُ','سَرِيعُ','بَدِيعُ','يَطِيرُ','رَفِيعُ']];
 const MW=[ABC.map(c=>c+DA+'و'),['ثَمُودُ','رَسُولُ','يَقُولُ','أَعُوذُ','حُدُودَ','يَغُوثَ','دُونِ','بُطُونَ','أَخُوكَ','يَحُورَ']];
+// unit 3: sukun, shadda, tanween
+const SK=[['أَبْ','إِبْ','أُبْ','أَتْ','إِتْ','أُتْ','أَجْ','إِدْ','أُرْ','أَسْ','إِشْ','أُصْ','أَطْ','إِعْ','أُفْ','أَقْ','إِكْ','أُلْ','أَمْ','إِنْ','أُهْ'],
+ ['قُلْ','لَمْ','مِنْ','عَنْ','هَلْ','بَلْ','قَدْ','كَمْ','لَنْ','قُمْ','نَمْ','كُلْ','خُذْ','إِذْ'],
+ ['يَلْعَبُ','يَشْرَبُ','يَسْمَعُ','يَكْتُبُ','مَسْجِدُ','مَكْتَبُ','مَلْعَبُ','أَرْنَبُ','يَذْهَبُ','يَجْلِسُ','مِنْبَرُ','أَحْمَرُ','أَخْضَرُ','أَصْفَرُ']];
+const SH=[['رَبَّ','إِنَّ','ثُمَّ','مَدَّ','شَدَّ','عَدَّ','فَرَّ','مَرَّ','رَدَّ','حَجَّ','صَبَّ','ظَنَّ'],['عَلَّمَ','كَسَّرَ','قَدَّمَ','سَلَّمَ','رَتَّبَ','نَظَّفَ','سَبَّحَ','كَبَّرَ','فَكَّرَ','صَدَّقَ','يَمُدُّ','يَشُدُّ']];
+const SS=[[['نَظَّفَ','wipe'],['وَرَتَّبَ','carry']],[['فَكَّرَ','know'],['فَصَدَّقَ','nod']],[['كَبَّرَ','praise'],['وَسَبَّحَ','humble']],[['سَلَّمَ','go'],['وَجَلَسَ','sit']],[['قَدَّمَ','gift'],['فَشَكَرَ','thank']]];
+const makeTX=()=>shuffle(shuffle(ABC.slice()).slice(0,9).map((c,i)=>c+'ًٌٍ'[i%3]));
+const TW=[['كِتَابٌ','قَلَمٌ','وَلَدٌ','جَمَلٌ','قَمَرٌ','بَابٌ','سَمَكٌ','عِنَبٌ'],['وَلَدًا','قَلَمًا','جَمَلًا','بَابًا','قَمَرٍ','وَلَدٍ','جَمَلٍ','كِتَابٍ']];
 const VEM={wash:'🧼',wipe:'🧽',plant:'🌱',harvest:'🌾',grow:'🌿',bow:'',prostrate:'',ask:'❓',know:'💡',hold:'🍎',look:'👀',read:'📖',write:'✍️',success:'🏆',knock:'🚪',opendoor:'🚪',sit:'🪑',eat:'🍽️',run:'🏃',jump:'🦘',
  sneeze:'🤧',praise:'🤲',silent:'🤫',relief:'😌',fear:'😨',nod:'👍',strong:'💪',carry:'📦',profit:'💰',heal:'😊',thank:'💖',hurt:'🤕',happy:'😄',lost:'🔍',found:'🎉',go:'🚶',gift:'🎁',wearhat:'🧢',removehat:'🧢',drink:'🍯',humble:''};
 const LESSONS=[
@@ -381,11 +396,17 @@ const LESSONS=[
  {id:'rv',t:'مراجعة الحركات: جمل',d:'اقرأ الجملة ثم شاهد ضمة يمثّلها: جُرِحَ وَشُفِيَ',h:'da',kind:'sent',sets:[RV.slice(0,4),RV.slice(4)],subs:['جمل ١','جمل ٢']},
  {id:'ma',t:'المد بالألف',d:'بَ + ا = بَا (نمدّ الصوت) ← قَالَ ، طَالَ',h:'fa',kind:'words',vc:1,madd:1,sets:MA,subs:['الحروف','الكلمات']},
  {id:'my',t:'المد بالياء',d:'بِ + ي = بِي ← أَخِي ، فِيهَا',h:'ka',kind:'words',vc:1,madd:1,sets:MY,subs:['الحروف','الكلمات']},
- {id:'mw',t:'المد بالواو',d:'بُ + و = بُو ← يَقُولُ ، رَسُولُ',h:'da',kind:'words',vc:1,madd:1,sets:MW,subs:['الحروف','الكلمات']}];
+ {id:'mw',t:'المد بالواو',d:'بُ + و = بُو ← يَقُولُ ، رَسُولُ',h:'da',kind:'words',vc:1,madd:1,sets:MW,subs:['الحروف','الكلمات']},
+ {id:'sk',t:'السكون: سيارة المقاطع 🚦',d:'الحرف المتحرك يركب سيارة جديدة 🟢، والساكن يقف 🔴 ويركب مع الحرف الذي قبله: أَبْ ، قُلْ ، يَلْ عَ بُ',h:'fa',kind:'car',vc:1,sets:SK,subs:['حروف ساكنة','كلمات قصيرة','كلمات أطول']},
+ {id:'sh',t:'الشدة: الحرف التوأم ✌️',d:'الشدة حرفان: الأول ساكن يقف 🔴 والثاني متحرك ينطلق 🟢: رَبْ بَ = رَبَّ',h:'fa',kind:'car',vc:1,shadda:1,sets:SH,subs:['كلمات ١','كلمات ٢']},
+ {id:'ss',t:'جمل بالشدة',d:'اقرأ الجملة ثم شاهد فتحة يمثّلها: نَظَّفَ وَرَتَّبَ',h:'fa',kind:'sent',sets:[SS],subs:['جمل']},
+ {id:'tn',t:'التنوين: البطل وتوأمه',d:'علامتان على الحرف = نون ساكنة نسمعها ولا نكتبها: بٌ ← بُنْ',h:'da',hs:['fa','da','ka'],marks:['ً','ٌ','ٍ'],kind:'letters',subs:['تنوين الفتح','تنوين الضم','تنوين الكسر']},
+ {id:'tx',t:'التنوين الثلاثة معًا',d:'فتحتان أم ضمتان أم كسرتان؟ ادعُ البطل المناسب',h:'fa',heroes:['fa','da','ka'],tan:1,kind:'mixed',sets:[makeTX(),makeTX()],subs:['تدريب ١','تدريب ٢']},
+ {id:'tw',t:'كلمات بالتنوين',d:'كِتَابٌ ، قَلَمًا ، جَمَلٍ — ونسمع النون: كِتَابُنْ',h:'da',kind:'words',vc:1,tan:1,sets:TW,subs:['كلمات ١','كلمات ٢']}];
 LESSONS.forEach(L=>{ const a=PR[L.id]||[]; PR[L.id]=L.subs.map((_,i)=>a[i]||0); });
 function unlocked(li,si){ if(S.open) return true; const L=LESSONS[li]; if(si>0) return PR[L.id][si-1]>0; if(li===0) return true; return PR[LESSONS[li-1].id].every(x=>x>0); }
 function refreshMenu(){ $('#lessons').innerHTML=LESSONS.map((L,li)=>`<div class="lesson" style="--hc:${H[L.h].suit}"><div class="lh"><span class="no">${AR(li+1)}</span><span><b>${L.t}</b><small>${L.d}</small></span></div><div class="subs">${L.subs.map((s,si)=>{ const u=unlocked(li,si), st=PR[L.id][si]||0; return `<button class="sub${u?'':' locked'}" data-go="${li},${si}">${u?'':'🔒 '}${s}<span class="stars">${starsHTML(st)}</span></button>`; }).join('')}</div></div>`).join('')
-  +`<div class="lesson soon"><div class="lh"><span class="no">…</span><span><b>قريبًا بإذن الله</b><small>السكون، ثم الشدة، ثم التنوين، بنفس ترتيب الكتاب.</small></span></div></div>`; }
+  +`<div class="lesson soon"><div class="lh"><span class="no">…</span><span><b>قريبًا بإذن الله</b><small>تطبيقات على السور القصيرة بنفس ترتيب الكتاب.</small></span></div></div>`; }
 
 let hero=heroes.fa;
 function setHero(h){ hero=heroes[h]; HK.forEach(k=>heroes[k].g.visible=k===h); }
@@ -479,18 +500,22 @@ const LBS=1.6;
 function letterBlock(text,col){ const g=new THREE.Group(); const side=mat(col,{e:col,ei:.6,r:.3}); const tx=ctex(512,512,(x,w,h)=>{ x.fillStyle='#ffffff'; x.beginPath(); if(x.roundRect) x.roundRect(16,16,w-32,h-32,70); else x.rect(16,16,w-32,h-32); x.fill(); x.lineWidth=26; x.strokeStyle=col; x.stroke(); x.font='800 210px "Baloo Bhaijaan 2", Tahoma, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillStyle='#1a1a2e'; x.fillText(text,w/2,h/2+40); },1,1);
  const face=new THREE.MeshStandardMaterial({map:tx,roughness:.4}); const m=new THREE.Mesh(G.box(2.3,2.3,.6),[side,side,side,side,face,face]); m.castShadow=true; g.add(m); const gl=glow(col,4,.4); gl.position.z=.6; g.add(gl); world.add(g); return g; }
 function bumpMedal(n){ const el=$('#sMedal'); el.textContent='🏅 '+AR(n); el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
-function showPicks(on){ const L=GS.L; $('#hold').hidden=on; $('.meter').style.visibility=on?'hidden':''; $('#picks').hidden=!on; if(on) $$('#picks [data-pick]').forEach(b=>{ b.hidden=!L.heroes.includes(b.dataset.pick); b.classList.remove('hint'); }); }
-function startLesson(li,si){ const L=LESSONS[li]; Object.assign(GS,{L,li,si,h:L.h,medals:0,i:0,on:true}); RC.on=false; if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); hideProps(); hideBubble(); boardsOn(); setHero(L.h);
- GS.list=L.kind==='letters'?L.groups[si].slice():L.kind==='words'?shuffle(L.sets[si].slice()).slice(0,L.madd&&si===0?8:6):L.sets[si].slice();
+function showPicks(on){ const L=GS.L; $('#hold').hidden=on; $('.meter').style.visibility=on?'hidden':''; $('#picks').hidden=!on; if(on) $$('#picks [data-pick]').forEach(b=>{ const h=b.dataset.pick; b.hidden=!L.heroes.includes(h); b.classList.remove('hint'); b.querySelector('.mk').textContent='ـ'+(L.tan?TAN[h]:MK[h]); }); }
+function showCarBtns(on){ const L=GS.L; $('#carbtns').hidden=!on; if(on){ $('#hold').hidden=true; $('.meter').style.visibility='hidden'; $$('#carbtns .pk').forEach(b=>{ b.classList.remove('hint'); if(b.dataset.car==='shadda') b.hidden=!L.shadda; }); } }
+// a pair of marks for tanween: the hero and his twin
+function twinMark(h){ const g=new THREE.Group(), a=makeMark(h), b=makeMark(h); a.position.y=.45; b.position.y=-.45; a.scale.setScalar(.8); b.scale.setScalar(.8); g.add(a,b); return g; }
+function startLesson(li,si){ const L=LESSONS[li], h=L.hs?L.hs[si]:L.h; Object.assign(GS,{L,li,si,h,mark:L.marks?L.marks[si]:MK[h],medals:0,i:0,on:true}); RC.on=false; if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); hideProps(); hideBubble(); boardsOn(); setHero(h);
+ GS.list=L.kind==='letters'?(L.groups?L.groups[si].slice():shuffle(ABC.slice()).slice(0,8)):L.kind==='words'||L.kind==='car'?shuffle(L.sets[si].slice()).slice(0,(L.madd||L.kind==='car')&&si===0?8:6):L.sets[si].slice();
  show('mag'); setupMag(); }
-function clearMag(){ GS.blocks.forEach(dropObj); GS.blocks=[]; dropObj(GS.merged); GS.merged=null; if(GS.markObj){ world.remove(GS.markObj); GS.markObj=null; } if(GS.anim){ world.remove(GS.anim.m); GS.anim=null; } sparks.forEach(s=>s.s.visible=false); }
+function clearMag(keepCars){ GS.blocks.forEach(dropObj); GS.blocks=[]; dropObj(GS.merged); GS.merged=null; if(GS.markObj){ world.remove(GS.markObj); GS.markObj=null; } if(GS.anim){ if(GS.anim.m) world.remove(GS.anim.m); GS.anim=null; } sparks.forEach(s=>s.s.visible=false); clearCars(keepCars); }
 const wmode=()=>GS.L.vc?'vc':'sc';
-function itemText(){ const it=GS.list[GS.i], k=GS.L.kind; return k==='letters'?it+MK[GS.h]:k==='sent'?it.map(x=>x[0]).join(' '):it; }
-function sayParts(){ const it=GS.list[GS.i], k=GS.L.kind; if(k==='letters') Speech.say(itemText(),.6); else if(k==='sent') Speech.say(it.map(x=>x[0]).join('، '),.6); else Speech.say((k==='mixed'?clusters(it):GS.parts).join('، '),.55); }
+function itemText(){ const it=GS.list[GS.i], k=GS.L.kind; return k==='letters'?it+GS.mark:k==='sent'?it.map(x=>x[0]).join(' '):it; }
+function sayParts(){ const it=GS.list[GS.i], k=GS.L.kind; if(k==='letters') Speech.say(itemText(),.6); else if(k==='sent') Speech.say(it.map(x=>x[0]).join('، '),.6); else Speech.say((k==='mixed'?clusters(it):k==='car'?carSyl(it):GS.parts).join('، '),.55); }
 function mixedHTML(){ const C=GS.cl; return C.map((c,i)=>`<span style="color:${i<GS.k?VC[vowelOf(c)]:i===GS.k?'#ffc83a':'#ffffff'}">${(i>0&&!NONJOIN.includes(lastBase(C[i-1]))?ZW:'')+c+(i<C.length-1&&!NONJOIN.includes(lastBase(c))?ZW:'')}</span>`).join(''); }
 function setupMag(){ clearMag(); hideProps(); boardsOn(); const L=GS.L, it=GS.list[GS.i], C=H[GS.h]; Object.assign(GS,{p:0,said:false,done:false,acting:null,merging:null,missed:false}); setHero(L.kind==='mixed'?L.heroes[0]:GS.h);
- $('#cue').hidden=false; $('#nextBtn').hidden=true; $('#meter').style.width='0'; $('#sRound').textContent=`${AR(GS.i+1)} / ${AR(GS.list.length)}`; $('#sMedal').textContent='🏅 '+AR(GS.medals); showPicks(false);
- if(L.kind==='letters'){ GS.blocks=[letterBlock(it,C.markC)]; GS.blocks[0].scale.setScalar(LBS); GS.ws=[1]; GS.markObj=makeMark(GS.h); world.add(GS.markObj); $('#cW').innerHTML=`<span>${it}</span>`; $('#cQ').textContent=`اضغط باستمرار: ${C.n} يضع علامته ${C.where} الحرف`; }
+ $('#cue').hidden=false; $('#nextBtn').hidden=true; $('#meter').style.width='0'; $('#sRound').textContent=`${AR(GS.i+1)} / ${AR(GS.list.length)}`; $('#sMedal').textContent='🏅 '+AR(GS.medals); showPicks(false); $('#carbtns').hidden=true;
+ if(L.kind==='letters'){ GS.blocks=[letterBlock(it,C.markC)]; GS.blocks[0].scale.setScalar(LBS); GS.ws=[1]; GS.markObj=L.marks?twinMark(GS.h):makeMark(GS.h); world.add(GS.markObj); $('#cW').innerHTML=`<span>${it}</span>`; $('#cQ').textContent=L.marks?`اضغط باستمرار: ${C.n} وتوأمه يضعان علامتين ${C.where} الحرف`:`اضغط باستمرار: ${C.n} يضع علامته ${C.where} الحرف`; }
+ else if(L.kind==='car') setupCar(it);
  else if(L.kind==='mixed'){ GS.cl=clusters(it); GS.k=0; GS.p=.3; GS.cl.forEach(c=>GS.blocks.push(makeBlock(baseOf(c),'#8f9bc4'))); GS.ws=GS.cl.map(()=>1); $('#cW').innerHTML=mixedHTML(); $('#cQ').textContent='انظر إلى علامة الحرف الملوّن: من يضعها؟'; showPicks(true); }
  else if(L.kind==='words'){ GS.parts=partsOf(it); GS.parts.forEach((s,i)=>GS.blocks.push(makeBlock(s,L.vc?VC[vowelOf(s)]:SC[i%3],baseOf(s).length>1?1.45:0))); GS.ws=GS.parts.map(s=>baseOf(s).length>1?1.45:1); $('#cW').innerHTML=stretchParts(GS.parts,0,wmode()); $('#cQ').textContent=L.madd?'اضغط باستمرار ومدّ الصوت مع البطل':'اضغط باستمرار ليضمّ البطل المقاطع'; }
  else { GS.ws=it.map(x=>.5*baseOf(x[0]).length+.1); it.forEach((x,i)=>GS.blocks.push(makeBlock(x[0],SC[i%3],GS.ws[i]))); $('#cW').innerHTML=it.map((x,i)=>`<span style="color:${SC[i%3]}">${x[0]}</span>`).join(' &nbsp; '); $('#cQ').textContent=`اضغط باستمرار ليجمع ${C.n} كلمات الجملة`; }
@@ -500,23 +525,61 @@ function placeBlocks(p,t){ const n=GS.blocks.length, gap=.25, W=GS.ws.map(w=>w*2
 function placeLetter(p,t){ const b=GS.blocks[0]; b.position.set(0,5.0+Math.sin(t*2)*.08,2); b.rotation.y=Math.sin(t*1.2)*.1*(1-p); const m=GS.markObj; if(!m) return; hero.arms[0].hand.getWorldPosition(V1); V2.set(0,GS.h==='ka'?5-1.15*LBS-.7:5+1.15*LBS+.7,1.5); const e=easeIO(p); m.position.lerpVectors(V1,V2,e); m.position.y+=Math.sin(e*Math.PI)*1.3; m.scale.setScalar(.45+.2*e); m.rotation.z=Math.sin(t*3)*.25*(1-e); }
 // the student looks at the mark and calls the hero who owns it
 function chooseHero(h){ const L=GS.L; if(!GS.on||!L||L.kind!=='mixed'||GS.done||GS.anim||GS.merging!=null||!L.heroes.includes(h)||GS.k>=GS.cl.length) return; const need=vowelOf(GS.cl[GS.k]);
- if(h===need){ setHero(h); const m=makeMark(h); world.add(m); GS.anim={t:0,h,m}; Snd.play('swap'); $$('#picks .pk').forEach(b=>b.classList.remove('hint')); }
- else { GS.missed=true; Snd.play('no'); rumble(90,.1,.1); const C=H[need], tip=need==='fa'?'شَرطة فوق الحرف':need==='ka'?'شَرطة تحت الحرف':'واو صغيرة فوق الحرف'; pop(`<div class="big">${GS.cl[GS.k]}</div>${tip} ← نادِ <b style="color:${C.markC}">${C.n}</b>`,2800); const b=$(`#picks [data-pick="${need}"]`); if(b) b.classList.add('hint'); } }
+ if(h===need){ setHero(h); const m=L.tan?twinMark(h):makeMark(h); world.add(m); GS.anim={t:0,h,m}; Snd.play('swap'); $$('#picks .pk').forEach(b=>b.classList.remove('hint')); }
+ else { GS.missed=true; Snd.play('no'); rumble(90,.1,.1); const C=H[need], tip=L.tan?(need==='fa'?'فتحتان فوق الحرف':need==='ka'?'كسرتان تحت الحرف':'ضمتان فوق الحرف'):need==='fa'?'شَرطة فوق الحرف':need==='ka'?'شَرطة تحت الحرف':'واو صغيرة فوق الحرف'; pop(`<div class="big">${GS.cl[GS.k]}</div>${tip} ← نادِ <b style="color:${C.markC}">${C.n}</b>`,2800); const b=$(`#picks [data-pick="${need}"]`); if(b) b.classList.add('hint'); } }
 function updateMixed(dt,t){ placeBlocks(GS.p,t); const cur=GS.blocks[GS.k]; GS.blocks.forEach((b,i)=>b.scale.setScalar(i===GS.k&&!GS.anim?1+.07*Math.sin(t*6):1));
  if(GS.anim){ const a=GS.anim; a.t+=dt; const e=easeIO(Math.min(1,a.t/.8)); hero.arms[0].hand.getWorldPosition(V1); V2.copy(cur.position); V2.y+=a.h==='ka'?-1.85:1.85; V2.z-=.4; a.m.position.lerpVectors(V1,V2,e); a.m.position.y+=Math.sin(e*Math.PI)*1.2; a.m.scale.setScalar(.4+.15*e);
   if(a.t>=.85){ world.remove(a.m); GS.anim=null; const pos=cur.position.clone(); dropObj(cur); const c=GS.cl[GS.k], nb=makeBlock(c,H[a.h].markC); nb.position.copy(pos); GS.blocks[GS.k]=nb; burst(pos,H[a.h].markC,30); Snd.play('place'); Speech.say(c,.6); GS.k++; $('#cW').innerHTML=mixedHTML(); if(GS.k>=GS.cl.length){ GS.merging=0; showPicks(false); $('#hold').hidden=true; } } }
  if(GS.merging!=null){ GS.merging+=dt; GS.p=.3+.7*Math.min(1,GS.merging); if(GS.merging>=1.15){ GS.merging=null; doneMag(); } } }
-function doneMag(){ GS.done=true; const L=GS.L, it=GS.list[GS.i], txt=itemText(); clearMag();
+/* ---------- sukun & shadda: syllable cars and a traffic light ---------- */
+const TL=(()=>{ const g=new THREE.Group(); mk(G.cyl(.13,.16,4.6,10),mat('#2a2f3a',{m:.6,r:.4}),0,2.3,0,g); mk(G.box(1.2,3.1,.9),mat('#1c2230',{r:.5}),0,5.3,0,g); const L={};
+ [['red','#ff2a2a',6.3],['yel','#ffc83a',5.3],['grn','#22e06a',4.3]].forEach(([k,c,y])=>{ const m=new THREE.MeshStandardMaterial({color:LIN('#2a2a2a'),emissive:LIN(c),emissiveIntensity:0,roughness:.3}); mk(G.sph(.38,18,12),m,0,y,-.42,g,1); mk(G.box(.95,.1,.4),mat('#1c2230'),0,y+.42,-.55,g,1); const gl=glow(c,2.6,0); gl.position.set(0,y,-.75); g.add(gl); L[k]={m,gl}; });
+ g.userData.L=L; g.position.set(7.4,0,2.6); g.visible=false; world.add(g); return g; })();
+function setLight(k){ for(const n in TL.userData.L){ const o=TL.userData.L[n], on=n===k; o.m.emissiveIntensity=on?2.4:0; o.gl.material.opacity=on?.9:0; } }
+const CARC=['#ff5a5a','#3fa9ff','#ffc83a','#3fd17a','#c86adf'];
+function makeCar(col){ const g=new THREE.Group(); const B=mat(col,{r:.3,m:.3}), DK=mat('#1c2230',{r:.4}), GLS=mat('#9fd8ff',{r:.1,m:.5,e:'#3a6aa0',ei:.3}), HL=mat('#fff6d8',{e:'#fff1c0',ei:2});
+ mk(G.box(3.1,.7,1.5),B,0,.7,0,g); mk(G.box(1.7,.55,1.32),GLS,-.15,1.3,0,g); mk(G.box(1.85,.08,1.42),B,-.15,1.6,0,g);
+ const wheels=[]; for(const [x,z] of [[-1,-.76],[1,-.76],[-1,.76],[1,.76]]){ const w=mk(G.cyl(.38,.38,.26,18),DK,x,.38,z,g); w.rotation.x=Math.PI/2; wheels.push(w); }
+ for(const z of [-.45,.45]){ mk(G.box(.1,.22,.3),HL,1.56,.8,z,g,1); mk(G.box(.1,.2,.3),mat('#ff3b3b',{e:'#ff2020',ei:1.2}),-1.56,.8,z,g,1); }
+ g.userData.wheels=wheels; g.scale.setScalar(1.2); world.add(g); return g; }
+function setLabel(car,txt,col){ const old=car.userData.lbl; if(old){ car.remove(old); old.traverse(c=>{ const ms=Array.isArray(c.material)?c.material:c.material?[c.material]:[]; ms.forEach(m=>{ if(m.map&&m.map!==GLOW) m.map.dispose(); }); }); } const n=baseOf(txt).length; const l=makeBlock(txt,col,n>1?1+.4*(n-1):0); world.remove(l); l.scale.setScalar(.72); l.position.set(0,2.65,0); car.add(l); car.userData.lbl=l; car.userData.txt=txt; }
+function clearCars(keepCars){ (GS.top||[]).forEach(dropObj); GS.top=[]; if(!keepCars){ (GS.cars||[]).forEach(dropObj); GS.cars=[]; TL.visible=false; } $('#carbtns').hidden=true; }
+const slotX=i=>(i-(GS.nsyl-1)/2)*4.2;
+function carHTML(){ const C=GS.cl; return C.map((c,i)=>`<span style="color:${i<GS.k?(c.includes(SUK)?'#ff5a5a':c.includes(SHD)?'#c86adf':'#3fd17a'):i===GS.k?'#ffc83a':'#ffffff'}">${(i>0&&!NONJOIN.includes(lastBase(C[i-1]))?ZW:'')+c+(i<C.length-1&&!NONJOIN.includes(lastBase(c))?ZW:'')}</span>`).join(''); }
+function setupCar(it){ HK.forEach(k=>heroes[k].g.visible=false); GS.steps=carSteps(it); GS.cl=clusters(it); GS.nsyl=carSyl(it).length; GS.k=0; GS.cars=[]; GS.top=[]; GS.anim=null; GS.merging=null;
+ const n=GS.cl.length; GS.cl.forEach((c,i)=>{ const b=makeBlock(c,'#8f9bc4'); b.position.set((i-(n-1)/2)*2.6,4.9,2.2); GS.top.push(b); });
+ TL.visible=true; setLight('yel'); $('#cW').innerHTML=carHTML(); $('#cQ').textContent=GS.L.shadda?'انظر إلى الحرف: حركة 🟢 ، سكون 🔴 ، شدة ✌️':'انظر إلى الحرف الملوّن: عليه حركة ← انطلق 🟢 ، عليه سكون ← قف 🔴'; showCarBtns(true); }
+function carChoose(a){ const s=GS.steps&&GS.steps[GS.k]; if(!GS.on||GS.done||!s||GS.anim||GS.merging!=null) return;
+ if(a===s.t){ $$('#carbtns .pk').forEach(b=>b.classList.remove('hint')); runStep(s); }
+ else { GS.missed=true; Snd.play('no'); rumble(90,.1,.1); const tip=s.t==='go'?'على الحرف حركة ← الإشارة خضراء: انطلق 🟢 بسيارة جديدة':s.t==='stop'?'على الحرف سكون (دائرة صغيرة) ← الإشارة حمراء: قف 🔴 واركب مع الحرف الذي قبله':'على الحرف شدة ✌️ ← الحرف يتكرر: الأول يقف والثاني ينطلق'; pop(`<div class="big">${GS.cl[GS.k]}</div>${tip}`,3200); const b=$(`#carbtns [data-car="${s.t}"]`); if(b) b.classList.add('hint'); } }
+// go = a new car drives in with the letter; stop = the letter rides in the car before it
+function runStep(s){ const top=GS.top[GS.k]; if(top) top.visible=false;
+ if(s.t==='go'){ setLight('grn'); const car=makeCar(CARC[GS.cars.length%CARC.length]); car.position.set(-20,0,2); setLabel(car,s.a,VC[vowelOf(s.a)]); GS.cars.push(car); Snd.play('jump'); GS.anim={t:0,type:'go',car,to:slotX(GS.cars.length-1),say:s.a}; }
+ else if(s.t==='stop'||s.t==='ride'){ const car=GS.cars[GS.cars.length-1]; if(s.t==='stop'){ setLight('red'); Snd.play('slide'); } const txt=car.userData.txt+s.a; setLabel(car,txt,s.t==='stop'?'#ff5a5a':VC[vowelOf(txt)]); burst(V1.set(car.position.x,2.6,car.position.z),s.t==='stop'?'#ff5a5a':'#ffc83a',26); GS.anim={t:0,type:'stop',car,say:txt}; }
+ else { GS.anim={t:0,type:'shadda',s}; setLight('red'); Snd.play('swap'); } }
+function stepDone(say){ GS.anim=null; if(say) Speech.say(say,.6); GS.k++; $('#cW').innerHTML=carHTML(); const nx=GS.steps[GS.k]; if(!nx){ GS.merging=0; $('#carbtns').hidden=true; return; } if(nx.t==='ride') setTimeout(()=>{ if(GS.on&&!GS.done&&GS.steps[GS.k]===nx) runStep(nx); },350); else setLight('yel'); }
+function updateCar(dt,t){ GS.top.forEach((b,i)=>{ b.scale.setScalar(i===GS.k&&!GS.anim?1+.07*Math.sin(t*6):1); b.position.y=4.9+Math.sin(t*2+i)*.06; });
+ GS.cars.forEach((c,i)=>{ if(!GS.anim||GS.anim.car!==c) c.position.y=Math.abs(Math.sin(t*3+i))*.03; });
+ const a=GS.anim; if(a){ a.t+=dt;
+  if(a.type==='go'){ const e=easeIO(Math.min(1,a.t/1.1)); a.car.position.x=-20+(a.to+20)*e; a.car.userData.wheels.forEach(w=>w.rotation.y-=dt*12*(1-e)); if(a.t>=1.15) stepDone(a.say); }
+  else if(a.type==='stop'){ a.car.rotation.z=Math.sin(Math.min(1,a.t/.6)*Math.PI*2)*.06*(1-a.t); if(a.t>=.8){ a.car.rotation.z=0; stepDone(a.say); } }
+  else if(a.type==='shadda'){ const s=a.s, car=GS.cars[GS.cars.length-1];
+   if(!a.p1&&a.t>.1){ a.p1=1; const txt=car.userData.txt+s.a; setLabel(car,txt,'#ff5a5a'); burst(V1.set(car.position.x,2.6,2),'#c86adf',30); Speech.say(txt,.6); }
+   if(!a.p2&&a.t>1.3){ a.p2=1; setLight('grn'); const nc=makeCar(CARC[GS.cars.length%CARC.length]); nc.position.set(-20,0,2); setLabel(nc,s.b,VC[vowelOf(s.b)]); GS.cars.push(nc); a.nc=nc; a.to=slotX(GS.cars.length-1); Snd.play('jump'); }
+   if(a.nc){ const e=easeIO(Math.min(1,(a.t-1.3)/1.1)); a.nc.position.x=-20+(a.to+20)*e; if(a.t>=2.45) stepDone(s.b); } } }
+ if(GS.merging!=null){ GS.merging+=dt; if(GS.merging>.6&&!GS.readSyl){ GS.readSyl=1; Speech.say(GS.cars.map(c=>c.userData.txt).join('، '),.55); } GS.cars.forEach((c,i)=>{ c.position.x+=(slotX(i)*.82-c.position.x)*Math.min(1,dt*2); }); if(GS.merging>=1.8){ GS.merging=null; GS.readSyl=0; setLight('grn'); doneMag(); } } }
+function doneMag(){ GS.done=true; const L=GS.L, it=GS.list[GS.i], txt=itemText(); clearMag(L.kind==='car'); $('#carbtns').hidden=true;
  if(L.kind==='letters'){ GS.merged=letterBlock(txt,H[GS.h].markC); GS.merged.scale.setScalar(LBS); GS.merged.position.set(0,5,2); $('#cW').innerHTML=`<span style="color:${H[GS.h].markC}">${txt}</span>`; }
  else if(L.kind!=='sent'){ GS.merged=makeBlock(txt,'#ffc83a',Math.max(1,baseOf(txt).length*.95)); GS.merged.position.set(0,5,2); $('#cW').innerHTML=L.kind==='mixed'?mixedHTML():stretchParts(partsOf(txt),1,L.vc?'vc':''); }
  burst(V1.set(0,5,2),L.kind==='letters'?H[GS.h].markC:'#ffc83a',70); Snd.play('medal'); rumble(260,.35,.8); GS.medals++; MEDALS++; store.set('medals',MEDALS); flyMedal(V1.set(0,5,2)); bumpMedal(GS.medals);
  $('#hold').hidden=true; $('#meter').style.width='100%';
  if(L.kind==='sent'){ startAct(); return; }
- $('#cQ').textContent='اقرأ معي! ثم اضغط التالي'; $('#nextBtn').hidden=false; setTimeout(()=>{ try{$('#nextBtn').focus({preventScroll:true});}catch(e){} },50); Speech.say(txt,.7); }
+ const tn=/[ً-ٍ]/.test(txt); $('#cQ').innerHTML=tn?`نقرؤها: <b style="color:#ffc83a;font-size:1.5em">${tanRead(txt)}</b> ← ثم اضغط التالي`:'اقرأ معي! ثم اضغط التالي'; $('#nextBtn').hidden=false; setTimeout(()=>{ try{$('#nextBtn').focus({preventScroll:true});}catch(e){} },50); Speech.say(txt,.7); }
 function nextMag(){ if(!GS.done||(GS.acting&&!GS.acting.fin)) return; hideProps(); hideBubble(); boardsOn(); GS.acting=null; GS.i++; if(GS.i>=GS.list.length) afterMag(); else setupMag(); }
 function afterMag(){ if(GS.L.kind==='sent') finishLesson(3,`قرأت ${AR(GS.list.length)} جمل ومثّلها ${H[GS.h].n}.`); else startRace(); }
 function updateMag(dt,t,I){ if(GS.acting) return updateAct(dt,t);
- const L=GS.L, holding=L.kind!=='mixed'&&(holdDown||keys.Space||keys.Enter||I.a);
+ const L=GS.L, holding=L.kind!=='mixed'&&L.kind!=='car'&&(holdDown||keys.Space||keys.Enter||I.a);
+ if(L.kind==='car'){ if(!GS.done){ if(I.downE) carChoose('go'); if(I.midE) carChoose('stop'); if(I.upE&&L.shadda) carChoose('shadda'); } updateCar(dt,t); return; }
  if(L.kind==='mixed'){ if(!GS.done){ if(I.upE) chooseHero('fa'); if(I.midE) chooseHero('da'); if(I.downE) chooseHero('ka'); updateMixed(dt,t); } }
  else if(!GS.done){ if(holding){ if(!GS.said){ GS.said=true; sayParts(); } GS.p=Math.min(1,GS.p+dt*{slow:.22,normal:.3,fast:.42}[S.speed]*(L.madd?.8:1)); }
   if(L.kind==='letters') placeLetter(GS.p,t); else { placeBlocks(GS.p,t); if(L.kind==='words') $('#cW').innerHTML=stretchParts(GS.parts,GS.p,wmode()); }
@@ -547,24 +610,26 @@ function makeTextGate(opts,correct,wide){ const g=new THREE.Group(); g.userData.
  g.position.z=92; world.add(g); return g; }
 const shortKind=()=>GS.L.kind==='letters'||GS.L.kind==='mixed';
 function startRace(){ GS.on=false; clearMag(); hideProps(); hideBubble(); boardsOn(); const L=GS.L; let items, pool;
- if(L.kind==='letters'){ pool=L.groups[GS.si].map(c=>c+MK[L.h]); items=shuffle(pool.slice()); }
+ if(L.kind==='letters'){ pool=(L.groups?L.groups[GS.si]:GS.list).map(c=>c+GS.mark); items=shuffle(pool.slice()); }
  else if(L.kind==='mixed'){ pool=[...new Set(GS.list.flatMap(clusters))]; items=shuffle(pool.slice()); setHero(L.heroes[0]); }
  else { pool=L.sets[GS.si]; items=GS.list.slice(); }
  while(items.length<6) items.push(pick(pool));
  RC.pool=pool; RC.q=shuffle(items).slice(0,6).map(v=>({v})); Object.assign(RC,{on:true,round:0,total:6,first:0,lane:1,x:0,phase:'run',t:0,cur:null}); if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); for(let z=22;z<85;z+=20) addStarRow(z);
  $('#cue').hidden=false; show('play'); $('#cW').innerHTML=''; $('#cQ').textContent='اجمع النجوم ⭐'; updRace(); pop(`🏃 الآن السباق!<br><small>${raceQ()}</small>`,2600); }
-const raceQ=()=>GS.L.kind==='letters'?'ادخل بوابة الحرف نفسه':GS.L.kind==='mixed'?'انتبه للحركة! ادخل بوابة الحرف بحركته':'اقرأ المقاطع وادخل بوابة الكلمة';
+const raceQ=()=>GS.L.kind==='car'?(GS.L.shadda?'انتبه للشدة! ادخل بوابة الكلمة نفسها':'انتبه للسكون! ادخل بوابة الكلمة نفسها'):GS.L.kind==='letters'?'ادخل بوابة الحرف نفسه':GS.L.kind==='mixed'?'انتبه للحركة! ادخل بوابة الحرف بحركته':'اقرأ المقاطع وادخل بوابة الكلمة';
 function updRace(){ $('#sMedal').textContent='🏅 '+AR(GS.medals); $('#sRound').textContent=`${AR(Math.min(RC.round+1,RC.total))} / ${AR(RC.total)}`; }
 function raceOpts(v){ const L=GS.L;
  // same letter with another vowel: the student has to look at the mark
- if(L.kind==='mixed'){ const b=baseOf(v), o=L.heroes.map(h=>b+MK[h]); if(o.length<3) o.push(pick(ABC.filter(c=>c!==b))+MK[vowelOf(v)]); return shuffle(o); }
+ if(L.kind==='mixed'){ const M=L.tan?TAN:MK, b=baseOf(v), o=L.heroes.map(h=>b+M[h]); if(o.length<3) o.push(pick(ABC.filter(c=>c!==b))+M[vowelOf(v)]); return shuffle(o); }
+ // sukun / shadda: the word against its twin without the sukun or the shadda
+ if(L.kind==='car'){ const tw=L.shadda?v.replace(SHD,''):v.replace(SUK,FA); return shuffle([v,tw,pick(RC.pool.filter(x=>x!==v&&x!==tw))]); }
  // madd: the long syllable against its short twin
  if(L.madd&&syllables(v).length===1) return shuffle([v,clusters(v)[0],pick(RC.pool.filter(x=>x!==v))]);
  return shuffle([v,...shuffle(RC.pool.filter(x=>x!==v)).slice(0,2)]); }
 function raceCue(){ const v=RC.q[0].v, sk=shortKind(); RC.cur=v; RC.phase='cue'; RC.t=0; RC.spoke=false; const opts=raceOpts(v); RC.opts=opts; RC.correct=opts.indexOf(v);
  RC.gate=makeTextGate(opts,RC.correct,!sk&&baseOf(v).length>2); RC.anim=!sk&&S.diff==='easy'&&partsOf(v).length>1; RC.blendP=sk||partsOf(v).length<2?1:0; $('#cQ').textContent=raceQ(); drawRaceWord(); }
 function drawRaceWord(){ const v=RC.cur; $('#cW').innerHTML=shortKind()?`<span style="color:${VC[vowelOf(v)]}">${v}</span>`:stretchParts(partsOf(v),RC.blendP,S.diff==='hard'?'':wmode()); }
-function pop(html,ms){ const p=$('#pop'); p.innerHTML=html; p.hidden=false; p.style.animation='none'; void p.offsetWidth; p.style.animation=''; clearTimeout(pop.t); pop.t=setTimeout(()=>p.hidden=true,ms||2400); }
+function pop(html,ms){ const p=$('#pop'), top=state==='mag'&&GS.L&&GS.L.kind==='car'; p.style.top=top?'150px':''; p.style.bottom=top?'auto':''; p.innerHTML=html; p.hidden=false; p.style.animation='none'; void p.offsetWidth; p.style.animation=''; clearTimeout(pop.t); pop.t=setTimeout(()=>p.hidden=true,ms||2400); }
 function judgeRace(){ const v=RC.cur, it=RC.q[0];
  if(RC.lane===RC.correct){ if(!it.retry) RC.first++; GS.medals++; MEDALS++; store.set('medals',MEDALS); Snd.play('medal'); rumble(260,.35,.8); burst(V1.set(LANEX[RC.lane],2.6,0),'#ffc83a',60); flyMedal(V1.set(LANEX[RC.lane],2.6,0)); dropObj(RC.gate); RC.gate=null; bumpMedal(GS.medals);
   pop(`<div class="big">${v}</div>🏅 أحسنت!`,2200); Speech.say(v,.7); RC.q.shift(); RC.round++; RC.phase='run'; RC.t=0; $('#cW').innerHTML=''; $('#cQ').textContent='اجمع النجوم ⭐'; }
@@ -585,7 +650,7 @@ function updateRace(dt,t,I,sp){
 function nextOf(li,si){ if(si+1<LESSONS[li].subs.length) return [li,si+1]; if(li+1<LESSONS.length) return [li+1,0]; return null; }
 function finishLesson(st,msg){ GS.on=false; RC.on=false; clearMag(); hideProps(); hideBubble(); boardsOn(); $('#cue').hidden=false; const L=GS.L; PR[L.id][GS.si]=Math.max(PR[L.id][GS.si]||0,st); store.set('progress',PR); Snd.play('win');
  const nx=nextOf(GS.li,GS.si), btns=[]; if(nx&&unlocked(nx[0],nx[1])) btns.push([nx.join(','),nx[0]===GS.li?'التالي: '+LESSONS[nx[0]].subs[nx[1]]:'الدرس التالي: '+LESSONS[nx[0]].t,'primary']); btns.push([GS.li+','+GS.si,'مرة أخرى',btns.length?'':'primary']); btns.push(['menu','القائمة']);
- endScreen(`${H[L.kind==='mixed'?hero===heroes.da?'da':hero===heroes.ka?'ka':'fa':L.h].n} فخور بك! 🦸`,st,GS.medals,msg+` مجموع أوسمتك: ${AR(MEDALS)}.`,btns); }
+ endScreen(`${H[L.kind==='mixed'?hero===heroes.da?'da':hero===heroes.ka?'ka':'fa':GS.h].n} فخور بك! 🦸`,st,GS.medals,msg+` مجموع أوسمتك: ${AR(MEDALS)}.`,btns); }
 
 /* ---------- shared frame update ---------- */
 let CL=new THREE.Vector3(0,2,10);
@@ -597,6 +662,7 @@ function update(dt,t,I){ const racing=state==='play'&&RC.on; const sp=racing?SPE
  if(racing) updateRace(dt,t,I,sp);
  const k=Math.min(1,dt*3), inMag=state==='mag'||(state==='pause'&&resumeTo==='mag'), inRace=state==='play'||(state==='pause'&&resumeTo==='play');
  if(inMag&&GS.acting){ camera.position.lerp(V2.set(1.9,3.3,8.6),k); CL.lerp(V1.set(0,2.5,0),k); }
+ else if(inMag&&GS.L&&GS.L.kind==='car'){ camera.position.lerp(V2.set(0,4.2,-12.5),k); CL.lerp(V1.set(0,3.2,4),k); }
  else if(inMag){ camera.position.lerp(V2.set(0,2.6,-10),k); CL.lerp(V1.set(0,4.8,4),k); }
  else if(inRace){ hero.g.position.set(RC.x,0,0); hero.g.rotation.y=0; if(state==='play'){ hero.pose('run',t,1); if(!hero.board) hero.rig.rotation.z=(LANEX[RC.lane]-RC.x)*-.04; } const near=RC.gate&&RC.gate.position.z<24; camera.position.lerp(V2.set(RC.x*.4,near?5.2:4.0,near?-11:-8.5),k); CL.lerp(V1.set(RC.x*.25,near?2.8:2.2,10),k); }
  else { hero.g.position.set(2.8,0,6); hero.g.rotation.y=Math.PI-.35; hero.pose(state==='end'?'victory':'idle',t,0); hero.head.rotation.set(0,0,0); camera.position.lerp(V2.set(1.2,2.6,-2.6),k); CL.lerp(V1.set(1.6,1.8,6),k); }
@@ -626,6 +692,7 @@ document.addEventListener('click',e=>{ Snd.init();
  const ml=e.target.closest('#mainLink'); if(ml&&window.parent!==window){ e.preventDefault(); try{speechSynthesis.cancel();}catch(_){} window.parent.postMessage('ayn-close','*'); return; }
  const g=e.target.closest('[data-go]'); if(g){ Snd.play('click'); go(g.dataset.go); return; }
  const pk=e.target.closest('[data-pick]'); if(pk){ chooseHero(pk.dataset.pick); return; }
+ const cb=e.target.closest('[data-car]'); if(cb){ carChoose(cb.dataset.car); return; }
  const ln=e.target.closest('.lanes [data-lane]'); if(ln){ tq[ln.dataset.lane]=1; return; }
  if(e.target.closest('#hold')) return;
  const b=e.target.closest('[data-act]'); if(!b) return; const a=b.dataset.act; Snd.play('click');

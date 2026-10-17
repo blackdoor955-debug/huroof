@@ -288,7 +288,7 @@ async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspa
   rows.sort((a,b)=>a.name.localeCompare(b.name,'ar')); $('#teacherEmpty').hidden=rows.length>0;
   tb.innerHTML=rows.map(r=>{ const a=avatarOf(r.id); return `<tr><td><b>${a.e} ${esc(r.name)}</b><br><small class="note">${r.parents?`مرتبط بـ ${AR(r.parents)} ولي أمر`:'لم يرتبط ولي أمر بعد'}</small></td>
    <td><span class="code">${fmtCode(r.id)}</span> <button class="btn sm" data-copy="${r.id}">نسخ</button></td>
-   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.noor,38)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td>${bar(r.s.longshort,4)}</td><td>${bar(r.s.bigsmall,4)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
+   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.noor,51)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td>${bar(r.s.longshort,4)}</td><td>${bar(r.s.bigsmall,4)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
    <td style="white-space:nowrap"><button class="btn sm primary" data-play="${r.id}" data-name="${esc(r.name)}">▶ العب</button> <button class="btn sm danger" data-del="${r.id}" data-name="${esc(r.name)}">حذف</button></td></tr>`; }).join('');
  }catch(e){ tb.innerHTML=`<tr><td colspan="13"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
 $('#fAdd').addEventListener('submit',async e=>{ e.preventDefault(); const name=$('#inStudent').value.trim(); if(!name){ msg($('#addMsg'),'اكتب اسم الطالب.'); return; } $('#btnAdd').disabled=true;
@@ -357,7 +357,7 @@ async function syncNow(){ if(!player||player.guest) return; const jobs=[]; for(c
 async function stopPlayer(){ closeGame(); if(!player) return; clearInterval(syncTimer); if(player.guest){ for(const k of ALLKEYS){ const v=localStorage.getItem(k); if(v!=null) localStorage.setItem('guest_'+k,v); } } else await syncNow(); clearKeys(); player=null; }
 function showHubProgress(){ const data={}; for(const g in GAMEKEYS) data[g]=snapshot(g); const s=summarize(data);
  const set=(g,t)=>{ const el=$(`[data-pr="${g}"]`); el.textContent=t; };
- set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math2',`📏 ${AR(s.longshort)}/٤ أنشطة`); set('math3',`🐘 ${AR(s.bigsmall)}/٤ أنشطة`); set('noor',`🌟 ${AR(s.noor)}/٣٨ مرحلة · 🏅 ${AR(s.nMedals)}`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
+ set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math2',`📏 ${AR(s.longshort)}/٤ أنشطة`); set('math3',`🐘 ${AR(s.bigsmall)}/٤ أنشطة`); set('noor',`🌟 ${AR(s.noor)}/٥١ مرحلة · 🏅 ${AR(s.nMedals)}`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
 $('#btnSwitch').onclick=async()=>{ const wasGuest=player&&player.guest; await stopPlayer(); if(wasGuest&&!me) view('vAuth'); else home(); };
 $('#btnGuest').onclick=()=>startPlayer({guest:true,name:'لاعب ضيف'});
 $$('.game').forEach(b=>b.onclick=()=>openGame(b.dataset.game));
