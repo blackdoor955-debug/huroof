@@ -110,7 +110,7 @@ td b{font-size:17px}
 <div class="wrap">
   <header class="top">
     <div class="brand"><span class="schoolbox"><img class="school" src="logo.avif" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true;this.parentElement.nextElementSibling.hidden=false"></span><div class="logo" hidden>أ</div><div><b>مغامرات الحروف</b><small class="sch">مدارس الفيصلية الأهلية</small></div></div>
-    <div class="who" id="who" hidden><span id="whoName"></span><button class="btn sm" id="btnHome">🏠 الرئيسية</button><button class="btn sm" id="btnLogout">خروج</button></div>
+    <div class="who" id="who" hidden><span id="whoName"></span><button class="btn sm" id="btnHome">🏠 الرئيسية</button><button class="btn sm" id="btnAdmin" hidden>🛡️ الإدارة</button><button class="btn sm" id="btnLogout">خروج</button></div>
   </header>
 
   <div id="vLoading"><div class="spin" role="status" aria-label="جارٍ التحميل"></div></div>
@@ -160,11 +160,25 @@ td b{font-size:17px}
     </div>
     <div class="panel">
       <div class="tbl-wrap"><table>
-        <thead><tr><th>الطالب</th><th>رمز الدعوة لولي الأمر</th><th>مغامرات الحروف</th><th>أين يسكن الحرف</th><th>أبطال الحركات</th><th>فتحة يقرأ</th><th>الألوان</th><th>الأشكال</th><th>الأوسمة</th><th></th></tr></thead>
+        <thead><tr><th>الطالب</th><th>رمز الدعوة لولي الأمر</th><th>مغامرات الحروف</th><th>أين يسكن الحرف</th><th>أبطال الحركات</th><th>فتحة يقرأ</th><th>الألوان</th><th>الأشكال</th><th>طويل وقصير</th><th>الأوسمة</th><th></th></tr></thead>
         <tbody id="tBody"></tbody>
       </table></div>
       <p class="note" id="teacherEmpty" hidden>أضف طلابك ليظهروا هنا. لكل طالب رمز دعوة ترسله لولي أمره ليتابع تقدّمه من البيت.</p>
     </div>
+    <details class="panel" id="adminClaim"><summary class="note" style="cursor:pointer">🛡️ تفعيل صلاحيات الإدارة</summary>
+      <form class="inline" id="fAdmin" style="margin-top:12px"><div class="field"><label for="inAdmin">رمز الإدارة</label><input id="inAdmin" dir="ltr" autocomplete="off" placeholder="MODIR-XXXXXX"></div><button class="btn primary" id="btnAdminOn">تفعيل</button></form>
+      <div class="msg" id="adminClaimMsg" hidden style="margin-top:10px"></div>
+    </details>
+  </section>
+
+  <!-- admin -->
+  <section id="vAdmin" hidden>
+    <div class="panel"><div class="sec-h"><h2>🛡️ لوحة الإدارة</h2><button class="btn sm" id="btnAdminRefresh">↻ تحديث</button></div>
+      <p class="note">من هنا تحذف معلمًا أو ولي أمر. الحساب المحذوف يُوقَف فورًا: لا يرى أي طالب، ولا يستطيع التسجيل كمعلم أو ربط طفل من جديد. طلاب المعلم المحذوف ينتقلون إليك تلقائيًا فلا يضيع تقدّمهم.</p>
+      <div class="msg" id="adminMsg" hidden style="margin-top:10px"></div></div>
+    <div class="panel"><div class="sec-h"><h2>المعلمون</h2></div><div class="tbl-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>عدد الطلاب</th><th></th></tr></thead><tbody id="aTeachers"></tbody></table></div></div>
+    <div class="panel"><div class="sec-h"><h2>أولياء الأمور</h2></div><div class="tbl-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>الأطفال المرتبطون</th><th></th></tr></thead><tbody id="aParents"></tbody></table></div></div>
+    <div class="panel"><div class="sec-h"><h2>الحسابات الموقوفة</h2></div><div class="tbl-wrap"><table><thead><tr><th>الاسم</th><th>البريد</th><th>النوع</th><th></th></tr></thead><tbody id="aBlocked"></tbody></table></div></div>
   </section>
 
   <!-- the games hub for the chosen student -->
@@ -180,11 +194,12 @@ td b{font-size:17px}
     <div class="sect">🔢 الرياضيات</div>
     <div class="games">
       <button class="game" data-game="math1" style="--a:#ff5a5a;--b:#1e88e5"><span class="ic">🎈</span><h3>عالم الألوان والأشكال</h3><p>المفاهيم ما قبل الأكاديمية: الألوان والأشكال الهندسية.</p><span class="pr" data-pr="math1"></span></button>
+      <button class="game" data-game="math2" style="--a:#ff8a3d;--b:#14b8a6"><span class="ic">🦒</span><h3>طويل وقصير</h3><p>الثعبان، القطار السحري، الزرافة والسلحفاة، والولد المطاطي.</p><span class="pr" data-pr="math2"></span></button>
     </div>
   </section>
 </div>
 
-<div class="wrap"><p class="credits">إعداد المعلم: <b>أحمد حازم عبد الله</b> · المشرف التربوي: <b>د. خالد محروس بكري</b><br>مدارس الفيصلية الأهلية</p></div>
+<div class="wrap"><p class="credits">مدير إدارة قسم ذوي الإعاقة: <b>أ. فيصل بن صالح الزهراني</b><br>المشرف التربوي: <b>د. خالد محروس بكري</b> · إعداد المعلم: <b>أحمد حازم عبد الله</b><br>مدارس الفيصلية الأهلية</p></div>
 <div id="gameWrap" hidden><iframe id="gameFrame" title="اللعبة" allow="gamepad; fullscreen; autoplay"></iframe></div>
 <div class="update" id="updateBar" hidden>🔄 يوجد تحديث جديد للألعاب <button class="btn sm" id="btnUpdate" style="background:#fff;color:#14532d">تحديث الآن</button></div>
 <div class="confirm" id="confirmBox" hidden><div class="panel"><h3 id="cTitle"></h3><p id="cText" class="note"></p><div style="display:flex;gap:10px;justify-content:center"><button class="btn danger" id="cYes">نعم، احذف</button><button class="btn" id="cNo">إلغاء</button></div></div></div>
@@ -199,7 +214,7 @@ td b{font-size:17px}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const AR=n=>Number(n).toLocaleString('ar-EG');
 const VERSION=window.HUROOF_VERSION||'1';
-const VIEWS=['vLoading','vAuth','vParent','vTeacher','vHub'];
+const VIEWS=['vLoading','vAuth','vParent','vTeacher','vHub','vAdmin'];
 function view(id){ VIEWS.forEach(v=>$('#'+v).hidden=v!==id); window.scrollTo(0,0); }
 function msg(el,text,ok){ el.hidden=!text; el.textContent=text||''; el.className='msg '+(ok?'ok':'err'); }
 const AV=['🦁','🐯','🐼','🦊','🐸','🐵','🐰','🐨','🦄','🐙','🐬','🦉'], COL=['#ff9a1f','#3fa9ff','#3fd17a','#c86adf','#ff6b8a','#2fc6c0','#f2c230','#ff7a4d'];
@@ -236,13 +251,20 @@ $('#btnLogout').onclick=async()=>{ await stopPlayer(); await auth.signOut(); };
 $('#btnHome').onclick=async()=>{ await stopPlayer(); home(); };
 
 let signingUp=false;
-auth.onAuthStateChanged(u=>{ if(signingUp) return; if(u) route(u); else { me=null; $('#who').hidden=true; if(player&&player.guest) return; view('vAuth'); setMode('in'); } });
-async function route(u){ view('vLoading'); let teacher=false; try{ teacher=(await db.doc('teachers/'+u.uid).get()).exists; }catch(e){}
- me={uid:u.uid,name:u.displayName||u.email,teacher}; $('#whoName').textContent=(teacher?'🧑‍🏫 ':'👨‍👩‍👧 ')+me.name; $('#who').hidden=false; home(); }
+auth.onAuthStateChanged(u=>{ if(signingUp) return; if(u) route(u); else { me=null; $('#who').hidden=true; if(player&&player.guest) return; view('vAuth'); setMode('in'); if(blockedMsg){ msg($('#authErr'),blockedMsg); blockedMsg=''; } } });
+let blockedMsg='';
+async function route(u){ view('vLoading'); let teacher=false, admin=false, blocked=false;
+ try{ blocked=(await db.doc('blocked/'+u.uid).get()).exists; }catch(e){}
+ if(blocked){ blockedMsg='تم إيقاف هذا الحساب. تواصل مع إدارة المدرسة.'; await auth.signOut(); return; }
+ try{ teacher=(await db.doc('teachers/'+u.uid).get()).exists; }catch(e){}
+ try{ admin=(await db.doc('admins/'+u.uid).get()).exists; }catch(e){}
+ // keep the e-mail on the profile so the admin can tell accounts apart
+ try{ if(teacher) await db.doc('teachers/'+u.uid).update({email:u.email}); else await db.doc('users/'+u.uid).set({email:u.email,name:u.displayName||''},{merge:true}); }catch(e){}
+ me={uid:u.uid,name:u.displayName||u.email,teacher,admin}; $('#whoName').textContent=(admin?'🛡️ ':teacher?'🧑‍🏫 ':'👨‍👩‍👧 ')+me.name; $('#who').hidden=false; $('#btnAdmin').hidden=!admin; $('#adminClaim').hidden=admin; home(); }
 function home(){ if(!me){ view('vAuth'); return; } if(me.teacher){ view('vTeacher'); loadTeacher(); } else { view('vParent'); loadParent(); } }
 
 /* ---------- progress summaries ---------- */
-const GAMEKEYS={huroof:['huroof_progress'],ayn:['ayn_progress'],harakat:['hrk2_progress','hrk2_medals'],blend:['blend_progress','blend_medals'],math1:['math1_progress']};
+const GAMEKEYS={huroof:['huroof_progress'],ayn:['ayn_progress'],harakat:['hrk2_progress','hrk2_medals'],blend:['blend_progress','blend_medals'],math1:['math1_progress'],math2:['math2_progress']};
 const parse=v=>{ try{ return v?JSON.parse(v):null; }catch(e){ return null; } };
 function summarize(data){ // data: {game:{key:jsonString}}
  const g=k=>data[k]||{}; const s={};
@@ -251,19 +273,20 @@ function summarize(data){ // data: {game:{key:jsonString}}
  const kp=parse(g('harakat').hrk2_progress)||{}; s.harakat=Object.keys(kp).filter(k=>k!=='*').length; s.hMedals=+(parse(g('harakat').hrk2_medals)||0);
  const bp=parse(g('blend').blend_progress)||{}; s.blend=['m2','m3','race'].filter(k=>bp[k]).length; s.bMedals=+(parse(g('blend').blend_medals)||0);
  const mp=parse(g('math1').math1_progress)||{}; s.colors=((mp.colors||{}).mastered||[]).length; s.shapes=((mp.shapes||{}).mastered||[]).length;
+ const lp=parse(g('math2').math2_progress)||{}; s.longshort=['snake','train','ride','rubber'].filter(k=>lp[k]&&(lp[k].stars>0||lp[k].best>0)).length;
  s.medals=s.hMedals+s.bMedals; return s; }
 const bar=(n,of)=>`<div class="bar" title="${AR(n)} من ${AR(of)}"><i style="width:${Math.round(100*Math.min(1,n/of))}%"></i></div><small>${AR(n)} / ${AR(of)}</small>`;
 async function readProgress(sid){ const out={}; const docs=await Promise.all(Object.keys(GAMEKEYS).map(g=>db.doc(`students/${sid}/progress/${g}`).get())); docs.forEach(d=>{ if(d.exists) out[d.id]=(d.data().data)||{}; }); return out; }
 
 /* ---------- teacher ---------- */
-async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="10"><div class="spin"></div></td></tr>';
+async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="11"><div class="spin"></div></td></tr>';
  try{ const qs=await db.collection('students').where('teacherUid','==',me.uid).get(); const rows=[]; for(const d of qs.docs){ const st=d.data(); const pr=await readProgress(d.id).catch(()=>({})); rows.push({id:d.id,name:st.name,parents:(st.parentUids||[]).length,s:summarize(pr)}); }
   rows.sort((a,b)=>a.name.localeCompare(b.name,'ar')); $('#teacherEmpty').hidden=rows.length>0;
   tb.innerHTML=rows.map(r=>{ const a=avatarOf(r.id); return `<tr><td><b>${a.e} ${esc(r.name)}</b><br><small class="note">${r.parents?`مرتبط بـ ${AR(r.parents)} ولي أمر`:'لم يرتبط ولي أمر بعد'}</small></td>
    <td><span class="code">${fmtCode(r.id)}</span> <button class="btn sm" data-copy="${r.id}">نسخ</button></td>
-   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
+   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td>${bar(r.s.longshort,4)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
    <td style="white-space:nowrap"><button class="btn sm primary" data-play="${r.id}" data-name="${esc(r.name)}">▶ العب</button> <button class="btn sm danger" data-del="${r.id}" data-name="${esc(r.name)}">حذف</button></td></tr>`; }).join('');
- }catch(e){ tb.innerHTML=`<tr><td colspan="10"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
+ }catch(e){ tb.innerHTML=`<tr><td colspan="11"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
 $('#fAdd').addEventListener('submit',async e=>{ e.preventDefault(); const name=$('#inStudent').value.trim(); if(!name){ msg($('#addMsg'),'اكتب اسم الطالب.'); return; } $('#btnAdd').disabled=true;
  try{ const id=genCode(10); await db.doc('students/'+id).set({name,teacherUid:me.uid,parentUids:[],createdAt:TS()}); $('#inStudent').value=''; msg($('#addMsg'),`أُضيف ${name}. رمز الدعوة لولي أمره: ${fmtCode(id)}`,true); loadTeacher(); }catch(err){ msg($('#addMsg'),errText(err)); }
  $('#btnAdd').disabled=false; });
@@ -287,6 +310,32 @@ $('#fLink').addEventListener('submit',async e=>{ e.preventDefault(); const code=
  try{ await db.doc('students/'+code).update({parentUids:firebase.firestore.FieldValue.arrayUnion(me.uid)}); $('#inLink').value=''; msg(m,'تم ربط الطفل بحسابك 🎉',true); loadParent(); }catch(err){ msg(m,err.code==='permission-denied'?'الرمز غير صحيح، أو وصل الطفل للحد الأقصى من أولياء الأمور.':errText(err)); }
  $('#btnLink').disabled=false; });
 
+/* ---------- admin: remove (block) teachers and parents ---------- */
+$('#fAdmin').addEventListener('submit',async e=>{ e.preventDefault(); const code=$('#inAdmin').value.trim().toUpperCase(), m=$('#adminClaimMsg'); if(!code){ msg(m,'اكتب رمز الإدارة.'); return; }
+ try{ await db.doc('admins/'+me.uid).set({code,createdAt:TS()}); me.admin=true; $('#btnAdmin').hidden=false; $('#adminClaim').hidden=true; $('#whoName').textContent='🛡️ '+me.name; loadAdmin(); }catch(err){ msg(m,'رمز الإدارة غير صحيح.'); } });
+$('#btnAdmin').onclick=async()=>{ await stopPlayer(); loadAdmin(); };
+$('#btnAdminRefresh').onclick=()=>loadAdmin();
+let adminData=null;
+const amsg=(t,ok)=>msg($('#adminMsg'),t,ok);
+async function loadAdmin(){ if(!me||!me.admin) return; view('vAdmin'); amsg(''); ['#aTeachers','#aParents','#aBlocked'].forEach(s=>$(s).innerHTML='<tr><td colspan="4"><div class="spin"></div></td></tr>');
+ try{ const [ts,us,bs,ss]=await Promise.all([db.collection('teachers').get(),db.collection('users').get(),db.collection('blocked').get(),db.collection('students').get()]);
+  const students=ss.docs.map(d=>({id:d.id,...d.data()})); adminData={students};
+  const none='<tr><td colspan="4" class="note">لا يوجد.</td></tr>';
+  $('#aTeachers').innerHTML=ts.docs.map(d=>{ const t=d.data(), n=students.filter(s=>s.teacherUid===d.id).length, self=d.id===me.uid; return `<tr><td><b>${esc(t.name||'—')}</b>${self?' <small class="note">(أنت)</small>':''}</td><td dir="ltr">${esc(t.email||'—')}</td><td>${AR(n)}</td><td>${self?'':`<button class="btn sm danger" data-adel="teacher" data-uid="${d.id}" data-name="${esc(t.name||'')}" data-email="${esc(t.email||'')}">حذف المعلم</button>`}</td></tr>`; }).join('')||none;
+  const teacherIds=new Set(ts.docs.map(d=>d.id));
+  $('#aParents').innerHTML=us.docs.filter(d=>!teacherIds.has(d.id)).map(d=>{ const u=d.data(), kids=students.filter(s=>(s.parentUids||[]).includes(d.id)).map(s=>s.name); return `<tr><td><b>${esc(u.name||'—')}</b></td><td dir="ltr">${esc(u.email||'—')}</td><td>${kids.length?esc(kids.join('، ')):'<span class="note">لا أحد</span>'}</td><td><button class="btn sm danger" data-adel="parent" data-uid="${d.id}" data-name="${esc(u.name||'')}" data-email="${esc(u.email||'')}">حذف ولي الأمر</button></td></tr>`; }).join('')||none;
+  $('#aBlocked').innerHTML=bs.docs.map(d=>{ const b=d.data(); return `<tr><td><b>${esc(b.name||'—')}</b></td><td dir="ltr">${esc(b.email||'—')}</td><td>${b.role==='teacher'?'معلم':'ولي أمر'}</td><td><button class="btn sm" data-unblock="${d.id}" data-role="${b.role}" data-name="${esc(b.name||'')}" data-email="${esc(b.email||'')}">إعادة السماح</button></td></tr>`; }).join('')||none;
+ }catch(e){ amsg(errText(e)); } }
+$('#vAdmin').addEventListener('click',async e=>{ const del=e.target.closest('[data-adel]'), ub=e.target.closest('[data-unblock]');
+ if(del){ const role=del.dataset.adel, uid=del.dataset.uid, name=del.dataset.name, email=del.dataset.email;
+  const ok=await ask(role==='teacher'?`حذف المعلم ${name}؟`:`حذف ولي الأمر ${name}؟`, role==='teacher'?'سيُوقَف حسابه فورًا، وينتقل كل طلابه وتقدّمهم إليك. يمكنك إعادة السماح له لاحقًا من «الحسابات الموقوفة».':'سيُوقَف حسابه فورًا، ويُفصل عن كل الأطفال المرتبطين به. يمكنك إعادة السماح له لاحقًا من «الحسابات الموقوفة».'); if(!ok) return;
+  try{ await db.doc('blocked/'+uid).set({name,email,role,at:TS(),by:me.uid});
+   if(role==='teacher'){ for(const s of adminData.students.filter(s=>s.teacherUid===uid)) await db.doc('students/'+s.id).update({teacherUid:me.uid}); await db.doc('teachers/'+uid).delete(); }
+   else { for(const s of adminData.students.filter(s=>(s.parentUids||[]).includes(uid))) await db.doc('students/'+s.id).update({parentUids:firebase.firestore.FieldValue.arrayRemove(uid)}); await db.doc('users/'+uid).delete(); }
+   await loadAdmin(); amsg(`تم حذف ${name||email} وإيقاف حسابه.`,true); }catch(err){ amsg(errText(err)); } }
+ if(ub){ const uid=ub.dataset.unblock, role=ub.dataset.role, name=ub.dataset.name, email=ub.dataset.email;
+  try{ if(role==='teacher') await db.doc('teachers/'+uid).set({code:'ADMIN-RESTORED',name,email,createdAt:TS()}); else await db.doc('users/'+uid).set({name,email,role:'parent',createdAt:TS()}); await db.doc('blocked/'+uid).delete(); await loadAdmin(); amsg(`أُعيد السماح لـ ${name||email}.`,true); }catch(err){ amsg(errText(err)); } } });
+
 /* ---------- playing as a student, with cloud sync of game progress ---------- */
 let player=null, lastSaved={}, syncTimer=null, frameOpen=false;
 const ALLKEYS=Object.values(GAMEKEYS).flat();
@@ -304,7 +353,7 @@ async function syncNow(){ if(!player||player.guest) return; const jobs=[]; for(c
 async function stopPlayer(){ closeGame(); if(!player) return; clearInterval(syncTimer); if(player.guest){ for(const k of ALLKEYS){ const v=localStorage.getItem(k); if(v!=null) localStorage.setItem('guest_'+k,v); } } else await syncNow(); clearKeys(); player=null; }
 function showHubProgress(){ const data={}; for(const g in GAMEKEYS) data[g]=snapshot(g); const s=summarize(data);
  const set=(g,t)=>{ const el=$(`[data-pr="${g}"]`); el.textContent=t; };
- set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
+ set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math2',`📏 ${AR(s.longshort)}/٤ أنشطة`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
 $('#btnSwitch').onclick=async()=>{ const wasGuest=player&&player.guest; await stopPlayer(); if(wasGuest&&!me) view('vAuth'); else home(); };
 $('#btnGuest').onclick=()=>startPlayer({guest:true,name:'لاعب ضيف'});
 $$('.game').forEach(b=>b.onclick=()=>openGame(b.dataset.game));

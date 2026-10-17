@@ -1,0 +1,353 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>طويل وقصير</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Lalezar&display=swap">
+<style>
+:root{
+  /* Layout: menus on the platform's night glass; each activity is a bright full-screen play table the child stretches and squashes by hand.
+     Long = warm orange band, short = teal band, used the same way in every activity. */
+  --night:#0a1030; --glass:rgba(11,17,50,.82); --glass2:rgba(255,255,255,.08); --line:rgba(255,255,255,.18);
+  --ink:#f7f4ff; --muted:#b9c0ea; --gold:#ffc83a; --long:#ff8a3d; --short:#14b8a6;
+  --display:'Lalezar','Baloo Bhaijaan 2',Tahoma,sans-serif; --body:'Baloo Bhaijaan 2',Tahoma,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--night);color:var(--ink);font-family:var(--body);-webkit-user-select:none;user-select:none}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0;line-height:1.6}
+button{font-family:var(--body);color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;padding-block:20px;padding-inline:16px;display:flex;align-items:center;justify-content:center;z-index:10;background:radial-gradient(ellipse at 20% 0%,#24307a 0%,var(--night) 60%)}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.wrap{width:min(980px,100%);padding:24px;display:flex;flex-direction:column;gap:18px;margin-block:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:19px;font-weight:700;color:var(--ink);background:var(--glass2);border:1px solid var(--line);border-radius:16px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.btn:hover,.btn:focus-visible{background:rgba(255,255,255,.15)}
+.btn.primary{background:linear-gradient(180deg,#ffd75e,#ff9f1c);color:#2a1600;border-color:transparent;box-shadow:0 6px 0 #b8620a}
+.btn.sm{font-size:15px;padding:7px 12px}
+.eyebrow{font-size:15px;color:var(--gold);font-weight:700}
+.title{font-family:var(--display);font-size:clamp(48px,10vw,88px);line-height:1;background:linear-gradient(180deg,#fff 10%,#ffd96b 55%,#ff9a1f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 5px 0 rgba(80,30,0,.55))}
+.title .l{letter-spacing:.12em}
+.lead{color:var(--muted);font-size:18px;max-width:60ch}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.act{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:right;padding:18px;border-radius:24px;border:2px solid rgba(255,255,255,.18);background:linear-gradient(160deg,var(--a),var(--b));cursor:pointer;min-width:0;box-shadow:inset 0 -50px 60px rgba(0,0,0,.22);transition:transform .15s}
+.act:hover,.act:focus-visible{transform:translateY(-4px)}
+.act .ic{font-size:46px;line-height:1}
+.act h3{font-size:26px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.act p{font-size:14px;color:#fff;opacity:.95;line-height:1.45}
+.act .pr{font-size:14px;font-weight:800;background:rgba(0,0,0,.25);padding:3px 10px;border-radius:999px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.note{color:var(--muted);font-size:14px;line-height:1.6}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-size:15px;font-weight:700;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--gold);color:#2a1600;border-color:var(--gold)}
+
+/* stage */
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
+#stage svg.scene{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.grass{background:linear-gradient(180deg,#8fd6ff 0%,#dff4ff 42%,#8fd36a 42%,#5fb444 100%)}
+.yard{background:linear-gradient(180deg,#ffe3c2 0%,#fff3e3 55%,#e9c48f 55%,#d9a96a 100%)}
+.rail{background:linear-gradient(180deg,#7fc8ff 0%,#d8f0ff 50%,#a7d38a 50%,#86bd65 100%)}
+.trail{background:linear-gradient(180deg,#6ec6ff 0%,#cdeeff 60%,#c9a46a 60%,#b08850 100%)}
+.hud{position:fixed;z-index:20;top:calc(10px + env(safe-area-inset-top,0px));inset-inline:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.hud>*{pointer-events:auto}
+.goal{display:flex;align-items:center;gap:12px;padding:8px 18px 8px 12px;border-radius:22px;background:rgba(255,255,255,.94);color:#1a1a2e;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:clamp(20px,3.4vw,30px);font-weight:800;max-width:calc(100% - 140px)}
+.goal .tag{padding:2px 14px;border-radius:999px;color:#fff;font-size:.9em}
+.goal .tag.long{background:var(--long)}.goal .tag.short{background:var(--short)}
+.steps{display:flex;gap:6px}
+.steps i{width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.15)}
+.steps i.on{background:#ffb300;box-shadow:0 0 8px #ffb300}
+.tools{display:flex;gap:8px}
+.ib{width:52px;height:52px;border-radius:16px;border:0;background:rgba(255,255,255,.94);color:#1a1a2e;font-size:22px;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.say{position:fixed;z-index:25;left:50%;top:40%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(60px,12vw,140px);line-height:1.1;white-space:nowrap;pointer-events:none;text-shadow:0 6px 0 rgba(0,0,0,.18),0 0 30px rgba(255,255,255,.95);animation:sayin 1.5s ease-out forwards}
+@keyframes sayin{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}18%{transform:translate(-50%,-50%) scale(1.12);opacity:1}75%{opacity:1}100%{transform:translate(-50%,-62%) scale(1);opacity:0}}
+.tip{position:fixed;z-index:24;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:12px 22px;border-radius:20px;background:rgba(255,255,255,.95);color:#1a1a2e;font-size:clamp(18px,2.6vw,24px);font-weight:800;box-shadow:0 10px 26px rgba(0,0,0,.2);max-width:calc(100% - 32px);text-align:center}
+.tip.fix{background:#fff3cd;border:3px solid #ffb300}
+#cursor{position:fixed;z-index:31;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 3px #1a1a2e,0 0 20px #fff;pointer-events:none}
+.wiggle{animation:wig .9s ease-in-out 2}
+@keyframes wig{25%{transform:rotate(-2deg) translateY(-6px)}75%{transform:rotate(2deg) translateY(4px)}}
+.pulse{animation:pls 1s ease-in-out infinite}
+@keyframes pls{50%{opacity:.35}}
+.arrow{animation:arw .8s ease-in-out infinite}
+@keyframes arw{50%{transform:translateX(var(--ax,-18px)) translateY(var(--ay,0))}}
+
+/* ride */
+.choices{position:fixed;z-index:22;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:clamp(14px,4vw,40px);padding:22px;border-radius:30px;background:rgba(255,255,255,.95);box-shadow:0 20px 50px rgba(0,0,0,.3);flex-direction:column;align-items:center;color:#1a1a2e}
+.choices h3{font-size:clamp(24px,4vw,34px)}
+.choices .opts{display:flex;gap:clamp(14px,4vw,36px)}
+.opt{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;width:clamp(140px,22vw,200px);height:clamp(170px,26vw,240px);border-radius:24px;border:5px solid transparent;cursor:pointer;font-size:24px;font-weight:800;color:#fff;box-shadow:0 8px 0 rgba(0,0,0,.2);padding-bottom:10px}
+.opt.long{background:linear-gradient(180deg,#ffb37a,var(--long))}.opt.short{background:linear-gradient(180deg,#5fe0d0,var(--short))}
+.opt .em{line-height:1}
+.opt.long .em{font-size:clamp(90px,14vw,130px)}.opt.short .em{font-size:clamp(50px,8vw,70px)}
+.opt.hint{animation:hint 1s infinite}
+@keyframes hint{50%{box-shadow:0 0 0 8px #fff,0 0 34px #fff}}
+.opt.no{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.rider{position:absolute;transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.beast{position:absolute;line-height:1;transition:font-size .5s cubic-bezier(.3,1.5,.5,1);filter:drop-shadow(0 10px 8px rgba(0,0,0,.25))}
+.kid{position:absolute;line-height:1;font-size:56px;transition:bottom .5s cubic-bezier(.3,1.5,.5,1)}
+.poof{position:absolute;font-size:90px;pointer-events:none;animation:poof .6s ease-out forwards}
+@keyframes poof{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(-50%,-50%) scale(1.8);opacity:0}}
+.flymedal{position:fixed;z-index:30;font-size:70px;pointer-events:none;transition:all .9s cubic-bezier(.5,0,.3,1)}
+.endcard{width:min(520px,100%);padding:26px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.bigstars{font-size:58px;letter-spacing:6px;color:rgba(255,255,255,.2)}.bigstars b{color:var(--gold);font-weight:400}
+.toast{position:fixed;z-index:60;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);padding:10px 18px;font-size:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<section id="menu" class="screen" hidden dir="rtl">
+  <div class="wrap panel">
+    <div class="eyebrow">قسم الرياضيات · المفاهيم ما قبل الأكاديمية</div>
+    <div class="title"><span class="l">طـــــويل</span><br>وقصير</div>
+    <p class="lead">الطالب يصنع الطويل والقصير بيده: يمدّ الثعبان ويضغطه، ويركّب عربات القطار، ويختار الحيوان المناسب للطريق، ويشدّ الولد المطاطي.</p>
+    <div class="acts">
+      <button class="act" data-go="snake" style="--a:#43a047;--b:#1b5e20"><span class="ic">🐍</span><h3>شكّل الثعبان</h3><p>اسحب ذيل الثعبان ليصبح طويلًا أو قصيرًا.</p><span class="pr" id="prSnake"></span></button>
+      <button class="act" data-go="train" style="--a:#ff5a5a;--b:#2f6fd6"><span class="ic">🚂</span><h3>القطار السحري</h3><p>أضف العربات ليطول القطار، وأبعدها ليقصر.</p><span class="pr" id="prTrain"></span></button>
+      <button class="act" data-go="ride" style="--a:#ffb300;--b:#14b8a6"><span class="ic">🦒</span><h3>الزرافة والسلحفاة</h3><p>اختر الطويل لتأخذ الوسام، والقصير لتمر من تحت الحاجز.</p><span class="pr" id="prRide"></span></button>
+      <button class="act" data-go="rubber" style="--a:#8e24aa;--b:#ff7a4d"><span class="ic">🧒</span><h3>الولد المطاطي</h3><p>شدّ الولد ليصبح طويلًا، واضغطه ليصبح قصيرًا.</p><span class="pr" id="prRubber"></span></button>
+    </div>
+    <div class="row"><span class="note">الوضع الهادئ:</span><div class="seg" data-key="calm"><button data-v="false">عادي</button><button data-v="true">هادئ</button></div><span class="note">النطق:</span><div class="seg" data-key="voice"><button data-v="true">مفعّل</button><button data-v="false">مطفأ</button></div></div>
+    <p class="note" id="voiceNote"></p>
+    <div class="row"><a class="btn sm" id="mainLink" href="index.html" target="_top">🏠 العودة إلى المنصة</a></div>
+  </div>
+</section>
+
+<section id="end" class="screen" hidden dir="rtl">
+  <div class="endcard panel"><h2 id="eTitle"></h2><div class="bigstars" id="eStars"></div><p id="eMsg" style="font-size:19px"></p><div class="row" style="justify-content:center" id="eBtns"></div></div>
+</section>
+
+<div id="stage" hidden></div>
+<div class="hud" id="hud" hidden dir="rtl">
+  <div class="goal" id="goal"></div>
+  <div class="tools"><button class="ib" id="bSay" aria-label="اسمع">🔊</button><button class="ib" id="bHome" aria-label="القائمة">🏠</button></div>
+</div>
+<div class="tip" id="tip" hidden dir="rtl"></div>
+<div id="cursor" hidden></div>
+<div class="toast panel" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('math2_'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem('math2_'+k,JSON.stringify(v));}catch(e){}}};
+const S=Object.assign({calm:false,voice:true},store.get('settings',{}));
+const PR=Object.assign({snake:{ok:0,stars:0},train:{ok:0,stars:0},ride:{best:0,stars:0},rubber:{ok:0,stars:0}},store.get('progress',{}));
+const save=()=>store.set('progress',PR);
+const AR=n=>Number(n).toLocaleString('ar-EG');
+const rnd=Math.random, pick=a=>a[(rnd()*a.length)|0], clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const NS='http://www.w3.org/2000/svg';
+const W={long:'طويل',short:'قصير'}, WF={long:'طويلًا',short:'قصيرًا'};
+
+/* ---------- sound & speech ---------- */
+const Snd=(()=>{ let ctx=null,out,nb; function init(){ if(ctx) return; try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); out=ctx.createGain(); out.gain.value=.85; out.connect(ctx.destination); nb=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate); const d=nb.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=rnd()*2-1; }catch(e){ctx=null;} }
+ const V=v=>v*(S.calm?.45:1);
+ function tone(f,d,type,v,w,to){ if(!ctx) return; if(ctx.state==='suspended') ctx.resume().catch(()=>{}); const t=ctx.currentTime+(w||0), o=ctx.createOscillator(), g=ctx.createGain(); o.type=type||'sine'; o.frequency.setValueAtTime(f,t); if(to) o.frequency.exponentialRampToValueAtTime(to,t+d); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(V(v||.2),t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(out); o.start(t); o.stop(t+d+.05); }
+ function noise(d,v,type,f){ if(!ctx) return; const t=ctx.currentTime, s=ctx.createBufferSource(); s.buffer=nb; const fl=ctx.createBiquadFilter(); fl.type=type; fl.frequency.value=f; const g=ctx.createGain(); g.gain.setValueAtTime(V(v),t); g.gain.exponentialRampToValueAtTime(.0001,t+d); s.connect(fl); fl.connect(g); g.connect(out); s.start(t); s.stop(t+d+.05); }
+ let last=0; const FX={ ok(){ [784,988,1175,1568].forEach((f,i)=>tone(f,.25,'triangle',.2,i*.07)); }, no(){ tone(300,.25,'sine',.15,0,200); }, win(){ [523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,.32,'triangle',.18,i*.12)); },
+  stretch(p){ const n=performance.now(); if(n-last<60) return; last=n; tone(200+p*700,.07,'triangle',.06); }, boing(){ tone(180,.35,'sine',.22,0,520); }, clank(){ tone(420,.08,'square',.08); noise(.1,.12,'highpass',2500); }, whistle(){ tone(880,.5,'square',.06); tone(1046,.5,'square',.05); }, poof(){ noise(.35,.25,'bandpass',1200); tone(500,.3,'sine',.12,0,1400); }, bump(){ noise(.15,.3,'lowpass',300); tone(120,.2,'sine',.25,0,60); } };
+ return {init,play(n,a){ init(); FX[n]&&FX[n](a); }}; })();
+const Speech={voice:null,init(){const p=()=>{try{const vs=speechSynthesis.getVoices();this.voice=vs.find(v=>/^ar/i.test(v.lang))||null;$('#voiceNote').textContent=this.voice?'الصوت: '+this.voice.name:'لا يوجد صوت عربي مثبّت في الجهاز؛ ستظهر الكلمات مكتوبة كبيرة على الشاشة.';}catch(e){}};p();try{speechSynthesis.onvoiceschanged=p;}catch(e){}},
+ say(t,rate){ if(!S.voice||!this.voice) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.voice=this.voice; u.lang=this.voice.lang; u.rate=rate||.8; u.pitch=1.1; speechSynthesis.speak(u);}catch(e){} }};
+function bigWord(text,color){ const d=document.createElement('div'); d.className='say'; d.textContent=text; d.style.color=color; document.body.appendChild(d); setTimeout(()=>d.remove(),1600); }
+function praise(kind){ Snd.play('ok'); rumble(200,.3,.7); bigWord(kind==='long'?'ممتاز! طـــويل':'ممتاز! قصير',kind==='long'?'#ff7a1a':'#0d9488'); Speech.say('ممتاز! '+W[kind]); }
+function tip(text,fix){ const t=$('#tip'); t.textContent=text; t.className='tip'+(fix?' fix':''); t.hidden=!text; }
+function toast(t){ const e=$('#toast'); e.textContent=t; e.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>e.hidden=true,2600); }
+const starsHTML=n=>[0,1,2].map(i=>i<n?'<b>★</b>':'★').join('');
+const stepsHTML=(n,of)=>`<span class="steps">${Array.from({length:of},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>`;
+const tagHTML=k=>`<span class="tag ${k}">${W[k]}</span>`;
+function el(tag,attrs,parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+// order: learn "long" alone, then "short" alone, then mixed
+const SEQ=['long','long','long','short','short','short','long','short','short','long'];
+
+/* ---------- screens ---------- */
+let mode=null, A=null, loop=null;
+const stage=$('#stage');
+function showMenu(){ stopAct(); $('#menu').hidden=false; $('#end').hidden=true; refreshMenu(); setTimeout(()=>{ try{ $('#menu .act').focus({preventScroll:true}); }catch(e){} },50); }
+function refreshMenu(){ $('#prSnake').textContent=PR.snake.stars?'★'.repeat(PR.snake.stars):'ابدأ هنا'; $('#prTrain').textContent=PR.train.stars?'★'.repeat(PR.train.stars):'—'; $('#prRide').textContent=PR.ride.best?`🏅 ${AR(PR.ride.best)} أوسمة`:'—'; $('#prRubber').textContent=PR.rubber.stars?'★'.repeat(PR.rubber.stars):'—';
+ $$('.seg').forEach(sg=>sg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(String(S[sg.dataset.key])===b.dataset.v)))); }
+function startAct(m){ Snd.init(); stopAct(); mode=m; $('#menu').hidden=true; $('#end').hidden=true; stage.hidden=false; $('#hud').hidden=false; stage.innerHTML=''; A=({snake:Snake,train:Train,ride:Ride,rubber:Rubber})[m]; A.start(); }
+function stopAct(){ if(loop){ cancelAnimationFrame(loop); loop=null; } stage.hidden=true; stage.innerHTML=''; $('#hud').hidden=true; tip(''); $$('.choices,.say,.flymedal').forEach(e=>e.remove()); mode=null; A=null; drag=false; try{speechSynthesis.cancel();}catch(e){} }
+function endCard(title,stars,msgText,btns){ stopAct(); Snd.play('win'); $('#eTitle').textContent=title; $('#eStars').innerHTML=starsHTML(stars); $('#eMsg').textContent=msgText; $('#eBtns').innerHTML=btns.map(([g,t,c])=>`<button class="btn ${c||''}" data-go="${g}">${t}</button>`).join(''); $('#end').hidden=false; Speech.say(title); setTimeout(()=>{ try{ $('#eBtns button').focus(); }catch(e){} },50); }
+const setGoal=h=>$('#goal').innerHTML=h;
+const starsFor=(firstOk,total)=>firstOk>=total*.85?3:firstOk>=total*.6?2:1;
+
+/* ---------- shared stretch engine for the snake and the rubber boy ----------
+   The child drags a handle; length is clamped to [min,max]. The target zone is a coloured band.
+   Visual aid fades with success: 0 = ghost outline + band, 1 = band only, 2 = none.
+   Error corrector: on release outside the band, an arrow shows the direction and the band/ghost come back. */
+function makeStretch(cfg){ return {
+ i:0, first:0, tries:0, kind:null, val:0, dragging:false, aid:0,
+ start(){ stage.className=cfg.bg; this.i=0; this.first=0; this.svg=el('svg',{class:'scene'},stage); cfg.build.call(this); this.next(); },
+ next(){ if(this.i>=SEQ.length) return this.finish(); this.kind=SEQ[this.i]; this.tries=0; this.fix=null; this.done=false; const ok=PR[cfg.key].ok||0; this.aid=ok<3?0:ok<7?1:2;
+  const g=cfg.geom.call(this); this.min=g.min; this.max=g.max; this.zone=this.kind==='long'?[g.longLo,g.max]:[g.min,g.shortHi]; this.val=this.kind==='long'?g.startShort:g.startLong;
+  setGoal(`<span>${cfg.say(this.kind)}</span>${tagHTML(this.kind)}${stepsHTML(this.i,SEQ.length)}`); Speech.say(cfg.say(this.kind).replace(/[«»]/g,'')); tip(cfg.hint(this.kind)); this.render(); },
+ render(){ cfg.draw.call(this); },
+ down(x,y){ if(cfg.hit.call(this,x,y)){ this.dragging=true; tip(''); } },
+ move(x,y){ if(!this.dragging) return; const v=clamp(cfg.valueAt.call(this,x,y),this.min,this.max); if(Math.abs(v-this.val)>1) Snd.play('stretch',(v-this.min)/(this.max-this.min)); this.val=v; this.render(); },
+ up(){ if(!this.dragging) return; this.dragging=false; const [lo,hi]=this.zone;
+  if(this.val>=lo&&this.val<=hi){ praise(this.kind); if(this.tries===0) this.first++; PR[cfg.key].ok=(PR[cfg.key].ok||0)+1; save(); this.done=true; this.fix=null; this.render(); cfg.celebrate.call(this); this.i++; setTimeout(()=>{ this.done=false; this.next(); },2000); }
+  else { this.tries++; Snd.play('no'); const needMore=this.val<lo; this.fix=needMore?'more':'less'; if(this.tries>=2) this.aid=0; tip(cfg.fixText(this.kind,needMore),true); Speech.say(cfg.fixText(this.kind,needMore)); this.render(); } },
+ finish(){ const st=starsFor(this.first,SEQ.length); PR[cfg.key].stars=Math.max(PR[cfg.key].stars||0,st); save(); endCard(cfg.endTitle,st,`نجحت ${AR(this.first)} من ${AR(SEQ.length)} مرات من أول محاولة.`,cfg.endBtns); } }; }
+
+/* ---------- 1) the snake: drag the tail ---------- */
+const Snake=makeStretch({ key:'snake', bg:'grass', endTitle:'ثعبان رائع! 🐍', endBtns:[['snake','مرة أخرى','primary'],['train','القطار السحري'],['menu','القائمة']],
+ say:k=>k==='long'?'اجعل الثعبان طويلًا':'اجعل الثعبان قصيرًا',
+ hint:k=>k==='long'?'اسحب الذيل ✋ حتى يصل الثعبان إلى التفاحة 🍎':'ادفع الذيل ✋ حتى يدخل الثعبان بيته الصغير',
+ fixText:(k,more)=>more?'ما زال قصيرًا! اسحب الذيل أكثر':'ما زال طويلًا! ادفع الذيل نحو الرأس',
+ build(){ const s=this.svg; this.gBand=el('g',{},s); this.gGhost=el('g',{},s); this.gSnake=el('g',{},s); this.gUi=el('g',{},s); },
+ geom(){ const Wd=innerWidth; this.headX=Wd*.84; this.y=innerHeight*.62; return {min:Wd*.1,max:Wd*.72,longLo:Wd*.56,shortHi:Wd*.24,startShort:Wd*.17,startLong:Wd*.62}; },
+ hit(x,y){ const tx=this.headX-this.val; return Math.hypot(x-tx,y-this.y)<90 || (x>tx-20&&x<this.headX&&Math.abs(y-this.y)<60); },
+ valueAt(x){ return this.headX-x; },
+ draw(){ const L=this.val, hx=this.headX, y=this.y, k=this.kind, [lo,hi]=this.zone; [this.gBand,this.gGhost,this.gSnake,this.gUi].forEach(g=>g.innerHTML='');
+  const col=k==='long'?'#ff8a3d':'#14b8a6';
+  if(this.aid<2||this.fix){ el('rect',{x:hx-hi,y:y-70,width:hi-lo,height:140,rx:30,fill:col,opacity:.28,class:this.fix?'pulse':''},this.gBand); el('line',{x1:hx-lo,y1:y-80,x2:hx-lo,y2:y+80,stroke:col,'stroke-width':6,'stroke-dasharray':'12 10'},this.gBand); }
+  if(k==='long') { const ax=hx-(lo+hi)/2; const t=el('text',{x:ax,y:y-90,'font-size':70,'text-anchor':'middle'},this.gBand); t.textContent='🍎'; }
+  else { el('path',{d:`M${hx-hi-30} ${y+60} Q${hx-hi-30} ${y-110} ${hx-(lo+hi)/2} ${y-110} Q${hx+40} ${y-110} ${hx+40} ${y+60}`,fill:'#8d5a3b',opacity:.35,stroke:'#5a3a22','stroke-width':6},this.gBand); }
+  const path=(len)=>{ let d=''; const n=Math.max(6,Math.round(len/22)); for(let i=0;i<=n;i++){ const t=i/n, x=hx-len*t, yy=y+Math.sin(t*len/70)*16*(t>.05?1:t*20); d+=(i?'L':'M')+x.toFixed(1)+' '+yy.toFixed(1); } return d; };
+  if(this.aid===0&&!this.done){ el('path',{d:path((lo+hi)/2),fill:'none',stroke:'#fff','stroke-width':46,'stroke-linecap':'round',opacity:.45,'stroke-dasharray':'2 14'},this.gGhost); }
+  const g=this.gSnake; if(this.done) g.setAttribute('class','wiggle'); else g.removeAttribute('class');
+  el('path',{d:path(L),fill:'none',stroke:'#2e7d32','stroke-width':50,'stroke-linecap':'round','stroke-linejoin':'round'},g);
+  el('path',{d:path(L),fill:'none',stroke:'#66bb6a','stroke-width':38,'stroke-linecap':'round','stroke-linejoin':'round'},g);
+  el('path',{d:path(L),fill:'none',stroke:'#c5e86c','stroke-width':12,'stroke-linecap':'round','stroke-dasharray':'4 26'},g);
+  el('ellipse',{cx:hx+18,cy:y-4,rx:44,ry:34,fill:'#43a047',stroke:'#2e7d32','stroke-width':5},g);
+  for(const dy of [-16,8]){ el('circle',{cx:hx+30,cy:y-4+dy,r:11,fill:'#fff'},g); el('circle',{cx:hx+34,cy:y-4+dy,r:6,fill:'#1a1a2e'},g); }
+  el('path',{d:`M${hx+60} ${y} l26 0 l8 -8 m-8 8 l8 8`,stroke:'#e53935','stroke-width':4,fill:'none','stroke-linecap':'round'},g);
+  const tx=hx-L; const hc=el('g',{},this.gUi); el('circle',{cx:tx,cy:y,r:34,fill:'#fff',opacity:.9,stroke:col,'stroke-width':6,class:this.dragging?'':'pulse'},hc); const hand=el('text',{x:tx,y:y+14,'font-size':40,'text-anchor':'middle'},hc); hand.textContent='✋';
+  if(this.fix&&!this.dragging){ const dir=this.fix==='more'?-1:1; const a=el('text',{x:tx+dir*80,y:y-50,'font-size':64,'text-anchor':'middle',class:'arrow',style:`--ax:${dir*18}px`},this.gUi); a.textContent=dir<0?'⬅️':'➡️'; } },
+ celebrate(){ this.fix=null; } });
+
+/* ---------- 2) the rubber boy: drag his head up or down ---------- */
+const Rubber=makeStretch({ key:'rubber', bg:'yard', endTitle:'الولد المطاطي سعيد! 🧒', endBtns:[['rubber','مرة أخرى','primary'],['ride','الزرافة والسلحفاة'],['menu','القائمة']],
+ say:k=>k==='long'?'اجعل الولد طويلًا':'اجعل الولد قصيرًا',
+ hint:k=>k==='long'?'شدّ رأس الولد ✋ للأعلى حتى يلمس النجمة ⭐':'اضغط رأس الولد ✋ للأسفل حتى يدخل تحت الخط',
+ fixText:(k,more)=>more?'ما زال قصيرًا! شدّه للأعلى أكثر':'ما زال طويلًا! اضغطه للأسفل أكثر',
+ build(){ const s=this.svg; this.gBand=el('g',{},s); this.gGhost=el('g',{},s); this.gBoy=el('g',{},s); this.gUi=el('g',{},s); },
+ geom(){ const H=innerHeight; this.cx=innerWidth*.5; this.ground=H*.86; const top=H*.2; const full=this.ground-top; return {min:full*.22,max:full,longLo:full*.8,shortHi:full*.36,startShort:full*.5,startLong:full*.55}; },
+ hit(x,y){ const hy=this.ground-this.val; return Math.abs(x-this.cx)<120&&Math.abs(y-hy)<110; },
+ valueAt(x,y){ return this.ground-y; },
+ draw(){ const h=this.val, cx=this.cx, gy=this.ground, k=this.kind, [lo,hi]=this.zone; [this.gBand,this.gGhost,this.gBoy,this.gUi].forEach(g=>g.innerHTML=''); const col=k==='long'?'#ff8a3d':'#14b8a6';
+  if(this.aid<2||this.fix){ el('rect',{x:cx-200,y:gy-hi,width:400,height:hi-lo,rx:24,fill:col,opacity:.25,class:this.fix?'pulse':''},this.gBand); el('line',{x1:cx-230,y1:gy-lo,x2:cx+230,y2:gy-lo,stroke:col,'stroke-width':6,'stroke-dasharray':'14 10'},this.gBand); }
+  if(k==='long'){ const t=el('text',{x:cx+150,y:gy-hi+60,'font-size':64,'text-anchor':'middle'},this.gBand); t.textContent='⭐'; }
+  else { el('rect',{x:cx-240,y:gy-hi-14,width:480,height:14,rx:7,fill:'#8d5a3b'},this.gBand); }
+  const boy=(hh,ghost)=>{ const g=el('g',{},ghost?this.gGhost:this.gBoy); const headR=Math.min(48,hh*.22+14), bodyH=Math.max(30,hh-headR*2-46), bw=clamp(150*Math.pow(260/Math.max(hh,60),.55),56,170)*.5;
+   const top=gy-hh; const op=ghost?{opacity:.4,'stroke-dasharray':'8 8'}:{};
+   el('rect',{x:cx-bw*.5-4,y:gy-46,width:bw*.42,height:46,rx:10,fill:ghost?'none':'#3949ab',stroke:'#1a237e','stroke-width':ghost?4:3,...op},g); el('rect',{x:cx+4+bw*.08,y:gy-46,width:bw*.42,height:46,rx:10,fill:ghost?'none':'#3949ab',stroke:'#1a237e','stroke-width':ghost?4:3,...op},g);
+   el('rect',{x:cx-bw/2,y:top+headR*2-6,width:bw,height:bodyH+12,rx:Math.min(40,bw/2),fill:ghost?'none':'#ff7043',stroke:ghost?'#fff':'#bf360c','stroke-width':ghost?5:4,...op},g);
+   if(!ghost){ for(const s of [-1,1]) el('path',{d:`M${cx+s*bw/2} ${top+headR*2+16} q${s*40} ${bodyH*.3} ${s*22} ${bodyH*.55}`,stroke:'#f2c9a0','stroke-width':16,fill:'none','stroke-linecap':'round'},g); }
+   el('circle',{cx,cy:top+headR,r:headR,fill:ghost?'none':'#f2c9a0',stroke:ghost?'#fff':'#c98f5f','stroke-width':ghost?5:3,...op},g);
+   if(!ghost){ el('path',{d:`M${cx-headR} ${top+headR*.8} q${headR} ${-headR*1.5} ${headR*2} 0`,fill:'#4e342e'},g); for(const s of [-1,1]){ el('circle',{cx:cx+s*headR*.38,cy:top+headR*1.0,r:headR*.13,fill:'#1a1a2e'},g); } el('path',{d:`M${cx-headR*.35} ${top+headR*1.35} q${headR*.35} ${headR*.35} ${headR*.7} 0`,stroke:'#8a3b2a','stroke-width':4,fill:'none','stroke-linecap':'round'},g); } return top; };
+  if(this.aid===0&&!this.done) boy((lo+hi)/2,true);
+  const top=boy(h,false); if(this.done) this.gBoy.setAttribute('class','wiggle'); else this.gBoy.removeAttribute('class');
+  const hc=el('g',{},this.gUi); el('circle',{cx:cx+70,cy:top+30,r:32,fill:'#fff',opacity:.9,stroke:col,'stroke-width':6,class:this.dragging?'':'pulse'},hc); const hand=el('text',{x:cx+70,y:top+44,'font-size':38,'text-anchor':'middle'},hc); hand.textContent='✋';
+  if(this.fix&&!this.dragging){ const up=this.fix==='more'; const a=el('text',{x:cx-130,y:top+(up?-10:90),'font-size':64,'text-anchor':'middle',class:'arrow',style:`--ax:0px;--ay:${up?-18:18}px`},this.gUi); a.textContent=up?'⬆️':'⬇️'; } },
+ celebrate(){ this.fix=null; } });
+
+/* ---------- 3) the magic train: drag wagons on and off ---------- */
+const WAG_COL=['#e53935','#1e88e5','#fdd835','#43a047','#8e24aa','#fb8c00','#00acc1'];
+const Train={ i:0, first:0, tries:0, kind:null, cars:1, depot:5, need:{long:5,short:1}, held:null, aid:0,
+ start(){ stage.className='rail'; this.i=0; this.first=0; this.svg=el('svg',{class:'scene'},stage); this.next(); },
+ next(){ if(this.i>=SEQ.length) return this.finish(); this.kind=SEQ[this.i]; this.tries=0; this.done=false; const ok=PR.train.ok||0; this.aid=ok<3?0:ok<7?1:2; this.cars=this.kind==='long'?1:5; this.depot=6-this.cars; this.fix=null; this.lastCars=this.cars;
+  setGoal(`<span>${this.kind==='long'?'اجعل القطار طويلًا':'اجعل القطار قصيرًا'}</span>${tagHTML(this.kind)}${stepsHTML(this.i,SEQ.length)}`);
+  Speech.say(this.kind==='long'?'اجعل القطار طويلًا':'اجعل القطار قصيرًا'); tip(this.kind==='long'?'اسحب العربات ✋ من المخزن وألصقها بالقطار حتى يصل إلى العلم 🚩':'اسحب العربات ✋ من القطار إلى المخزن حتى يدخل القطار المحطة الصغيرة'); this.draw(); },
+ geo(){ const Wd=innerWidth; const cw=clamp(Wd*.1,44,120); return {cw, ex:Wd*.86, y:innerHeight*.52, dy:innerHeight*.82}; },
+ carX(n){ const g=this.geo(); return g.ex-(n)*(g.cw+8); },
+ draw(){ const g=this.geo(), s=this.svg, k=this.kind; s.innerHTML=''; const col=k==='long'?'#ff8a3d':'#14b8a6';
+  el('rect',{x:0,y:g.y+g.cw*.42,width:innerWidth,height:10,fill:'#6d4c41'},s); for(let x=0;x<innerWidth;x+=34) el('rect',{x,y:g.y+g.cw*.38,width:16,height:20,fill:'#8d6e63'},s);
+  el('rect',{x:innerWidth*.05,y:g.dy-g.cw*.5,width:innerWidth*.62,height:g.cw*1.1,rx:20,fill:'#fff',opacity:.35},s); const dl=el('text',{x:innerWidth*.36,y:g.dy+g.cw*.75,'font-size':22,'font-weight':800,'text-anchor':'middle',fill:'#2e4a1e'},s); dl.textContent='المخزن';
+  if(k==='long'){ const fx=this.carX(this.need.long)-g.cw*.2; if(this.aid<2||this.fix){ el('rect',{x:fx-10,y:g.y-g.cw*.8,width:this.carX(1)+g.cw-fx,height:g.cw*1.4,rx:18,fill:col,opacity:.18,class:this.fix?'pulse':''},s); for(let n=this.cars+1;n<=this.need.long;n++) el('rect',{x:this.carX(n),y:g.y-g.cw*.45,width:g.cw,height:g.cw*.75,rx:12,fill:'none',stroke:'#fff','stroke-width':4,'stroke-dasharray':'10 8',opacity:this.aid===0?.9:0},s); }
+   const f=el('text',{x:fx,y:g.y-g.cw*.4,'font-size':g.cw*.9,'text-anchor':'middle'},s); f.textContent='🚩'; }
+  else { const sx=this.carX(this.need.short)-g.cw*.15; el('path',{d:`M${sx} ${g.y+g.cw*.42} L${sx} ${g.y-g.cw*.85} Q${(sx+g.ex+g.cw*1.3)/2} ${g.y-g.cw*1.5} ${g.ex+g.cw*1.3} ${g.y-g.cw*.85} L${g.ex+g.cw*1.3} ${g.y+g.cw*.42}`,fill:col,opacity:(this.aid<2||this.fix)?.25:.12,stroke:'#0f766e','stroke-width':6,class:this.fix?'pulse':''},s); const t=el('text',{x:(sx+g.ex)/2+g.cw*.3,y:g.y-g.cw*1.0,'font-size':22,'font-weight':800,'text-anchor':'middle',fill:'#0f4c45'},s); t.textContent='المحطة الصغيرة'; }
+  const train=el('g',{class:this.done?'wiggle':''},s);
+  // engine faces right (it leads the way)
+  el('rect',{x:g.ex,y:g.y-g.cw*.6,width:g.cw*1.15,height:g.cw*.9,rx:14,fill:'#d32f2f'},train); el('rect',{x:g.ex+g.cw*.1,y:g.y-g.cw*1.05,width:g.cw*.5,height:g.cw*.5,rx:8,fill:'#b71c1c'},train); el('rect',{x:g.ex+g.cw*.75,y:g.y-g.cw*1.0,width:g.cw*.18,height:g.cw*.42,fill:'#333'},train); el('rect',{x:g.ex+g.cw*.18,y:g.y-g.cw*.95,width:g.cw*.34,height:g.cw*.28,rx:4,fill:'#bfe6ff'},train);
+  for(const wx of [.25,.85]) el('circle',{cx:g.ex+g.cw*wx,cy:g.y+g.cw*.32,r:g.cw*.16,fill:'#222',stroke:'#999','stroke-width':4},train);
+  for(let n=1;n<=this.cars;n++){ const x=this.carX(n), c=WAG_COL[(n-1)%WAG_COL.length]; const w=el('g',{'data-car':n},train); el('rect',{x,y:g.y-g.cw*.45,width:g.cw,height:g.cw*.75,rx:12,fill:c,stroke:'rgba(0,0,0,.25)','stroke-width':3},w); el('rect',{x:x+g.cw,y:g.y,width:8,height:8,fill:'#555'},w); for(const wx of [.25,.75]) el('circle',{cx:x+g.cw*wx,cy:g.y+g.cw*.32,r:g.cw*.15,fill:'#222',stroke:'#999','stroke-width':4},w); }
+  // depot wagons (bottom)
+  for(let d=0;d<this.depot;d++){ const x=innerWidth*.08+d*(g.cw+14), c=WAG_COL[(this.cars+d)%WAG_COL.length]; const w=el('g',{},s); el('rect',{x,y:g.dy-g.cw*.38,width:g.cw,height:g.cw*.75,rx:12,fill:c,stroke:'rgba(0,0,0,.25)','stroke-width':3},w); for(const wx of [.25,.75]) el('circle',{cx:x+g.cw*wx,cy:g.dy+g.cw*.4,r:g.cw*.15,fill:'#222'},w); }
+  if(this.held){ const h=this.held; el('rect',{x:h.x-g.cw/2,y:h.y-g.cw*.38,width:g.cw,height:g.cw*.75,rx:12,fill:h.c,stroke:'#fff','stroke-width':5,opacity:.95},s); }
+  if(this.fix&&!this.held){ const a=el('text',{x:this.fix==='more'?innerWidth*.36:this.carX(this.cars)+g.cw/2,y:this.fix==='more'?g.dy-g.cw*.9:g.y+g.cw*1.3,'font-size':60,'text-anchor':'middle',class:'arrow',style:`--ax:0px;--ay:${this.fix==='more'?-16:16}px`},s); a.textContent=this.fix==='more'?'⬆️':'⬇️'; } },
+ down(x,y){ const g=this.geo(); if(this.done) return;
+  if(y>g.dy-g.cw&&this.depot>0){ this.held={from:'depot',x,y,c:WAG_COL[this.cars%WAG_COL.length]}; Snd.play('clank'); }
+  else if(this.cars>0){ const lx=this.carX(this.cars); if(x>lx-20&&x<lx+g.cw+20&&Math.abs(y-g.y)<g.cw){ this.held={from:'train',x,y,c:WAG_COL[(this.cars-1)%WAG_COL.length]}; this.cars--; Snd.play('clank'); } }
+  if(this.held){ tip(''); this.draw(); } },
+ move(x,y){ if(!this.held) return; this.held.x=x; this.held.y=y; this.draw(); },
+ up(x,y){ if(!this.held) return; const g=this.geo(), h=this.held; this.held=null; const onTrack=Math.abs(y-g.y)<g.cw*1.2;
+  if(h.from==='depot'){ if(onTrack&&this.cars<7){ this.cars++; this.depot--; Snd.play('clank'); } }
+  else { if(onTrack){ this.cars++; } else { this.depot++; } }
+  this.check(); this.draw(); },
+ check(){ const k=this.kind; const ok=k==='long'?this.cars>=this.need.long:this.cars<=this.need.short;
+  if(ok){ this.done=true; this.fix=null; praise(k); Snd.play('whistle'); if(this.tries===0) this.first++; PR.train.ok=(PR.train.ok||0)+1; save(); this.i++; setTimeout(()=>this.next(),2100); return; }
+  // error corrector: wrong direction (adding when it should get shorter, or removing when it should get longer)
+  const wrongWay=(k==='long'&&this.lastCars!=null&&this.cars<this.lastCars)||(k==='short'&&this.lastCars!=null&&this.cars>this.lastCars);
+  if(wrongWay){ this.tries++; Snd.play('no'); this.fix=k==='long'?'more':'less'; const t=k==='long'?'نريد القطار طويلًا: أضف عربات من المخزن ⬆️':'نريد القطار قصيرًا: أبعد العربات إلى المخزن ⬇️'; tip(t,true); Speech.say(t.replace(/[⬆️⬇️]/g,'')); }
+  this.lastCars=this.cars; },
+ finish(){ const st=starsFor(this.first,SEQ.length); PR.train.stars=Math.max(PR.train.stars||0,st); save(); endCard('قطار سحري! 🚂',st,`نجحت ${AR(this.first)} من ${AR(SEQ.length)} مرات دون أخطاء.`,[['train','مرة أخرى','primary'],['ride','الزرافة والسلحفاة'],['menu','القائمة']]); } };
+Train.lastCars=null;
+
+/* ---------- 4) the ride: tall giraffe for the medal tree, short tortoise under the low bar ---------- */
+const Ride={ n:0, total:8, first:0, medals:0, beast:'short', obs:null, phase:'walk', x:0, last:0, tries:0,
+ start(){ stage.className='trail'; this.n=0; this.first=0; this.medals=0; this.beast='short';
+  stage.innerHTML=`<svg class="scene" id="rideSvg"></svg><div class="beast" id="beast">🐢</div><div class="kid" id="kid">🧒</div>`; this.walk(); this.last=performance.now(); const tick=t=>{ loop=requestAnimationFrame(tick); this.update(t); }; loop=requestAnimationFrame(tick); },
+ walk(){ if(this.n>=this.total) return this.finish(); this.obs=this.n<2?(this.n===0?'tree':'bar'):pick(['tree','bar']); this.phase='walk'; this.x=-260; this.tries=0; tip(''); setGoal(`<span>🏅 ${AR(this.medals)}</span>${stepsHTML(this.n,this.total)}`); this.layout(); },
+ layout(){ const H=innerHeight, gy=H*.6; this.gy=gy; const b=$('#beast'), k=$('#kid'); const tall=this.beast==='long'; b.textContent=tall?'🦒':'🐢'; b.style.fontSize=(tall?Math.min(H*.42,300):Math.min(H*.16,120))+'px'; const bx=innerWidth*.66; b.style.left=bx+'px'; b.style.top=(gy-(tall?Math.min(H*.42,300):Math.min(H*.16,120))*.92)+'px';
+  k.style.left=(bx+(tall?Math.min(H*.42,300)*.42:Math.min(H*.16,120)*.25))+'px'; k.style.top=(gy-(tall?Math.min(H*.42,300)*.62:Math.min(H*.16,120)*1.05))+'px'; this.bx=bx; this.drawObs(); },
+ drawObs(){ const s=$('#rideSvg'); s.innerHTML=''; const gy=this.gy, x=this.x; el('rect',{x:0,y:gy,width:innerWidth,height:8,fill:'#8a6a3a'},s);
+  if(this.obs==='tree'){ const h=innerHeight*.5; el('rect',{x:x-18,y:gy-h*.55,width:36,height:h*.55,fill:'#7a4f2c'},s); el('circle',{cx:x,cy:gy-h*.62,r:h*.24,fill:'#43a047'},s); el('circle',{cx:x-h*.14,cy:gy-h*.5,r:h*.16,fill:'#388e3c'},s); if(!this.got){ const m=el('text',{x,y:gy-h*.82,'font-size':58,'text-anchor':'middle'},s); m.textContent='🏅'; } this.reach=gy-h*.82; }
+  else { const bh=Math.min(innerHeight*.16,120)*1.25; for(const dx of [-110,110]) el('rect',{x:x+dx-8,y:gy-bh-10,width:16,height:bh+10,fill:'#555'},s); const bar=el('rect',{x:x-130,y:gy-bh-26,width:260,height:22,rx:6,fill:'#ffb300',stroke:'#333','stroke-width':3},s); for(let i=0;i<6;i++) el('rect',{x:x-120+i*44,y:gy-bh-26,width:20,height:22,fill:'#222'},s); this.barY=gy-bh-26; } },
+ update(t){ const dt=Math.min(.05,(t-this.last)/1000); this.last=t; if(this.phase==='walk'||this.phase==='go'){ this.x+=(S.calm?120:170)*dt; this.drawObs(); const b=$('#beast'); b.style.transform=`translateY(${Math.abs(Math.sin(t/180))*-6}px)`;
+   if(this.phase==='walk'&&this.x>this.bx-330){ this.phase='ask'; this.ask(); }
+   if(this.phase==='go'&&this.x>innerWidth+300){ this.n++; this.got=false; this.walk(); } } },
+ ask(){ const box=document.createElement('div'); box.className='choices'; box.dir='rtl'; box.innerHTML=`<h3>${this.obs==='tree'?'الوسام فوق الشجرة! ':'حاجز قصير! '}أيهما تختار؟</h3><div class="opts"><button class="opt long" data-pick="long"><span class="em">🦒</span>طويل</button><button class="opt short" data-pick="short"><span class="em">🐢</span>قصير</button></div>`; document.body.appendChild(box); this.box=box;
+  Speech.say('أيهما تختار؟ الطويل أم القصير؟'); if(this.n<2) setTimeout(()=>{ const c=box.querySelector(`[data-pick="${this.need()}"]`); c&&c.classList.add('hint'); },1200); setTimeout(()=>{ try{ box.querySelector('.opt').focus(); }catch(e){} },50); },
+ need(){ return this.obs==='tree'?'long':'short'; },
+ choose(k){ const box=this.box; if(!box) return; const need=this.need(); this.morph(k);
+  if(k===need){ box.remove(); this.box=null; praise(k); if(this.tries===0) this.first++; setTimeout(()=>this.pass(),900); }
+  else { this.tries++; const b=box.querySelector(`[data-pick="${k}"]`); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); setTimeout(()=>{ Snd.play('bump'); const msg=this.obs==='tree'?'السلحفاة قصيرة، لا تصل إلى الوسام. اختر الطويل':'الزرافة طويلة، لا تمر من تحت الحاجز. اختر القصير'; tip(msg,true); Speech.say(msg); box.querySelector(`[data-pick="${need}"]`).classList.add('hint'); $('#beast').animate([{transform:'translateX(0)'},{transform:'translateX(-30px)'},{transform:'translateX(0)'}],{duration:400}); },650); } },
+ morph(k){ if(this.beast===k) return; this.beast=k; Snd.play('poof'); const b=$('#beast'), r=b.getBoundingClientRect(); const p=document.createElement('div'); p.className='poof'; p.textContent='✨'; p.style.left=(r.left+r.width/2)+'px'; p.style.top=(r.top+r.height/2)+'px'; stage.appendChild(p); setTimeout(()=>p.remove(),650); this.layout(); },
+ pass(){ tip(''); if(this.obs==='tree'){ this.got=true; this.medals++; const m=document.createElement('div'); m.className='flymedal'; m.textContent='🏅'; m.style.left=(this.x)+'px'; m.style.top=(this.reach-50)+'px'; document.body.appendChild(m); requestAnimationFrame(()=>{ const g=$('#goal').getBoundingClientRect(); m.style.left=(g.left+20)+'px'; m.style.top=(g.top)+'px'; m.style.transform='scale(.5)'; }); setTimeout(()=>{ m.remove(); setGoal(`<span>🏅 ${AR(this.medals)}</span>${stepsHTML(this.n+1,this.total)}`); },950); Snd.play('ok'); }
+  this.phase='go'; },
+ tap(){},
+ finish(){ PR.ride.best=Math.max(PR.ride.best||0,this.medals); const st=starsFor(this.first,this.total); PR.ride.stars=Math.max(PR.ride.stars||0,st); save(); endCard('رحلة رائعة! 🦒🐢',st,`اخترت الصحيح ${AR(this.first)} من ${AR(this.total)} مرات من أول محاولة، وجمعت ${AR(this.medals)} أوسمة.`,[['ride','رحلة جديدة','primary'],['rubber','الولد المطاطي'],['menu','القائمة']]); } };
+
+/* ---------- input: mouse / touch / PlayStation (hold ✕ to drag) ---------- */
+let drag=false, gpActive=false, gp={x:innerWidth/2,y:innerHeight/2}, prevA=false, prevO=false, padIdx=null, navCd=0;
+stage.addEventListener('pointerdown',e=>{ Snd.init(); if(!A||!A.down) return; e.preventDefault(); drag=true; try{ stage.setPointerCapture(e.pointerId); }catch(_){} A.down(e.clientX,e.clientY); });
+stage.addEventListener('pointermove',e=>{ if(drag&&A&&A.move) A.move(e.clientX,e.clientY); });
+const pup=e=>{ if(!drag) return; drag=false; if(A&&A.up) A.up(e.clientX,e.clientY); }; stage.addEventListener('pointerup',pup); stage.addEventListener('pointercancel',pup);
+addEventListener('pointermove',e=>{ if(e.pointerType==='mouse'&&(e.movementX||e.movementY)&&gpActive){ gpActive=false; $('#cursor').hidden=true; } },{passive:true});
+function getPad(){ let ps=[]; try{ ps=navigator.getGamepads?navigator.getGamepads():[]; }catch(e){} if(padIdx!=null&&ps[padIdx]) return ps[padIdx]; for(const p of ps) if(p&&p.connected){ padIdx=p.index; return p; } return null; }
+addEventListener('gamepadconnected',e=>{ padIdx=e.gamepad.index; toast('🎮 يد التحكم: حرّك العصا، واضغط ✕ مع التحريك للسحب'); });
+function rumble(ms,s,w){ if(S.calm){s*=.4;w*=.4;} try{ const g=getPad(); if(g&&g.vibrationActuator) g.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:s,weakMagnitude:w}).catch(()=>{}); }catch(e){} }
+function padLoop(){ requestAnimationFrame(padLoop); const g=getPad(); if(!g) return; const bt=i=>!!(g.buttons[i]&&g.buttons[i].pressed); let ax=g.axes[0]||0, ay=g.axes[1]||0; if(bt(14)) ax=-1; if(bt(15)) ax=1; if(bt(12)) ay=-1; if(bt(13)) ay=1; if(Math.abs(ax)<.15) ax=0; if(Math.abs(ay)<.15) ay=0;
+ const a=bt(0), o=bt(1); if(a||o||ax||ay) Snd.init();
+ const box=document.querySelector('.choices');
+ if(mode&&!box){ if(ax||ay){ gpActive=true; gp.x=clamp(gp.x+ax*13,10,innerWidth-10); gp.y=clamp(gp.y+ay*13,10,innerHeight-10); if(drag&&A.move) A.move(gp.x,gp.y); }
+  const c=$('#cursor'); c.hidden=!gpActive; c.style.left=gp.x+'px'; c.style.top=gp.y+'px';
+  if(a&&!prevA&&gpActive&&A.down){ drag=true; A.down(gp.x,gp.y); } if(!a&&prevA&&drag){ drag=false; A.up&&A.up(gp.x,gp.y); } if(o&&!prevO) showMenu(); }
+ else { navCd-=1/60; const vis=[...document.querySelectorAll('.choices button,#menu:not([hidden]) button,#menu:not([hidden]) a.btn,#end:not([hidden]) button')]; if((ax||ay)&&navCd<=0&&vis.length){ navCd=.25; const cur=document.activeElement; let i=vis.indexOf(cur); i=i<0?0:clamp(i+((ax<0||ay>0)?1:-1),0,vis.length-1); vis[i].focus(); } if(!ax&&!ay) navCd=0; if(a&&!prevA&&document.activeElement&&vis.includes(document.activeElement)) document.activeElement.click(); }
+ prevA=a; prevO=o; }
+requestAnimationFrame(padLoop);
+
+/* ---------- clicks ---------- */
+document.addEventListener('click',e=>{ Snd.init();
+ const ml=e.target.closest('#mainLink'); if(ml&&window.parent!==window){ e.preventDefault(); try{speechSynthesis.cancel();}catch(_){} window.parent.postMessage('ayn-close','*'); return; }
+ const pk=e.target.closest('[data-pick]'); if(pk&&mode==='ride'){ Ride.choose(pk.dataset.pick); return; }
+ const go=e.target.closest('[data-go]'); if(go){ const g=go.dataset.go; if(g==='menu') showMenu(); else startAct(g); return; }
+ const sg=e.target.closest('.seg button'); if(sg){ const k=sg.parentElement.dataset.key; S[k]=sg.dataset.v==='true'; store.set('settings',S); refreshMenu(); return; } });
+$('#bHome').onclick=()=>showMenu();
+$('#bSay').onclick=()=>{ if(!A) return; if(mode==='ride') Speech.say('أيهما تختار؟ الطويل أم القصير؟'); else if(A.kind) Speech.say((mode==='train'?'اجعل القطار ':mode==='snake'?'اجعل الثعبان ':'اجعل الولد ')+WF[A.kind]); };
+addEventListener('keydown',e=>{ if(e.code==='Escape'&&mode) showMenu(); });
+addEventListener('resize',()=>{ if(A&&A.render&&mode!=='ride'&&mode!=='train'){ A.next&&A.render(); } if(mode==='train') Train.draw(); if(mode==='ride') Ride.layout(); });
+Speech.init(); showMenu();
+})();
+</script>
+
+</body>
+</html>
