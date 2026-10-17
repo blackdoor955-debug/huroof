@@ -1,0 +1,327 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>كبير وصغير</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Lalezar&display=swap">
+<style>
+:root{
+  /* Layout: menus on the platform's night glass; each activity is a bright full-screen play table the child stretches and squashes by hand.
+     Long = warm orange band, short = teal band, used the same way in every activity. */
+  --night:#0a1030; --glass:rgba(11,17,50,.82); --glass2:rgba(255,255,255,.08); --line:rgba(255,255,255,.18);
+  --ink:#f7f4ff; --muted:#b9c0ea; --gold:#ffc83a; --long:#ff8a3d; --short:#14b8a6;
+  --display:'Lalezar','Baloo Bhaijaan 2',Tahoma,sans-serif; --body:'Baloo Bhaijaan 2',Tahoma,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--night);color:var(--ink);font-family:var(--body);-webkit-user-select:none;user-select:none}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0;line-height:1.6}
+button{font-family:var(--body);color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;padding-block:20px;padding-inline:16px;display:flex;align-items:center;justify-content:center;z-index:10;background:radial-gradient(ellipse at 20% 0%,#24307a 0%,var(--night) 60%)}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:28px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.wrap{width:min(980px,100%);padding:24px;display:flex;flex-direction:column;gap:18px;margin-block:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:19px;font-weight:700;color:var(--ink);background:var(--glass2);border:1px solid var(--line);border-radius:16px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.btn:hover,.btn:focus-visible{background:rgba(255,255,255,.15)}
+.btn.primary{background:linear-gradient(180deg,#ffd75e,#ff9f1c);color:#2a1600;border-color:transparent;box-shadow:0 6px 0 #b8620a}
+.btn.sm{font-size:15px;padding:7px 12px}
+.eyebrow{font-size:15px;color:var(--gold);font-weight:700}
+.title{font-family:var(--display);font-size:clamp(48px,10vw,88px);line-height:1;background:linear-gradient(180deg,#fff 10%,#ffd96b 55%,#ff9a1f);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 5px 0 rgba(80,30,0,.55))}
+.title .l{letter-spacing:.12em}
+.lead{color:var(--muted);font-size:18px;max-width:60ch}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.act{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:right;padding:18px;border-radius:24px;border:2px solid rgba(255,255,255,.18);background:linear-gradient(160deg,var(--a),var(--b));cursor:pointer;min-width:0;box-shadow:inset 0 -50px 60px rgba(0,0,0,.22);transition:transform .15s}
+.act:hover,.act:focus-visible{transform:translateY(-4px)}
+.act .ic{font-size:46px;line-height:1}
+.act h3{font-size:26px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.act p{font-size:14px;color:#fff;opacity:.95;line-height:1.45}
+.act .pr{font-size:14px;font-weight:800;background:rgba(0,0,0,.25);padding:3px 10px;border-radius:999px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.note{color:var(--muted);font-size:14px;line-height:1.6}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-size:15px;font-weight:700;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--gold);color:#2a1600;border-color:var(--gold)}
+
+/* stage */
+#stage{position:fixed;inset:0;overflow:hidden;touch-action:none}
+#stage svg.scene{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.grass{background:linear-gradient(180deg,#8fd6ff 0%,#dff4ff 42%,#8fd36a 42%,#5fb444 100%)}
+.yard{background:linear-gradient(180deg,#ffe3c2 0%,#fff3e3 55%,#e9c48f 55%,#d9a96a 100%)}
+.rail{background:linear-gradient(180deg,#7fc8ff 0%,#d8f0ff 50%,#a7d38a 50%,#86bd65 100%)}
+.trail{background:linear-gradient(180deg,#6ec6ff 0%,#cdeeff 60%,#c9a46a 60%,#b08850 100%)}
+.hud{position:fixed;z-index:20;top:calc(10px + env(safe-area-inset-top,0px));inset-inline:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.hud>*{pointer-events:auto}
+.goal{display:flex;align-items:center;gap:12px;padding:8px 18px 8px 12px;border-radius:22px;background:rgba(255,255,255,.94);color:#1a1a2e;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:clamp(20px,3.4vw,30px);font-weight:800;max-width:calc(100% - 140px)}
+.goal .tag{padding:2px 14px;border-radius:999px;color:#fff;font-size:.9em}
+.goal .tag.long{background:var(--long)}.goal .tag.short{background:var(--short)}
+.steps{display:flex;gap:6px}
+.steps i{width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.15)}
+.steps i.on{background:#ffb300;box-shadow:0 0 8px #ffb300}
+.tools{display:flex;gap:8px}
+.ib{width:52px;height:52px;border-radius:16px;border:0;background:rgba(255,255,255,.94);color:#1a1a2e;font-size:22px;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.say{position:fixed;z-index:25;left:50%;top:40%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(60px,12vw,140px);line-height:1.1;white-space:nowrap;pointer-events:none;text-shadow:0 6px 0 rgba(0,0,0,.18),0 0 30px rgba(255,255,255,.95);animation:sayin 1.5s ease-out forwards}
+@keyframes sayin{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}18%{transform:translate(-50%,-50%) scale(1.12);opacity:1}75%{opacity:1}100%{transform:translate(-50%,-62%) scale(1);opacity:0}}
+.tip{position:fixed;z-index:24;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:12px 22px;border-radius:20px;background:rgba(255,255,255,.95);color:#1a1a2e;font-size:clamp(18px,2.6vw,24px);font-weight:800;box-shadow:0 10px 26px rgba(0,0,0,.2);max-width:calc(100% - 32px);text-align:center}
+.tip.fix{background:#fff3cd;border:3px solid #ffb300}
+#cursor{position:fixed;z-index:31;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 3px #1a1a2e,0 0 20px #fff;pointer-events:none}
+.wiggle{animation:wig .9s ease-in-out 2}
+@keyframes wig{25%{transform:rotate(-2deg) translateY(-6px)}75%{transform:rotate(2deg) translateY(4px)}}
+.pulse{animation:pls 1s ease-in-out infinite}
+@keyframes pls{50%{opacity:.35}}
+.arrow{animation:arw .8s ease-in-out infinite}
+@keyframes arw{50%{transform:translateX(var(--ax,-18px)) translateY(var(--ay,0))}}
+
+/* ride */
+.choices{position:fixed;z-index:22;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:clamp(14px,4vw,40px);padding:22px;border-radius:30px;background:rgba(255,255,255,.95);box-shadow:0 20px 50px rgba(0,0,0,.3);flex-direction:column;align-items:center;color:#1a1a2e}
+.choices h3{font-size:clamp(24px,4vw,34px)}
+.choices .opts{display:flex;gap:clamp(14px,4vw,36px)}
+.opt{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;width:clamp(140px,22vw,200px);height:clamp(170px,26vw,240px);border-radius:24px;border:5px solid transparent;cursor:pointer;font-size:24px;font-weight:800;color:#fff;box-shadow:0 8px 0 rgba(0,0,0,.2);padding-bottom:10px}
+.opt.long{background:linear-gradient(180deg,#ffb37a,var(--long))}.opt.short{background:linear-gradient(180deg,#5fe0d0,var(--short))}
+.opt .em{line-height:1}
+.opt.long .em{font-size:clamp(90px,14vw,130px)}.opt.short .em{font-size:clamp(50px,8vw,70px)}
+.opt.hint{animation:hint 1s infinite}
+@keyframes hint{50%{box-shadow:0 0 0 8px #fff,0 0 34px #fff}}
+.opt.no{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.rider{position:absolute;transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.beast{position:absolute;line-height:1;transition:font-size .5s cubic-bezier(.3,1.5,.5,1);filter:drop-shadow(0 10px 8px rgba(0,0,0,.25))}
+.kid{position:absolute;line-height:1;font-size:56px;transition:bottom .5s cubic-bezier(.3,1.5,.5,1)}
+.poof{position:absolute;font-size:90px;pointer-events:none;animation:poof .6s ease-out forwards}
+@keyframes poof{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(-50%,-50%) scale(1.8);opacity:0}}
+.flymedal{position:fixed;z-index:30;font-size:70px;pointer-events:none;transition:all .9s cubic-bezier(.5,0,.3,1)}
+.endcard{width:min(520px,100%);padding:26px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.bigstars{font-size:58px;letter-spacing:6px;color:rgba(255,255,255,.2)}.bigstars b{color:var(--gold);font-weight:400}
+.toast{position:fixed;z-index:60;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);padding:10px 18px;font-size:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.goal .tag.big{background:#ff8a3d}.goal .tag.small{background:#14b8a6}
+.opt.big{background:linear-gradient(180deg,#ffb37a,#ff8a3d)}.opt.small{background:linear-gradient(180deg,#5fe0d0,#14b8a6)}
+.opt.big .em{font-size:clamp(90px,14vw,130px)}.opt.small .em{font-size:clamp(40px,6vw,56px)}
+.plab{display:inline-block;margin-top:6px;padding:4px 16px;border-radius:999px;background:#fff;color:#1a1a2e;font-size:22px;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.item,.doll{user-select:none;touch-action:none}
+#stage svg .pulse,#stage svg .wiggle{transform-box:fill-box;transform-origin:center}
+</style>
+<section id="menu" class="screen" hidden dir="rtl">
+  <div class="wrap panel">
+    <div class="eyebrow">قسم الرياضيات · المفاهيم ما قبل الأكاديمية</div>
+    <div class="title"><span style="font-size:1.3em">كبير</span><br><span style="font-size:.7em">وصغير</span></div>
+    <p class="lead">نفس الشيء بحجمين: الطالب ينفخ البالون ويفرغه، ويختار الفيل أو الفأر، ويعطي بابا الملابس الكبيرة والطفل الصغيرة، ويضع الدمية الصغيرة داخل الكبيرة.</p>
+    <div class="acts">
+      <button class="act" data-go="balloon" style="--a:#ff5a5a;--b:#c2185b"><span class="ic">🎈</span><h3>نفخ البالون</h3><p>اضغط على المنفاخ ليكبر البالون، وأخرج الهواء ليصغر.</p><span class="pr" id="prBalloon"></span></button>
+      <button class="act" data-go="beasts" style="--a:#8d9aa8;--b:#14b8a6"><span class="ic">🐘</span><h3>الفيل والفأر</h3><p>الكبير يدفع الصخرة، والصغير يدخل الجحر.</p><span class="pr" id="prBeasts"></span></button>
+      <button class="act" data-go="clothes" style="--a:#3fa9ff;--b:#ff8a3d"><span class="ic">👕</span><h3>ملابس بابا والطفل</h3><p>الكبير لبابا، والصغير للطفل.</p><span class="pr" id="prClothes"></span></button>
+      <button class="act" data-go="dolls" style="--a:#c86adf;--b:#e53935"><span class="ic">🪆</span><h3>الدمى المتداخلة</h3><p>ضع الدمية الصغيرة داخل الدمية الكبيرة.</p><span class="pr" id="prDolls"></span></button>
+    </div>
+    <div class="row"><span class="note">الوضع الهادئ:</span><div class="seg" data-key="calm"><button data-v="false">عادي</button><button data-v="true">هادئ</button></div><span class="note">النطق:</span><div class="seg" data-key="voice"><button data-v="true">مفعّل</button><button data-v="false">مطفأ</button></div></div>
+    <p class="note" id="voiceNote"></p>
+    <div class="row"><a class="btn sm" id="mainLink" href="index.html" target="_top">🏠 العودة إلى المنصة</a></div>
+  </div>
+</section>
+
+<section id="end" class="screen" hidden dir="rtl">
+  <div class="endcard panel"><h2 id="eTitle"></h2><div class="bigstars" id="eStars"></div><p id="eMsg" style="font-size:19px"></p><div class="row" style="justify-content:center" id="eBtns"></div></div>
+</section>
+
+<div id="stage" hidden></div>
+<div class="hud" id="hud" hidden dir="rtl">
+  <div class="goal" id="goal"></div>
+  <div class="tools"><button class="ib" id="bSay" aria-label="اسمع">🔊</button><button class="ib" id="bHome" aria-label="القائمة">🏠</button></div>
+</div>
+<div class="tip" id="tip" hidden dir="rtl"></div>
+<div id="cursor" hidden></div>
+<div class="toast panel" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('math3_'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem('math3_'+k,JSON.stringify(v));}catch(e){}}};
+const S=Object.assign({calm:false,voice:true},store.get('settings',{}));
+const PR=Object.assign({balloon:{ok:0,stars:0},beasts:{best:0,stars:0},clothes:{ok:0,stars:0},dolls:{ok:0,stars:0}},store.get('progress',{}));
+const save=()=>store.set('progress',PR);
+const AR=n=>Number(n).toLocaleString('ar-EG');
+const rnd=Math.random, pick=a=>a[(rnd()*a.length)|0], clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=(rnd()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+const NS='http://www.w3.org/2000/svg';
+const W={big:'كبير',small:'صغير'}, WF={big:'كبيرًا',small:'صغيرًا'};
+/* ---------- sound & speech ---------- */
+const Snd=(()=>{ let ctx=null,out,nb; function init(){ if(ctx) return; try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); out=ctx.createGain(); out.gain.value=.85; out.connect(ctx.destination); nb=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate); const d=nb.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=rnd()*2-1; }catch(e){ctx=null;} }
+ const V=v=>v*(S.calm?.45:1);
+ function tone(f,d,type,v,w,to){ if(!ctx) return; if(ctx.state==='suspended') ctx.resume().catch(()=>{}); const t=ctx.currentTime+(w||0), o=ctx.createOscillator(), g=ctx.createGain(); o.type=type||'sine'; o.frequency.setValueAtTime(f,t); if(to) o.frequency.exponentialRampToValueAtTime(to,t+d); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(V(v||.2),t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(out); o.start(t); o.stop(t+d+.05); }
+ function noise(d,v,type,f){ if(!ctx) return; const t=ctx.currentTime, s=ctx.createBufferSource(); s.buffer=nb; const fl=ctx.createBiquadFilter(); fl.type=type; fl.frequency.value=f; const g=ctx.createGain(); g.gain.setValueAtTime(V(v),t); g.gain.exponentialRampToValueAtTime(.0001,t+d); s.connect(fl); fl.connect(g); g.connect(out); s.start(t); s.stop(t+d+.05); }
+ let last=0; const FX={ ok(){ [784,988,1175,1568].forEach((f,i)=>tone(f,.25,'triangle',.2,i*.07)); }, no(){ tone(300,.25,'sine',.15,0,200); }, win(){ [523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,.32,'triangle',.18,i*.12)); },
+  stretch(p){ const n=performance.now(); if(n-last<60) return; last=n; tone(200+p*700,.07,'triangle',.06); }, boing(){ tone(180,.35,'sine',.22,0,520); }, clank(){ tone(420,.08,'square',.08); noise(.1,.12,'highpass',2500); }, whistle(){ tone(880,.5,'square',.06); tone(1046,.5,'square',.05); }, poof(){ noise(.35,.25,'bandpass',1200); tone(500,.3,'sine',.12,0,1400); }, bump(){ noise(.15,.3,'lowpass',300); tone(120,.2,'sine',.25,0,60); } };
+ return {init,play(n,a){ init(); FX[n]&&FX[n](a); }}; })();
+const Speech={voice:null,init(){const p=()=>{try{const vs=speechSynthesis.getVoices();this.voice=vs.find(v=>/^ar/i.test(v.lang))||null;$('#voiceNote').textContent=this.voice?'الصوت: '+this.voice.name:'لا يوجد صوت عربي مثبّت في الجهاز؛ ستظهر الكلمات مكتوبة كبيرة على الشاشة.';}catch(e){}};p();try{speechSynthesis.onvoiceschanged=p;}catch(e){}},
+ say(t,rate){ if(!S.voice||!this.voice) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.voice=this.voice; u.lang=this.voice.lang; u.rate=rate||.8; u.pitch=1.1; speechSynthesis.speak(u);}catch(e){} }};
+function bigWord(text,color){ const d=document.createElement('div'); d.className='say'; d.textContent=text; d.style.color=color; document.body.appendChild(d); setTimeout(()=>d.remove(),1600); }
+function praise(kind){ Snd.play('ok'); rumble(200,.3,.7); bigWord(kind==='big'?'ممتاز! كبيــر':'ممتاز! صغير',kind==='big'?'#ff7a1a':'#0d9488'); Speech.say('ممتاز! '+W[kind]); }
+function tip(text,fix){ const t=$('#tip'); t.textContent=text; t.className='tip'+(fix?' fix':''); t.hidden=!text; }
+function toast(t){ const e=$('#toast'); e.textContent=t; e.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>e.hidden=true,2600); }
+const starsHTML=n=>[0,1,2].map(i=>i<n?'<b>★</b>':'★').join('');
+const stepsHTML=(n,of)=>`<span class="steps">${Array.from({length:of},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>`;
+const tagHTML=k=>`<span class="tag ${k}">${W[k]}</span>`;
+function el(tag,attrs,parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+// order: learn "big" alone, then "small" alone, then mixed
+const SEQ=['big','big','big','small','small','small','big','small','small','big'];
+
+/* ---------- screens ---------- */
+let mode=null, A=null, loop=null;
+const stage=$('#stage');
+function showMenu(){ stopAct(); $('#menu').hidden=false; $('#end').hidden=true; refreshMenu(); setTimeout(()=>{ try{ $('#menu .act').focus({preventScroll:true}); }catch(e){} },50); }
+function refreshMenu(){ const st=p=>p.stars?'★'.repeat(p.stars):'—'; $('#prBalloon').textContent=PR.balloon.stars?'★'.repeat(PR.balloon.stars):'ابدأ هنا'; $('#prBeasts').textContent=PR.beasts.best?`⭐ ${AR(PR.beasts.best)}`:'—'; $('#prClothes').textContent=st(PR.clothes); $('#prDolls').textContent=st(PR.dolls);
+ $$('.seg').forEach(sg=>sg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(String(S[sg.dataset.key])===b.dataset.v)))); }
+function startAct(m){ Snd.init(); stopAct(); mode=m; $('#menu').hidden=true; $('#end').hidden=true; stage.hidden=false; $('#hud').hidden=false; stage.innerHTML=''; A=({balloon:Balloon,beasts:Beasts,clothes:Clothes,dolls:Dolls})[m]; A.start(); }
+function stopAct(){ if(loop){ cancelAnimationFrame(loop); loop=null; } stage.hidden=true; stage.innerHTML=''; $('#hud').hidden=true; tip(''); $$('.choices,.say,.flymedal').forEach(e=>e.remove()); mode=null; A=null; drag=false; try{speechSynthesis.cancel();}catch(e){} }
+function endCard(title,stars,msgText,btns){ stopAct(); Snd.play('win'); $('#eTitle').textContent=title; $('#eStars').innerHTML=starsHTML(stars); $('#eMsg').textContent=msgText; $('#eBtns').innerHTML=btns.map(([g,t,c])=>`<button class="btn ${c||''}" data-go="${g}">${t}</button>`).join(''); $('#end').hidden=false; Speech.say(title); setTimeout(()=>{ try{ $('#eBtns button').focus(); }catch(e){} },50); }
+const setGoal=h=>$('#goal').innerHTML=h;
+const starsFor=(firstOk,total)=>firstOk>=total*.85?3:firstOk>=total*.6?2:1;
+
+/* ---------- size contrast fading: the big one starts 2.4x the small one and the gap shrinks with success ---------- */
+const RATIO=[2.4,2.1,1.85,1.65,1.45];
+const ratioFor=ok=>RATIO[Math.min(RATIO.length-1,Math.floor((ok||0)/2))];
+
+/* ---------- 1) the balloon: hold the pump to inflate, hold the valve to let air out ---------- */
+const Balloon={ i:0, first:0, tries:0, kind:null, r:0, act:null, aid:0, fix:null, done:false,
+ start(){ stage.className='grass'; this.i=0; this.first=0; this.svg=el('svg',{class:'scene'},stage); this.next(); const tick=()=>{ loop=requestAnimationFrame(tick); this.tick(); }; loop=requestAnimationFrame(tick); },
+ geo(){ const H=innerHeight; return {cx:innerWidth*.56, cy:H*.48, min:H*.06, max:H*.3, bigLo:H*.235, smallHi:H*.11, px:innerWidth*.16, py:H*.74}; },
+ next(){ if(this.i>=SEQ.length) return this.finish(); this.kind=SEQ[this.i]; this.tries=0; this.fix=null; this.done=false; this.jt=null; const ok=PR.balloon.ok||0; this.aid=ok<3?0:ok<7?1:2; const g=this.geo();
+  this.zone=this.kind==='big'?[g.bigLo,g.max]:[g.min,g.smallHi]; this.r=this.kind==='big'?g.min*1.4:g.max*.92;
+  setGoal(`<span>${this.kind==='big'?'اجعل البالون كبيرًا':'اجعل البالون صغيرًا'}</span>${tagHTML(this.kind)}${stepsHTML(this.i,SEQ.length)}`); Speech.say(this.kind==='big'?'اجعل البالون كبيرًا':'اجعل البالون صغيرًا');
+  tip(this.kind==='big'?'اضغط باستمرار على المنفاخ ✋ ليكبر البالون حتى يملأ الدائرة':'اضغط باستمرار على زر الهواء 🌬️ ليصغر البالون حتى يدخل الدائرة الصغيرة'); this.draw(); },
+ down(x,y){ if(this.done) return; const g=this.geo();
+  if(Math.hypot(x-g.px,y-(g.py-40))<110) this.act='in';
+  else if(Math.hypot(x-(g.cx+this.r*.9+60),y-(g.cy+this.r*1.15))<70||Math.hypot(x-g.cx,y-g.cy)<this.r) this.act='out';
+  if(this.act){ clearTimeout(this.jt); if(this.jt==null) this.r0=this.r; this.jt=1; tip(''); this.lt=performance.now(); } },
+ move(){},
+ // several pump strokes are normal: judge only after the child pauses
+ up(){ if(!this.act) return; this.tick(); this.act=null; this.jt=setTimeout(()=>{ this.jt=null; if(A===this) this.judge(); },1100); },
+ judge(){ if(this.done||Math.abs(this.r-this.r0)<3) return; const [lo,hi]=this.zone;
+  if(this.r>=lo&&this.r<=hi){ this.done=true; this.fix=null; praise(this.kind); if(this.tries===0) this.first++; PR.balloon.ok=(PR.balloon.ok||0)+1; save(); this.draw(); this.i++; setTimeout(()=>this.next(),2000); }
+  else { this.tries++; Snd.play('no'); if(this.tries>=2) this.aid=0; const more=this.r<lo; this.fix=more?'in':'out'; const t=more?'ما زال صغيرًا! انفخ أكثر بالمنفاخ':'ما زال كبيرًا! أخرج الهواء أكثر'; tip(t,true); Speech.say(t); this.draw(); } },
+ tick(){ if(!this.act||this.done) return; const g=this.geo(); const now=performance.now(), dt=Math.min(.25,(now-(this.lt||now))/1000); this.lt=now; const sp=(S.calm?.35:.5)*(g.max-g.min)*dt; const old=this.r; this.r=clamp(this.r+(this.act==='in'?sp:-sp),g.min,g.max);
+  if(this.r!==old){ Snd.play('stretch',(this.r-g.min)/(g.max-g.min)); if(this.act==='in'&&this.r>=g.max-1&&!this.warned){ this.warned=true; Snd.play('boing'); } } this.draw(); },
+ draw(){ const s=this.svg, g=this.geo(), k=this.kind, [lo,hi]=this.zone, r=this.r; s.innerHTML=''; const col=k==='big'?'#ff8a3d':'#14b8a6';
+  if(this.aid<2||this.fix){ el('circle',{cx:g.cx,cy:g.cy,r:(lo+hi)/2,fill:'none',stroke:col,'stroke-width':hi-lo,opacity:.22,class:this.fix?'pulse':''},s); el('circle',{cx:g.cx,cy:g.cy,r:lo,fill:'none',stroke:col,'stroke-width':5,'stroke-dasharray':'12 10'},s); }
+  if(this.aid===0&&!this.done) el('circle',{cx:g.cx,cy:g.cy,r:(lo+hi)/2,fill:'#fff',opacity:.35,stroke:'#fff','stroke-width':4,'stroke-dasharray':'4 10'},s);
+  // pump
+  const pumping=this.act==='in'; el('rect',{x:g.px-36,y:g.py-150,width:72,height:150,rx:14,fill:'#1e88e5',stroke:'#0d47a1','stroke-width':4},s); el('rect',{x:g.px-8,y:g.py-(pumping?185:225),width:16,height:80,fill:'#90a4ae'},s); el('rect',{x:g.px-60,y:g.py-(pumping?195:235),width:120,height:22,rx:11,fill:'#37474f'},s);
+  const hand=el('text',{x:g.px,y:g.py-(pumping?200:250),'font-size':44,'text-anchor':'middle',class:(this.fix==='in'||(!this.act&&k==='big'&&!this.done))?'pulse':''},s); hand.textContent='✋';
+  el('path',{d:`M${g.px+36} ${g.py-30} C${g.px+160} ${g.py+10} ${g.cx-40} ${g.cy+r*1.4} ${g.cx} ${g.cy+r*1.12}`,fill:'none',stroke:'#455a64','stroke-width':8},s);
+  // balloon (squash a little while it moves, so it feels like rubber)
+  const id='bg'+(this.i%2); const d=el('defs',{},s); const rg=el('radialGradient',{id,cx:'35%',cy:'30%',r:'75%'},d); el('stop',{offset:'0','stop-color':'#fff','stop-opacity':.9},rg); el('stop',{offset:'.18','stop-color':'#ff5a5a'},rg); el('stop',{offset:'1','stop-color':'#b71c1c'},rg);
+  const b=el('g',{class:this.done?'wiggle':''},s); el('ellipse',{cx:g.cx,cy:g.cy,rx:r,ry:r*1.12,fill:`url(#${id})`},b); el('path',{d:`M${g.cx-10} ${g.cy+r*1.1} l20 0 l-10 14 z`,fill:'#b71c1c'},b);
+  if(r>g.max-2){ el('text',{x:g.cx+r*.7,y:g.cy-r,'font-size':40},s).textContent='⚠️'; }
+  // valve button
+  const vx=g.cx+r*.9+60, vy=g.cy+r*1.15; el('circle',{cx:vx,cy:vy,r:38,fill:'#fff',stroke:col,'stroke-width':5,class:(this.fix==='out'||(!this.act&&k==='small'&&!this.done))?'pulse':''},s); const v=el('text',{x:vx,y:vy+14,'font-size':38,'text-anchor':'middle'},s); v.textContent='🌬️';
+  if(this.fix){ const a=el('text',{x:this.fix==='in'?g.px+80:vx+70,y:this.fix==='in'?g.py-170:vy,'font-size':56,'text-anchor':'middle',class:'arrow',style:'--ax:-14px'},s); a.textContent='👈'; } },
+ finish(){ const st=starsFor(this.first,SEQ.length); PR.balloon.stars=Math.max(PR.balloon.stars||0,st); save(); endCard('بالونات رائعة! 🎈',st,`نجحت ${AR(this.first)} من ${AR(SEQ.length)} مرات من أول محاولة.`,[['balloon','مرة أخرى','primary'],['beasts','الفيل والفأر'],['menu','القائمة']]); } };
+
+/* ---------- 2) elephant or mouse: big one pushes the boulder, small one goes through the hole ---------- */
+const Beasts={ n:0, total:8, first:0, stars:0, beast:'small', obs:null, phase:'walk', x:0, last:0, tries:0,
+ start(){ stage.className='trail'; this.n=0; this.first=0; this.stars=0; this.beast='small';
+  stage.innerHTML=`<svg class="scene" id="bSvg"></svg><div class="beast" id="beast">🐭</div><div class="kid" id="kid">🧒</div>`; this.walk(); this.last=performance.now(); const tick=t=>{ loop=requestAnimationFrame(tick); this.update(t); }; loop=requestAnimationFrame(tick); },
+ walk(){ if(this.n>=this.total) return this.finish(); this.obs=this.n<2?(this.n===0?'rock':'hole'):pick(['rock','hole']); this.phase='walk'; this.x=-300; this.tries=0; this.pushed=0; this.bshift=0; tip(''); setGoal(`<span>⭐ ${AR(this.stars)}</span>${stepsHTML(this.n,this.total)}`); this.layout(); },
+ size(k){ const H=innerHeight; return k==='big'?Math.min(H*.36,260):Math.min(H*.1,74); },
+ layout(){ const gy=innerHeight*.6; this.gy=gy; const b=$('#beast'), k=$('#kid'); const big=this.beast==='big', sz=this.size(this.beast); b.textContent=big?'🐘':'🐭'; b.style.fontSize=sz+'px'; const bx=innerWidth*.62; b.style.left=bx+'px'; b.style.top=(gy-sz*.95)+'px';
+  k.style.fontSize=(big?56:44)+'px'; k.style.left=(bx+sz*(big?.35:.1))+'px'; k.style.top=(gy-sz*(big?.98:1.0)-(big?20:36))+'px'; this.bx=bx; this.drawObs(); },
+ drawObs(){ const s=$('#bSvg'); s.innerHTML=''; const gy=this.gy, x=this.x+this.pushed; el('rect',{x:0,y:gy,width:innerWidth,height:8,fill:'#8a6a3a'},s);
+  if(this.obs==='rock'){ const R=innerHeight*.13; el('ellipse',{cx:x,cy:gy-R*.85,rx:R*1.1,ry:R*.9,fill:'#8d8f96',stroke:'#5f6168','stroke-width':6},s); el('ellipse',{cx:x-R*.35,cy:gy-R*1.2,rx:R*.3,ry:R*.18,fill:'#b8bac0'},s); }
+  else { const wh=innerHeight*.36; el('rect',{x:this.x-60,y:gy-wh,width:120,height:wh,fill:'#c97b4a',stroke:'#8a4b2a','stroke-width':5},s); for(let r=0;r<6;r++) el('line',{x1:this.x-60,y1:gy-wh+r*wh/6,x2:this.x+60,y2:gy-wh+r*wh/6,stroke:'#8a4b2a','stroke-width':3},s);
+   el('path',{d:`M${this.x-30} ${gy} L${this.x-30} ${gy-50} Q${this.x} ${gy-80} ${this.x+30} ${gy-50} L${this.x+30} ${gy} Z`,fill:'#2a1a10'},s); this.wallTop=gy-wh; } },
+ update(t){ const dt=Math.min(.05,(t-this.last)/1000); this.last=t;
+  if(this.phase==='walk'||this.phase==='go'){ this.x+=(S.calm?120:170)*dt; if(this.phase==='go'&&this.obs==='rock') this.pushed+=(S.calm?120:170)*dt*.0; this.drawObs(); $('#beast').style.transform=`translateY(${Math.abs(Math.sin(t/180))*-6}px)`;
+   if(this.phase==='walk'&&this.x>this.bx-360){ this.phase='ask'; this.ask(); }
+   if(this.phase==='go'&&this.x>innerWidth+320){ this.n++; this.walk(); } }
+  if(this.obs==='hole'&&this.phase==='go'){ const inside=Math.abs(this.x-this.bx-this.size('small')*.5)<90; $('#beast').style.opacity=$('#kid').style.opacity=inside?0:1; }
+  // the elephant walks up to the boulder, then shoves it out of the way
+  if(this.phase==='push'){ const R=innerHeight*.13, reach=-(this.bx-(this.x+R*1.1)-10); if(this.bshift>reach){ this.bshift=Math.max(reach,this.bshift-260*dt); } else this.pushed-=260*dt;
+   $('#beast').style.marginLeft=$('#kid').style.marginLeft=this.bshift+'px'; this.drawObs(); if(this.pushed<-innerWidth){ this.phase='back'; } }
+  if(this.phase==='back'){ this.bshift=Math.min(0,this.bshift+300*dt); $('#beast').style.marginLeft=$('#kid').style.marginLeft=this.bshift+'px'; if(this.bshift>=0) this.phase='go'; } },
+ ask(){ const box=document.createElement('div'); box.className='choices'; box.dir='rtl'; box.innerHTML=`<h3>${this.obs==='rock'?'صخرة كبيرة تسد الطريق! ':'جحر صغير! '}أيهما تختار؟</h3><div class="opts"><button class="opt big" data-pick="big"><span class="em">🐘</span>كبير</button><button class="opt small" data-pick="small"><span class="em">🐭</span>صغير</button></div>`; document.body.appendChild(box); this.box=box;
+  Speech.say('أيهما تختار؟ الكبير أم الصغير؟'); if(this.n<2) setTimeout(()=>{ const c=box.querySelector(`[data-pick="${this.need()}"]`); c&&c.classList.add('hint'); },1200); setTimeout(()=>{ try{ box.querySelector('.opt').focus(); }catch(e){} },50); },
+ need(){ return this.obs==='rock'?'big':'small'; },
+ choose(k){ const box=this.box; if(!box) return; const need=this.need(); this.morph(k);
+  if(k===need){ box.remove(); this.box=null; praise(k); if(this.tries===0) this.first++; this.stars++; setTimeout(()=>this.pass(),900); }
+  else { this.tries++; const b=box.querySelector(`[data-pick="${k}"]`); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); setTimeout(()=>{ Snd.play('bump'); const msg=this.obs==='rock'?'الفأر صغير، لا يستطيع دفع الصخرة الكبيرة. اختر الكبير':'الفيل كبير، لا يدخل في الجحر الصغير. اختر الصغير'; tip(msg,true); Speech.say(msg); box.querySelector(`[data-pick="${need}"]`).classList.add('hint'); $('#beast').animate([{transform:'translateX(0)'},{transform:'translateX(-30px)'},{transform:'translateX(0)'}],{duration:400}); },650); } },
+ morph(k){ if(this.beast===k) return; this.beast=k; Snd.play('poof'); const b=$('#beast'), r=b.getBoundingClientRect(); const p=document.createElement('div'); p.className='poof'; p.textContent='✨'; p.style.left=(r.left+r.width/2)+'px'; p.style.top=(r.top+r.height/2)+'px'; stage.appendChild(p); setTimeout(()=>p.remove(),650); this.layout(); },
+ pass(){ tip(''); setGoal(`<span>⭐ ${AR(this.stars)}</span>${stepsHTML(this.n+1,this.total)}`); if(this.obs==='rock'){ Snd.play('bump'); this.phase='push'; } else this.phase='go'; },
+ finish(){ PR.beasts.best=Math.max(PR.beasts.best||0,this.stars); const st=starsFor(this.first,this.total); PR.beasts.stars=Math.max(PR.beasts.stars||0,st); save(); endCard('رحلة رائعة! 🐘🐭',st,`اخترت الصحيح ${AR(this.first)} من ${AR(this.total)} مرات من أول محاولة.`,[['beasts','رحلة جديدة','primary'],['clothes','ملابس بابا والطفل'],['menu','القائمة']]); } };
+
+/* ---------- 3) generalisation: big clothes to dad, small clothes to the baby ---------- */
+const ITEMS=[['👕','القميص'],['👖','البنطال'],['👟','الحذاء'],['🧢','القبعة'],['🧦','الجورب'],['🧤','القفاز'],['🥾','الجزمة'],['🧥','المعطف']];
+const Clothes={ round:0, total:8, first:0, step:0, held:null, tries:0,
+ start(){ stage.className='yard'; this.round=0; this.first=0; this.items=shuffle(ITEMS.slice()); this.next(); },
+ next(){ if(this.round>=this.total) return this.finish(); const it=this.items[this.round%this.items.length]; this.it=it; this.step=0; this.tries=0; const ratio=ratioFor(PR.clothes.ok); const base=Math.min(innerHeight*.12,90);
+  const bigLeft=rnd()<.5; stage.innerHTML=`<div class="person" id="pDad" style="position:absolute;right:5%;bottom:12%;text-align:center"><div style="font-size:${Math.min(innerHeight*.34,240)}px;line-height:1">🧔</div><b class="plab">بابا</b></div>
+   <div class="person" id="pBaby" style="position:absolute;left:5%;bottom:12%;text-align:center"><div style="font-size:${Math.min(innerHeight*.14,100)}px;line-height:1">👶</div><b class="plab">الطفل</b></div>
+   <div class="item" data-size="big" style="position:absolute;left:${bigLeft?36:56}%;top:34%;font-size:${base*ratio}px;line-height:1;cursor:grab;filter:drop-shadow(0 10px 8px rgba(0,0,0,.25))">${it[0]}</div>
+   <div class="item" data-size="small" style="position:absolute;left:${bigLeft?60:38}%;top:44%;font-size:${base}px;line-height:1;cursor:grab;filter:drop-shadow(0 10px 8px rgba(0,0,0,.25))">${it[0]}</div>`;
+  this.ask(); },
+ ask(){ const k=this.step===0?(this.round%2?'small':'big'):(this.round%2?'big':'small'); this.k=k; const who=k==='big'?'بابا':'الطفل';
+  setGoal(`<span>أعطِ ${who} ${this.it[1]} ال${W[k]}</span>${tagHTML(k)}${stepsHTML(this.round,this.total)}`); Speech.say('أعطِ '+who+' '+this.it[1]+' ال'+W[k]); tip(`اسحب ${this.it[1]} ✋ إلى ${who}`);
+  if(PR.clothes.ok<3) setTimeout(()=>{ const e=stage.querySelector(`.item[data-size="${k}"]`); e&&e.classList.add('pulse'); },900); },
+ down(x,y){ const e=document.elementFromPoint(x,y), it=e&&e.closest('.item'); if(!it) return; const r=it.getBoundingClientRect(); this.held={el:it,dx:x-r.left,dy:y-r.top,ox:it.style.left,oy:it.style.top}; it.style.zIndex=5; it.classList.remove('pulse'); tip(''); },
+ move(x,y){ const h=this.held; if(!h) return; h.el.style.left=(x-h.dx)+'px'; h.el.style.top=(y-h.dy)+'px'; },
+ up(x,y){ const h=this.held; if(!h) return; this.held=null; h.el.style.pointerEvents='none'; const e=document.elementFromPoint(x,y); h.el.style.pointerEvents=''; const p=e&&e.closest('.person'); const size=h.el.dataset.size, back=()=>{ h.el.style.transition='left .35s, top .35s'; h.el.style.left=h.ox; h.el.style.top=h.oy; setTimeout(()=>h.el.style.transition='',400); };
+  if(!p){ back(); return; } const toDad=p.id==='pDad';
+  if(size===this.k&&toDad===(this.k==='big')){ praise(this.k); h.el.remove(); p.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:500}); if(this.tries===0&&this.step===1) this.first++; PR.clothes.ok=(PR.clothes.ok||0)+1; save();
+   if(this.step===0){ this.step=1; setTimeout(()=>this.ask(),1500); } else { this.round++; setTimeout(()=>this.next(),1600); } }
+  else { this.tries++; Snd.play('no'); back(); const msg=size!==this.k?(this.k==='big'?'هذا صغير! ابحث عن الكبير':'هذا كبير! ابحث عن الصغير'):(this.k==='big'?'الكبير لبابا':'الصغير للطفل'); tip(msg,true); Speech.say(msg); const t=stage.querySelector(`.item[data-size="${this.k}"]`); t&&t.classList.add('pulse'); } },
+ finish(){ const st=starsFor(this.first,this.total); PR.clothes.stars=Math.max(PR.clothes.stars||0,st); save(); endCard('ملابس في مكانها! 👕',st,`أعطيت الملابس الصحيحة ${AR(this.first)} من ${AR(this.total)} مرات دون خطأ.`,[['clothes','مرة أخرى','primary'],['dolls','الدمى المتداخلة'],['menu','القائمة']]); } };
+
+/* ---------- 4) nesting dolls: the small one goes inside the big one ---------- */
+const Dolls={ round:0, total:8, first:0, tries:0, held:null,
+ start(){ stage.className='yard'; this.round=0; this.first=0; this.next(); },
+ next(){ if(this.round>=this.total) return this.finish(); this.tries=0; const ratio=ratioFor(PR.dolls.ok); const base=Math.min(innerHeight*.16,110); const hue=(rnd()*360)|0; const bigFirst=rnd()<.5;
+  const bigEl=`<div class="doll" data-size="big" style="position:absolute;left:${bigFirst?28:58}%;top:${30}%;font-size:${base*ratio}px;line-height:1;filter:hue-rotate(${hue}deg) drop-shadow(0 10px 8px rgba(0,0,0,.25));cursor:grab">🪆</div>`;
+  const smEl=`<div class="doll" data-size="small" style="position:absolute;left:${bigFirst?64:30}%;top:${44}%;font-size:${base}px;line-height:1;filter:hue-rotate(${(hue+120)%360}deg) drop-shadow(0 10px 8px rgba(0,0,0,.25));cursor:grab">🪆</div>`;
+  stage.innerHTML=bigEl+smEl; setGoal(`<span>ضع الدمية الصغيرة داخل الكبيرة</span>${tagHTML('small')}${stepsHTML(this.round,this.total)}`); Speech.say('ضع الدمية الصغيرة داخل الدمية الكبيرة'); tip('اسحب الدمية الصغيرة ✋ وضعها على الدمية الكبيرة');
+  if(PR.dolls.ok<3) setTimeout(()=>{ const e=stage.querySelector('.doll[data-size="small"]'); e&&e.classList.add('pulse'); },900); },
+ down(x,y){ const e=document.elementFromPoint(x,y), d=e&&e.closest('.doll'); if(!d) return; const r=d.getBoundingClientRect(); this.held={el:d,dx:x-r.left,dy:y-r.top,ox:d.style.left,oy:d.style.top}; d.style.zIndex=5; d.classList.remove('pulse'); tip(''); },
+ move(x,y){ const h=this.held; if(!h) return; h.el.style.left=(x-h.dx)+'px'; h.el.style.top=(y-h.dy)+'px'; },
+ up(x,y){ const h=this.held; if(!h) return; this.held=null; h.el.style.pointerEvents='none'; const e=document.elementFromPoint(x,y); h.el.style.pointerEvents=''; const t=e&&e.closest('.doll'); const back=()=>{ h.el.style.transition='left .35s, top .35s'; h.el.style.left=h.ox; h.el.style.top=h.oy; setTimeout(()=>h.el.style.transition='',400); };
+  if(!t||t===h.el){ back(); return; }
+  if(h.el.dataset.size==='small'){ Snd.play('ok'); rumble(200,.3,.7); const r=t.getBoundingClientRect(); h.el.style.transition='all .45s'; h.el.style.left=(r.left+r.width*.3)+'px'; h.el.style.top=(r.top+r.height*.3)+'px'; h.el.style.transform='scale(.2)'; h.el.style.opacity='0'; setTimeout(()=>t.classList.add('wiggle'),450);
+   bigWord('ممتاز! الصغيرة داخل الكبيرة','#0d9488'); Speech.say('ممتاز! الصغيرة داخل الكبيرة'); if(this.tries===0) this.first++; PR.dolls.ok=(PR.dolls.ok||0)+1; save(); this.round++; setTimeout(()=>this.next(),2000); }
+  else { this.tries++; Snd.play('bump'); back(); const msg='الكبيرة لا تدخل في الصغيرة! خذ الدمية الصغيرة'; tip(msg,true); Speech.say(msg); const s=stage.querySelector('.doll[data-size="small"]'); s&&s.classList.add('pulse'); } },
+ finish(){ const st=starsFor(this.first,this.total); PR.dolls.stars=Math.max(PR.dolls.stars||0,st); save(); endCard('دمى رائعة! 🪆',st,`نجحت ${AR(this.first)} من ${AR(this.total)} مرات من أول محاولة.`,[['dolls','مرة أخرى','primary'],['balloon','نفخ البالون'],['menu','القائمة']]); } };
+/* ---------- input: mouse / touch / PlayStation (hold ✕ to drag) ---------- */
+let drag=false, gpActive=false, gp={x:innerWidth/2,y:innerHeight/2}, prevA=false, prevO=false, padIdx=null, navCd=0;
+stage.addEventListener('pointerdown',e=>{ Snd.init(); if(!A||!A.down) return; e.preventDefault(); drag=true; try{ stage.setPointerCapture(e.pointerId); }catch(_){} A.down(e.clientX,e.clientY); });
+stage.addEventListener('pointermove',e=>{ if(drag&&A&&A.move) A.move(e.clientX,e.clientY); });
+const pup=e=>{ if(!drag) return; drag=false; if(A&&A.up) A.up(e.clientX,e.clientY); }; stage.addEventListener('pointerup',pup); stage.addEventListener('pointercancel',pup);
+addEventListener('pointermove',e=>{ if(e.pointerType==='mouse'&&(e.movementX||e.movementY)&&gpActive){ gpActive=false; $('#cursor').hidden=true; } },{passive:true});
+function getPad(){ let ps=[]; try{ ps=navigator.getGamepads?navigator.getGamepads():[]; }catch(e){} if(padIdx!=null&&ps[padIdx]) return ps[padIdx]; for(const p of ps) if(p&&p.connected){ padIdx=p.index; return p; } return null; }
+addEventListener('gamepadconnected',e=>{ padIdx=e.gamepad.index; toast('🎮 يد التحكم: حرّك العصا، واضغط ✕ مع التحريك للسحب'); });
+function rumble(ms,s,w){ if(S.calm){s*=.4;w*=.4;} try{ const g=getPad(); if(g&&g.vibrationActuator) g.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:s,weakMagnitude:w}).catch(()=>{}); }catch(e){} }
+function padLoop(){ requestAnimationFrame(padLoop); const g=getPad(); if(!g) return; const bt=i=>!!(g.buttons[i]&&g.buttons[i].pressed); let ax=g.axes[0]||0, ay=g.axes[1]||0; if(bt(14)) ax=-1; if(bt(15)) ax=1; if(bt(12)) ay=-1; if(bt(13)) ay=1; if(Math.abs(ax)<.15) ax=0; if(Math.abs(ay)<.15) ay=0;
+ const a=bt(0), o=bt(1); if(a||o||ax||ay) Snd.init();
+ const box=document.querySelector('.choices');
+ if(mode&&!box){ if(ax||ay){ gpActive=true; gp.x=clamp(gp.x+ax*13,10,innerWidth-10); gp.y=clamp(gp.y+ay*13,10,innerHeight-10); if(drag&&A.move) A.move(gp.x,gp.y); }
+  const c=$('#cursor'); c.hidden=!gpActive; c.style.left=gp.x+'px'; c.style.top=gp.y+'px';
+  if(a&&!prevA&&gpActive&&A.down){ drag=true; A.down(gp.x,gp.y); } if(!a&&prevA&&drag){ drag=false; A.up&&A.up(gp.x,gp.y); } if(o&&!prevO) showMenu(); }
+ else { navCd-=1/60; const vis=[...document.querySelectorAll('.choices button,#menu:not([hidden]) button,#menu:not([hidden]) a.btn,#end:not([hidden]) button')]; if((ax||ay)&&navCd<=0&&vis.length){ navCd=.25; const cur=document.activeElement; let i=vis.indexOf(cur); i=i<0?0:clamp(i+((ax<0||ay>0)?1:-1),0,vis.length-1); vis[i].focus(); } if(!ax&&!ay) navCd=0; if(a&&!prevA&&document.activeElement&&vis.includes(document.activeElement)) document.activeElement.click(); }
+ prevA=a; prevO=o; }
+requestAnimationFrame(padLoop);
+
+/* ---------- clicks ---------- */
+document.addEventListener('click',e=>{ Snd.init();
+ const ml=e.target.closest('#mainLink'); if(ml&&window.parent!==window){ e.preventDefault(); try{speechSynthesis.cancel();}catch(_){} window.parent.postMessage('ayn-close','*'); return; }
+ const pk=e.target.closest('[data-pick]'); if(pk&&mode==='beasts'){ Beasts.choose(pk.dataset.pick); return; }
+ const go=e.target.closest('[data-go]'); if(go){ const g=go.dataset.go; if(g==='menu') showMenu(); else startAct(g); return; }
+ const sg=e.target.closest('.seg button'); if(sg){ const k=sg.parentElement.dataset.key; S[k]=sg.dataset.v==='true'; store.set('settings',S); refreshMenu(); return; } });
+$('#bHome').onclick=()=>showMenu();
+$('#bSay').onclick=()=>{ if(!A) return; if(mode==='beasts') Speech.say('أيهما تختار؟ الكبير أم الصغير؟'); else if(mode==='balloon') Speech.say('اجعل البالون '+WF[A.kind]); else if(mode==='dolls') Speech.say('ضع الدمية الصغيرة داخل الدمية الكبيرة'); else if(A.k) Speech.say('أعطِ '+(A.k==='big'?'بابا':'الطفل')+' '+A.it[1]+' ال'+W[A.k]); };
+addEventListener('keydown',e=>{ if(e.code==='Escape'&&mode) showMenu(); });
+addEventListener('resize',()=>{ if(mode==='balloon') Balloon.draw(); if(mode==='beasts') Beasts.layout(); });
+Speech.init(); showMenu();
+})();
+</script>
+</body>
+</html>
