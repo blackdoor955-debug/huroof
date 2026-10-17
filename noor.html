@@ -108,6 +108,12 @@ i.ps svg{width:20px;height:20px}
 .pop small{font-size:18px;color:var(--muted)}
 .pop{bottom:calc(200px + env(safe-area-inset-bottom,0px))}
 .cue .w{line-height:1.7}
+#sceneBtns .sb{position:fixed;transform:translate(-50%,0);display:flex;align-items:center;gap:6px;padding:10px 18px;border-radius:999px;border:3px solid #fff;background:linear-gradient(180deg,#ffd75e,#ff9f1c);color:#2a1600;font-size:21px;font-weight:800;box-shadow:0 6px 0 #b8620a,0 10px 24px rgba(0,0,0,.35);pointer-events:auto;cursor:pointer;z-index:6;white-space:nowrap}
+#sceneBtns .sb .num:not(:empty){display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#22c55e;color:#fff;font-size:20px}
+#sceneBtns .sb.ok{background:linear-gradient(180deg,#7ef0a8,#22c55e);box-shadow:0 6px 0 #0f7a3a}
+.sb.no,.pk.no{animation:shk .45s}@keyframes shk{20%{rotate:-9deg}50%{rotate:8deg}80%{rotate:-4deg}}
+.sb.hint{animation:pkh .9s infinite}.sb.sel,.pk.sel{outline:4px solid #fff;outline-offset:4px}
+.pk.wd{background:linear-gradient(180deg,#5b8cff,#1b3fae);min-width:140px;padding:6px 18px 12px}.pk.wd .mk{font-size:44px;line-height:1.5;font-weight:800}
 .picks{display:flex;gap:12px}.pk{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:100px;padding:4px 14px 10px;border-radius:22px;border:0;color:#fff;font-weight:800;font-size:19px;cursor:pointer;box-shadow:0 7px 0 rgba(0,0,0,.35);touch-action:manipulation}.pk .mk{font-size:54px;line-height:1.15}.pk i.ps{width:28px;height:28px}.pk.fa{background:linear-gradient(180deg,#ff5a5f,#c0141e)}.pk.da{background:linear-gradient(180deg,#5b8cff,#1b3fae)}.pk.ka{background:linear-gradient(180deg,#2fd06a,#0f7a3a)}.pk:active{transform:translateY(4px)}.pk.go{background:linear-gradient(180deg,#2fd06a,#0f7a3a)}.pk.stop{background:linear-gradient(180deg,#ff5a5f,#c0141e)}.pk.shd{background:linear-gradient(180deg,#d68af0,#7a1fd6)}.pk.hint{animation:pkh .9s infinite}@keyframes pkh{50%{transform:scale(1.12);box-shadow:0 0 0 7px #ffc83a}}@media (max-width:700px){.pk{min-width:78px;font-size:16px}.pk .mk{font-size:42px}}.pop .big{line-height:1.6}</style>
 
 <canvas id="gl" aria-label="مدينة نور البيان"></canvas>
@@ -151,8 +157,9 @@ i.ps svg{width:20px;height:20px}
   <div class="score panel"><span class="medal" id="sMedal">🏅 ٠</span><small id="sRound">١ / ٦</small></div>
   <div class="cue panel" id="cue"><div class="w" id="cW"></div><div class="q" id="cQ"></div></div>
   <div class="tools"><button class="ib" data-act="pause" aria-label="إيقاف مؤقت">❚❚</button><button class="ib" data-act="repeat" aria-label="اسمع">🔊</button></div>
-  <div class="magbar" id="magbar"><div class="meter"><i id="meter"></i></div><button class="hold" id="hold"><i class="ps" data-b="x"></i>✋ اضغط باستمرار</button><div class="picks" id="picks" hidden><button class="pk fa" data-pick="fa"><span class="mk">ـَ</span>فتحة <i class="ps" data-b="t"></i></button><button class="pk da" data-pick="da"><span class="mk">ـُ</span>ضمة <i class="ps" data-b="o"></i></button><button class="pk ka" data-pick="ka"><span class="mk">ـِ</span>كسرة <i class="ps" data-b="x"></i></button></div><div class="picks" id="carbtns" hidden><button class="pk go" data-car="go"><span class="mk">🟢</span>انطلق <i class="ps" data-b="x"></i></button><button class="pk stop" data-car="stop"><span class="mk">🔴</span>قف <i class="ps" data-b="o"></i></button><button class="pk shd" data-car="shadda"><span class="mk">ـّ</span>شدة <i class="ps" data-b="t"></i></button></div><button class="btn" id="nextBtn" data-act="next" hidden><i class="ps" data-b="x"></i>التالي</button></div>
+  <div class="magbar" id="magbar"><div class="meter"><i id="meter"></i></div><button class="hold" id="hold"><i class="ps" data-b="x"></i>✋ اضغط باستمرار</button><div class="picks" id="picks" hidden><button class="pk fa" data-pick="fa"><span class="mk">ـَ</span>فتحة <i class="ps" data-b="t"></i></button><button class="pk da" data-pick="da"><span class="mk">ـُ</span>ضمة <i class="ps" data-b="o"></i></button><button class="pk ka" data-pick="ka"><span class="mk">ـِ</span>كسرة <i class="ps" data-b="x"></i></button></div><div class="picks" id="carbtns" hidden><button class="pk go" data-car="go"><span class="mk">🟢</span>انطلق <i class="ps" data-b="x"></i></button><button class="pk stop" data-car="stop"><span class="mk">🔴</span>قف <i class="ps" data-b="o"></i></button><button class="pk shd" data-car="shadda"><span class="mk">ـّ</span>شدة <i class="ps" data-b="t"></i></button></div><div class="picks" id="tfBtns" hidden><button class="pk go" data-tf="1"><span class="mk">✅</span>صح</button><button class="pk stop" data-tf="0"><span class="mk">❌</span>خطأ</button></div><div class="picks" id="wordBtns" hidden></div><button class="btn" id="nextBtn" data-act="next" hidden><i class="ps" data-b="x"></i>التالي</button></div>
   <div class="lanes" id="lanes"><button data-lane="r" aria-label="يمين">➡️</button><button data-lane="l" aria-label="يسار">⬅️</button></div>
+  <div id="sceneBtns" hidden><button class="sb" data-s="0"><span class="num"></span>✋ هذا</button><button class="sb" data-s="1"><span class="num"></span>✋ هذا</button><button class="sb" data-s="2"><span class="num"></span>✋ هذا</button></div>
   <div class="pop panel" id="pop" hidden></div>
 </div>
 <div class="toast panel" id="toast" hidden></div>
@@ -380,9 +387,25 @@ const SH=[['رَبَّ','إِنَّ','ثُمَّ','مَدَّ','شَدَّ','ع�
 const SS=[[['نَظَّفَ','wipe'],['وَرَتَّبَ','carry']],[['فَكَّرَ','know'],['فَصَدَّقَ','nod']],[['كَبَّرَ','praise'],['وَسَبَّحَ','humble']],[['سَلَّمَ','go'],['وَجَلَسَ','sit']],[['قَدَّمَ','gift'],['فَشَكَرَ','thank']]];
 const makeTX=()=>shuffle(shuffle(ABC.slice()).slice(0,9).map((c,i)=>c+'ًٌٍ'[i%3]));
 const TW=[['كِتَابٌ','قَلَمٌ','وَلَدٌ','جَمَلٌ','قَمَرٌ','بَابٌ','سَمَكٌ','عِنَبٌ'],['وَلَدًا','قَلَمًا','جَمَلًا','بَابًا','قَمَرٍ','وَلَدٍ','جَمَلٍ','كِتَابٍ']];
+/* ---------- مسرح الفهم: reading comprehension, from fatha-only sentences upward ---------- */
+// verbs the heroes can act, grouped by the vowels the student has learned
+const FV=[['ركض','run'],['قفز','jump'],['جلس','sit'],['أكل','eat'],['كتب','write'],['رسم','draw'],['فتح','opendoor'],['سبح','swim'],['حمل','carry'],['زرع','plant'],['غسل','wash'],['مسح','wipe'],['قرأ','read'],['نظر','look'],['سأل','ask'],['مسك','hold'],['حصد','harvest'],['طرق','knock'],['نجح','success'],['ذهب','go']].map(([w,a])=>[voc(w),a]);
+const KV=[['شَرِبَ','drink'],['عَطِسَ','sneeze'],['حَمِدَ','praise'],['سَكَتَ','silent'],['فَهِمَ','nod'],['خَشِيَ','fear'],['قَوِيَ','strong'],['رَبِحَ','profit'],['فَرِحَ','happy']];
+const DV=[['جُرِحَ','hurt'],['لُبِسَ','wearhat'],['رُزِقَ','gift'],['فُقِدَ','lost'],['وُجِدَ','found']];
+const FPOOL={fa:FV,ka:FV.concat(KV),da:FV.concat(KV,DV)};
+const FBOOK={fa:SF,ka:SF.concat(KS),da:SF.concat(KS,RV)};
+const HNAME={fa:'فَتْحَةُ',da:'ضَمَّةُ',ka:'كَسْرَةُ'};
+const FAHM=[
+ {id:'cw',track:'fahm',t:'اقرأ واختر المشهد 🎬',d:'ثلاثة أبطال يمثّلون معًا: اقرأ الجملة واختر البطل الذي يمثّلها. (جمل بالفتحة)',h:'fa',kind:'watch',lvl:'fa',subs:['جمل الكتاب','انتبه للكلمة الثانية']},
+ {id:'ct',track:'fahm',t:'صح أم خطأ؟ ✅❌',d:'شاهد البطل واقرأ الجملة: هل تصف ما يفعله؟',h:'da',kind:'tf',lvl:'fa',subs:['جولة ١','جولة ٢']},
+ {id:'cc',track:'fahm',t:'أكمل الجملة 🧩',d:'كلمة ناقصة! شاهد البطل واختر الكلمة التي تكمل الجملة.',h:'ka',kind:'cloze',lvl:'fa',subs:['جولة ١','جولة ٢']},
+ {id:'co',track:'fahm',t:'رتّب الأحداث 🎞️',d:'جملة من ثلاثة أفعال: اضغط الأبطال بترتيب الجملة.',h:'fa',kind:'order',lvl:'fa',subs:['جولة ١','جولة ٢']},
+ {id:'ck',track:'fahm',t:'تحدي الكسرة 🌟',d:'مشاهد وصح وخطأ وكلمات ناقصة، بجمل فيها الكسرة: شَرِبَ ، عَطِسَ فَحَمِدَ',h:'ka',kind:'mix',lvl:'ka',subs:['تحدي ١','تحدي ٢']},
+ {id:'cd',track:'fahm',t:'تحدي الضمة والمراجعة 🌟',d:'كل الحركات: جُرِحَ وَشُفِيَ ، لُبِسَ وَخُلِعَ',h:'da',kind:'mix',lvl:'da',subs:['تحدي ١','تحدي ٢']},
+ {id:'cs',track:'fahm',t:'مَن فعل؟ ماذا فعل؟ 🕵️',d:'كل بطل يحمل اسمه: اقرأ السؤال وأجب. (بعد درس السكون)',h:'fa',kind:'story',lvl:'da',subs:['قصة ١','قصة ٢']}];
 const VEM={wash:'🧼',wipe:'🧽',plant:'🌱',harvest:'🌾',grow:'🌿',bow:'',prostrate:'',ask:'❓',know:'💡',hold:'🍎',look:'👀',read:'📖',write:'✍️',success:'🏆',knock:'🚪',opendoor:'🚪',sit:'🪑',eat:'🍽️',run:'🏃',jump:'🦘',
  sneeze:'🤧',praise:'🤲',silent:'🤫',relief:'😌',fear:'😨',nod:'👍',strong:'💪',carry:'📦',profit:'💰',heal:'😊',thank:'💖',hurt:'🤕',happy:'😄',lost:'🔍',found:'🎉',go:'🚶',gift:'🎁',wearhat:'🧢',removehat:'🧢',drink:'🍯',humble:''};
-const LESSONS=[
+const ALL_LESSONS=[
  {id:'fl',t:'الحروف بالفتحة',d:'فتحة يضع الفتحة فوق الحرف، ثم سباق الحروف. مجموعة بعد مجموعة.',h:'fa',kind:'letters',groups:GROUPS,subs:GNAME},
  {id:'fw',t:'كلمات بالفتحة',d:'هجاء ثم قراءة متصلة: دَ رَ سَ ← دَرَسَ',h:'fa',kind:'words',sets:WF,subs:['المجموعة ١','المجموعة ٢','المجموعة ٣']},
  {id:'fs',t:'جمل بالفتحة',d:'اقرأ الجملة ثم شاهد فتحة يمثّلها: غَسَلَ وَمَسَحَ',h:'fa',kind:'sent',sets:[SF.slice(0,5),SF.slice(5)],subs:['جمل ١','جمل ٢']},
@@ -403,19 +426,24 @@ const LESSONS=[
  {id:'tn',t:'التنوين: البطل وتوأمه',d:'علامتان على الحرف = نون ساكنة نسمعها ولا نكتبها: بٌ ← بُنْ',h:'da',hs:['fa','da','ka'],marks:['ً','ٌ','ٍ'],kind:'letters',subs:['تنوين الفتح','تنوين الضم','تنوين الكسر']},
  {id:'tx',t:'التنوين الثلاثة معًا',d:'فتحتان أم ضمتان أم كسرتان؟ ادعُ البطل المناسب',h:'fa',heroes:['fa','da','ka'],tan:1,kind:'mixed',sets:[makeTX(),makeTX()],subs:['تدريب ١','تدريب ٢']},
  {id:'tw',t:'كلمات بالتنوين',d:'كِتَابٌ ، قَلَمًا ، جَمَلٍ — ونسمع النون: كِتَابُنْ',h:'da',kind:'words',vc:1,tan:1,sets:TW,subs:['كلمات ١','كلمات ٢']}];
+ALL_LESSONS.push(...FAHM);
+const TRACK=window.NOOR_TRACK||'read';
+const LESSONS=ALL_LESSONS.filter(L=>(L.track||'read')===TRACK);
 LESSONS.forEach(L=>{ const a=PR[L.id]||[]; PR[L.id]=L.subs.map((_,i)=>a[i]||0); });
+if(TRACK==='fahm'){ document.title='مسرح الفهم'; $('#loading .logo').textContent='مسرح الفهم'; $('#menu .eyebrow').textContent='الفهم القرائي خطوة خطوة مع أبطال الحركات'; $('#menu .title').innerHTML='مسرح<br>الفهم 🎭'; $('#menu .demo').innerHTML='<span class="s1">اقرأ 📖</span><span>←</span><span class="s2">شاهد 🎬</span><span>←</span><span class="s3">اختر ✋</span>';
+ $('#menu .lead').textContent='يقرأ الطالب جملة، ويمثّل الأبطال الثلاثة مشاهد مختلفة على المسرح، فيختار المشهد الصحيح. نبدأ بجمل الفتحة فقط، ثم نتدرج مع دروس «نور البيان».'; }
 function unlocked(li,si){ if(S.open) return true; const L=LESSONS[li]; if(si>0) return PR[L.id][si-1]>0; if(li===0) return true; return PR[LESSONS[li-1].id].every(x=>x>0); }
 function refreshMenu(){ $('#lessons').innerHTML=LESSONS.map((L,li)=>`<div class="lesson" style="--hc:${H[L.h].suit}"><div class="lh"><span class="no">${AR(li+1)}</span><span><b>${L.t}</b><small>${L.d}</small></span></div><div class="subs">${L.subs.map((s,si)=>{ const u=unlocked(li,si), st=PR[L.id][si]||0; return `<button class="sub${u?'':' locked'}" data-go="${li},${si}">${u?'':'🔒 '}${s}<span class="stars">${starsHTML(st)}</span></button>`; }).join('')}</div></div>`).join('')
-  +`<div class="lesson soon"><div class="lh"><span class="no">…</span><span><b>قريبًا بإذن الله</b><small>تطبيقات على السور القصيرة بنفس ترتيب الكتاب.</small></span></div></div>`; }
+  +`<div class="lesson soon"><div class="lh"><span class="no">…</span><span><b>قريبًا بإذن الله</b><small>${TRACK==='fahm'?'قصص أطول، وأسئلة لماذا وكيف، واقرأ ونفّذ.':'تطبيقات على السور القصيرة بنفس ترتيب الكتاب.'}</small></span></div></div>`; }
 
-let hero=heroes.fa;
-function setHero(h){ hero=heroes[h]; HK.forEach(k=>heroes[k].g.visible=k===h); }
+let hero=heroes.fa, PSET=null, PROPS=null;
+function setHero(h){ hero=heroes[h]; if(PSET) PROPS=PSET[h]; HK.forEach(k=>heroes[k].g.visible=k===h); }
 function boardsOn(){ HK.forEach(k=>{ if(heroes[k].board) heroes[k].board.visible=true; }); }
 setHero('fa');
 
 /* ---------- props the hero uses when acting a verb (hero-local, hero faces +z) ---------- */
-const PROPS={};
-(function(){
+// every hero has his own props, so the three heroes can act at the same time
+function makeProps(){ const PROPS={};
  PROPS.sit=new THREE.Group(); const cw=mat('#8a5a32',{r:.6}); mk(G.box(1.0,.1,.9),cw,0,.58,0,PROPS.sit); mk(G.box(1.0,1.0,.1),cw,0,1.1,-.42,PROPS.sit); for(const [x,z] of [[-.42,-.38],[.42,-.38],[-.42,.38],[.42,.38]]) mk(G.cyl(.05,.05,.56,8),cw,x,.28,z,PROPS.sit); PROPS.sit.position.set(0,0,-.35);
  PROPS.plant=new THREE.Group(); mk(G.sph(.45,16,10),mat('#6a4428',{r:1}),0,0,0,PROPS.plant).scale.set(1,.35,1); mk(G.cyl(.04,.05,.6,8),mat('#3fae3a'),0,.3,0,PROPS.plant); for(const s of [-1,1]){ const l=mk(G.sph(.16,10,8),mat('#4ccf4a'),s*.14,.55,0,PROPS.plant); l.scale.set(1.2,.35,.7); } mk(G.sph(.12,10,8),mat('#ff5fa8'),0,.66,0,PROPS.plant); PROPS.plant.position.set(0,0,1.0);
  PROPS.wheat=new THREE.Group(); for(let i=0;i<9;i++){ const s=new THREE.Group(); s.position.set(-.8+(i%3)*.8+(rnd()-.5)*.2,0,.8+((i/3)|0)*.35); mk(G.cyl(.025,.03,1.1,6),mat('#c9a43a'),0,.55,0,s); mk(G.sph(.08,8,6),mat('#e8c547',{r:.6}),0,1.15,0,s).scale.set(.8,2.2,.8); PROPS.wheat.add(s); }
@@ -426,17 +454,19 @@ const PROPS={};
  PROPS.carry=new THREE.Group(); mk(G.box(.95,.75,.95),mat('#c8894a',{r:.8}),0,0,0,PROPS.carry); mk(G.box(.97,.12,.2),mat('#e8d0a0'),0,.32,0,PROPS.carry,1); mk(G.box(.2,.77,.97),mat('#e3262f'),0,0,0,PROPS.carry,1);
  PROPS.hat=new THREE.Group(); mk(G.sph(.29,20,12),mat('#ffc83a',{r:.5}),0,0,0,PROPS.hat).scale.set(1,.55,1); mk(G.box(.34,.04,.3),mat('#ffc83a',{r:.5}),0,-.06,.27,PROPS.hat);
  PROPS.cup=new THREE.Group(); mk(G.cyl(.13,.11,.3,16),mat('#ffd36a',{r:.2,t:.85}),0,0,0,PROPS.cup); mk(G.cyl(.135,.135,.04,16),mat('#c98a1a'),0,.15,0,PROPS.cup);
- Object.values(PROPS).forEach(p=>p.visible=false); })();
+ Object.values(PROPS).forEach(p=>p.visible=false); return PROPS; }
+PSET={}; HK.forEach(k=>{ heroes[k].key=k; PSET[k]=makeProps(); Object.values(PSET[k]).forEach(p=>heroes[k].g.add(p)); });
+PROPS=PSET.fa;
 const PROPFOR={sit:'sit',plant:'plant',grow:'plant',harvest:'wheat',read:'book',knock:'door',opendoor:'door',hold:'ball',found:'ball',wipe:'table',wash:'table',carry:'carry',gift:'carry',wearhat:'hat',removehat:'hat',drink:'cup'};
-function propsTo(h){ Object.values(PROPS).forEach(p=>h.g.add(p)); }
-function hideProps(keep){ Object.entries(PROPS).forEach(([k,p])=>{ if(k!==keep) p.visible=false; }); HK.forEach(k=>heroes[k].head.rotation.set(0,0,0)); }
+function propsTo(h){ PROPS=PSET[h.key]; }
+function hideProps(keep){ HK.forEach(hk=>Object.entries(PSET[hk]).forEach(([k,p])=>{ if(!(k===keep&&PSET[hk]===PROPS)) p.visible=false; })); HK.forEach(k=>heroes[k].head.rotation.set(0,0,0)); }
 let bubble=null;
 function showBubble(txt,em){ if(bubble){ bubble.parent&&bubble.parent.remove(bubble); bubble.material.map.dispose(); bubble.material.dispose(); } const t=ctex(640,300,(x,cw,ch)=>{ x.fillStyle='#ffffff'; x.beginPath(); if(x.roundRect) x.roundRect(10,10,cw-20,ch-60,60); else x.rect(10,10,cw-20,ch-60); x.fill(); x.beginPath(); x.moveTo(cw/2-30,ch-52); x.lineTo(cw/2,ch-8); x.lineTo(cw/2+30,ch-52); x.fill();
   if(em){ x.font='130px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillText(em,cw-120,128); }
   x.font='800 120px "Baloo Bhaijaan 2", Tahoma, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillStyle='#1a1a2e'; x.fillText(txt,em?cw/2-70:cw/2,140); },1,1);
  bubble=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,fog:false})); bubble.scale.set(3.4,1.6,1); bubble.position.set(0,3.9,0); hero.g.add(bubble); }
 function hideBubble(){ if(bubble) bubble.visible=false; }
-function actPose(verb,tt){ const h=hero; h.pose('idle',tt,0); h.head.rotation.set(0,0,0);
+function actPose(verb,tt,h,P){ h=h||hero; P=P||PROPS; h.pose('idle',tt,0); h.head.rotation.set(0,0,0);
  // the Kasra hero steps off his board to act
  if(h.board){ h.board.visible=verb==='ride'; h.rig.position.y=0; h.hips.position.y=1.1; h.legs.forEach(l=>{ l.hp.rotation.set(0,0,0); l.kn.rotation.set(0,0,0); }); h.chest.rotation.set(0,0,0); }
  const R=h.arms[0], Lf=h.arms[1]; const set=(a,x,z,e)=>{ a.sh.rotation.set(x,0,z); a.el.rotation.set(e,0,0); }; const s=Math.min(1,tt*1.6), es=easeIO(s);
@@ -451,24 +481,24 @@ function actPose(verb,tt){ const h=hero; h.pose('idle',tt,0); h.head.rotation.se
   case 'jump': h.rig.position.y=Math.abs(Math.sin(tt*5))*1.3; set(R,0,-2.6,-.3); set(Lf,0,2.6,-.3); h.legs.forEach(l=>l.kn.rotation.x=Math.abs(Math.sin(tt*5))<.3?.8:.1); break;
   case 'run': h.pose('run',tt*1.6,1); break;
   case 'swim': h.chest.rotation.x=.8; set(R,tt*7,0,-.2); set(Lf,tt*7+Math.PI,0,-.2); h.legs[0].hp.rotation.x=Math.sin(tt*10)*.3; h.legs[1].hp.rotation.x=-Math.sin(tt*10)*.3; break;
-  case 'plant': h.hips.position.y=.8; h.legs.forEach(l=>{ l.hp.rotation.x=-1.1; l.kn.rotation.x=1.9; }); h.chest.rotation.x=.5; set(R,-1.0+Math.sin(tt*6)*.2,-.1,-.4); set(Lf,-.6,.2,-.6); PROPS.plant.scale.setScalar(Math.min(1,.2+tt*.6)); break;
-  case 'wash': set(R,-1.15,-.35+Math.sin(tt*14)*.15,-1.0); set(Lf,-1.15,.35-Math.sin(tt*14)*.15,-1.0); if(rnd()<.08) burst(V1.set(hero.g.position.x,1.6,.6),'#bfe8ff',8); break;
+  case 'plant': h.hips.position.y=.8; h.legs.forEach(l=>{ l.hp.rotation.x=-1.1; l.kn.rotation.x=1.9; }); h.chest.rotation.x=.5; set(R,-1.0+Math.sin(tt*6)*.2,-.1,-.4); set(Lf,-.6,.2,-.6); P.plant.scale.setScalar(Math.min(1,.2+tt*.6)); break;
+  case 'wash': set(R,-1.15,-.35+Math.sin(tt*14)*.15,-1.0); set(Lf,-1.15,.35-Math.sin(tt*14)*.15,-1.0); if(rnd()<.08) burst(V1.set(h.g.position.x,1.6,.6),'#bfe8ff',8); break;
   case 'carry': set(R,-3.0,-.15,-.15); set(Lf,-3.0,.15,-.15); break;
   case 'cook': set(R,-1.0,Math.sin(tt*6)*.35,-.9); set(Lf,-.7,.3,-1.1); break;
 
   case 'wipe': set(R,-1.2+Math.cos(tt*6)*.15,-.25+Math.sin(tt*6)*.35,-.5); set(Lf,-.4,.25,-.6); h.head.rotation.x=.35; h.chest.rotation.x=.15; break;
-  case 'harvest': h.chest.rotation.x=.45; h.hips.position.y=1.0; h.legs.forEach(l=>{ l.hp.rotation.x=-.4; l.kn.rotation.x=.6; }); set(R,-.9,-.2+Math.sin(tt*5)*.8,-.3); set(Lf,-.7,.3,-.8); PROPS.wheat.children.forEach((st,i)=>{ st.scale.y=Math.max(.25,1-Math.max(0,tt-.4-i*.12)*.9); }); break;
-  case 'grow': h.head.rotation.x=.45; set(R,-.3,-.5,-1.6); set(Lf,-.3,.5,-1.6); PROPS.plant.scale.setScalar(Math.min(2.6,1+tt*.7)); break;
+  case 'harvest': h.chest.rotation.x=.45; h.hips.position.y=1.0; h.legs.forEach(l=>{ l.hp.rotation.x=-.4; l.kn.rotation.x=.6; }); set(R,-.9,-.2+Math.sin(tt*5)*.8,-.3); set(Lf,-.7,.3,-.8); P.wheat.children.forEach((st,i)=>{ st.scale.y=Math.max(.25,1-Math.max(0,tt-.4-i*.12)*.9); }); break;
+  case 'grow': h.head.rotation.x=.45; set(R,-.3,-.5,-1.6); set(Lf,-.3,.5,-1.6); P.plant.scale.setScalar(Math.min(2.6,1+tt*.7)); break;
   case 'bow': h.chest.rotation.x=1.35*es; set(R,-.25*es,-.1,0); set(Lf,-.25*es,.1,0); break;
   case 'prostrate': { h.hips.position.y=1.1-.55*es; h.legs.forEach(l=>{ l.hp.rotation.x=-.2*es; l.kn.rotation.x=1.55*es; }); h.chest.rotation.x=1.45*es; set(R,-2.7*es,-.15,0); set(Lf,-2.7*es,.15,0); h.head.rotation.x=-.3*es; break; }
   case 'ask': set(R,-1.35,-.45,-.7+Math.sin(tt*3)*.1); set(Lf,0,.5,-1.9); h.head.rotation.z=.28; h.head.rotation.y=Math.sin(tt*2)*.15; break;
   case 'know': if(tt<1.2){ set(R,-2.2,-.6,-2.3); h.head.rotation.z=.15; h.head.rotation.x=-.1; } else { set(R,-3.0,-.1,-.05); h.rig.position.y=Math.abs(Math.sin(tt*5))*.25; if(rnd()<.06) burst(V1.set(0,3.6,0),'#ffe066',10); } break;
-  case 'hold': set(R,-1.35*es,-.2,-.5*es); set(Lf,-1.0*es,.25,-.9*es); h.head.rotation.x=.25; PROPS.ball.position.set(-.25,1.0+.55*es,.5+.3*es); break;
+  case 'hold': set(R,-1.35*es,-.2,-.5*es); set(Lf,-1.0*es,.25,-.9*es); h.head.rotation.x=.25; P.ball.position.set(-.25,1.0+.55*es,.5+.3*es); break;
   case 'look': set(R,-2.3,-.25,-2.25); h.head.rotation.y=Math.sin(tt*1.6)*.7; h.head.rotation.x=-.08; set(Lf,0,.5,-1.9); break;
   case 'read': set(R,-1.05,-.15,-1.15); set(Lf,-1.05,.15,-1.15); h.head.rotation.x=.4+Math.sin(tt*2)*.05; h.head.rotation.y=Math.sin(tt*1.5)*.2; break;
   case 'success': h.pose('victory',tt,0); if(rnd()<.12) burst(V1.set((rnd()-.5)*3,3.4,0),pick(['#ffc83a','#ff5fa8','#3fc8ff']),12); break;
-  case 'knock': { h.head.rotation.y=-.8; const k=Math.sin(tt*11)>0; set(R,-.15,-1.45,k?-.9:-.35); PROPS.door.userData.hinge.rotation.y=0; if(k&&!actPose.k){ Snd.play('click'); } actPose.k=k; break; }
-  case 'opendoor': h.head.rotation.y=-.6; set(R,-.2,-1.5+.4*es,-.2); PROPS.door.userData.hinge.rotation.y=-1.7*es; break;
+  case 'knock': { h.head.rotation.y=-.8; const k=Math.sin(tt*11)>0; set(R,-.15,-1.45,k?-.9:-.35); P.door.userData.hinge.rotation.y=0; if(k&&!actPose.k){ Snd.play('click'); } actPose.k=k; break; }
+  case 'opendoor': h.head.rotation.y=-.6; set(R,-.2,-1.5+.4*es,-.2); P.door.userData.hinge.rotation.y=-1.7*es; break;
   case 'sneeze': if(tt<.9){ set(R,-2.2,-.3,-2.4); h.head.rotation.x=-.3; } else { set(R,-2.0,-.3,-2.2); const j=Math.max(0,1-(tt-.9)*3); h.head.rotation.x=.5*j; h.chest.rotation.x=.3*j; if(tt<1.0&&!actPose.sn){ actPose.sn=1; Snd.play('slide'); burst(V1.set(0,2.5,.6),'#ffffff',18); } } if(tt<.1) actPose.sn=0; break;
   case 'praise': set(R,-2.5,-.45,-.6); set(Lf,-2.5,.45,-.6); h.head.rotation.x=-.25; break;
   case 'silent': set(R,-2.05,.3,-2.5); h.head.rotation.x=.1; break;
@@ -482,11 +512,11 @@ function actPose(verb,tt){ const h=hero; h.pose('idle',tt,0); h.head.rotation.se
   case 'hurt': set(R,-.35,-.25,-.4); set(Lf,-1.0,.35,-1.35); h.chest.rotation.x=.2; h.head.rotation.z=.2+Math.sin(tt*18)*.03; break;
   case 'happy': h.rig.position.y=Math.abs(Math.sin(tt*6))*.45; set(R,0,-2.4+Math.sin(tt*8)*.3,-.2); set(Lf,0,2.4-Math.sin(tt*8)*.3,-.2); break;
   case 'lost': h.head.rotation.y=Math.sin(tt*2.2)*.8; set(R,-.3,-.6,-.5); set(Lf,-.3,.6,-.5); h.chest.rotation.x=.12; break;
-  case 'found': set(R,-3.0,-.1,-.1); PROPS.ball.position.set(-.62,3.45,.1); h.rig.position.y=Math.abs(Math.sin(tt*5))*.2; if(rnd()<.08) burst(V1.set(-.6,3.5,.1),'#ffc83a',10); break;
-  case 'gift': set(R,-1.3*es,-.1,-.6*es); set(Lf,-1.3*es,.1,-.6*es); PROPS.carry.position.set(0,.9+.75*es,.4+.35*es); PROPS.carry.scale.setScalar(.6); h.head.rotation.x=.2; break;
-  case 'wearhat': { const u=Math.min(1,tt/1.1); set(R,-2.6*Math.min(1,tt*2),-.45,-1.4); set(Lf,-2.6*Math.min(1,tt*2),.45,-1.4); if(tt>1.4){ set(R,0,-.15,-.2); set(Lf,0,.15,-.2); } PROPS.hat.position.set(0,1.7+1.16*easeIO(u),.6-.58*easeIO(u)); PROPS.hat.rotation.set(0,0,0); break; }
-  case 'removehat': { const u=Math.min(1,Math.max(0,tt-.3)/1.1); set(R,-2.6*(1-u*.6),-.45,-1.4); set(Lf,-2.6*(1-u*.6),.45,-1.4); PROPS.hat.position.set(0,2.86-1.16*easeIO(u),.02+.58*easeIO(u)); break; }
-  case 'drink': set(R,-2.0,-.25,-2.2); set(Lf,-.4,.3,-.6); h.head.rotation.x=-.2; PROPS.cup.position.set(-.18,2.3,.42); PROPS.cup.rotation.x=-.6-Math.sin(tt*2)*.15; break;
+  case 'found': set(R,-3.0,-.1,-.1); P.ball.position.set(-.62,3.45,.1); h.rig.position.y=Math.abs(Math.sin(tt*5))*.2; if(rnd()<.08) burst(V1.set(-.6,3.5,.1),'#ffc83a',10); break;
+  case 'gift': set(R,-1.3*es,-.1,-.6*es); set(Lf,-1.3*es,.1,-.6*es); P.carry.position.set(0,.9+.75*es,.4+.35*es); P.carry.scale.setScalar(.6); h.head.rotation.x=.2; break;
+  case 'wearhat': { const u=Math.min(1,tt/1.1); set(R,-2.6*Math.min(1,tt*2),-.45,-1.4); set(Lf,-2.6*Math.min(1,tt*2),.45,-1.4); if(tt>1.4){ set(R,0,-.15,-.2); set(Lf,0,.15,-.2); } P.hat.position.set(0,1.7+1.16*easeIO(u),.6-.58*easeIO(u)); P.hat.rotation.set(0,0,0); break; }
+  case 'removehat': { const u=Math.min(1,Math.max(0,tt-.3)/1.1); set(R,-2.6*(1-u*.6),-.45,-1.4); set(Lf,-2.6*(1-u*.6),.45,-1.4); P.hat.position.set(0,2.86-1.16*easeIO(u),.02+.58*easeIO(u)); break; }
+  case 'drink': set(R,-2.0,-.25,-2.2); set(Lf,-.4,.3,-.6); h.head.rotation.x=-.2; P.cup.position.set(-.18,2.3,.42); P.cup.rotation.x=-.6-Math.sin(tt*2)*.15; break;
   case 'humble': h.head.rotation.x=.5; set(R,-.55,.4,-1.2); set(Lf,-.55,-.4,-1.2); h.chest.rotation.x=.15; break;
   case 'ride': h.pose('run',tt,1); break;
  } }
@@ -504,7 +534,7 @@ function showPicks(on){ const L=GS.L; $('#hold').hidden=on; $('.meter').style.vi
 function showCarBtns(on){ const L=GS.L; $('#carbtns').hidden=!on; if(on){ $('#hold').hidden=true; $('.meter').style.visibility='hidden'; $$('#carbtns .pk').forEach(b=>{ b.classList.remove('hint'); if(b.dataset.car==='shadda') b.hidden=!L.shadda; }); } }
 // a pair of marks for tanween: the hero and his twin
 function twinMark(h){ const g=new THREE.Group(), a=makeMark(h), b=makeMark(h); a.position.y=.45; b.position.y=-.45; a.scale.setScalar(.8); b.scale.setScalar(.8); g.add(a,b); return g; }
-function startLesson(li,si){ const L=LESSONS[li], h=L.hs?L.hs[si]:L.h; Object.assign(GS,{L,li,si,h,mark:L.marks?L.marks[si]:MK[h],medals:0,i:0,on:true}); RC.on=false; if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); hideProps(); hideBubble(); boardsOn(); setHero(h);
+function startLesson(li,si){ const L=LESSONS[li], h=L.hs?L.hs[si]:L.h; if(L.track==='fahm'){ Object.assign(GS,{L,li,si,h,medals:0,i:0,on:true,acting:null,done:false}); RC.on=false; if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); return startFahm(); } Object.assign(GS,{L,li,si,h,mark:L.marks?L.marks[si]:MK[h],medals:0,i:0,on:true}); RC.on=false; if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); hideProps(); hideBubble(); boardsOn(); setHero(h);
  GS.list=L.kind==='letters'?(L.groups?L.groups[si].slice():shuffle(ABC.slice()).slice(0,8)):L.kind==='words'||L.kind==='car'?shuffle(L.sets[si].slice()).slice(0,(L.madd||L.kind==='car')&&si===0?8:6):L.sets[si].slice();
  show('mag'); setupMag(); }
 function clearMag(keepCars){ GS.blocks.forEach(dropObj); GS.blocks=[]; dropObj(GS.merged); GS.merged=null; if(GS.markObj){ world.remove(GS.markObj); GS.markObj=null; } if(GS.anim){ if(GS.anim.m) world.remove(GS.anim.m); GS.anim=null; } sparks.forEach(s=>s.s.visible=false); clearCars(keepCars); }
@@ -577,7 +607,7 @@ function doneMag(){ GS.done=true; const L=GS.L, it=GS.list[GS.i], txt=itemText()
  const tn=/[ً-ٍ]/.test(txt); $('#cQ').innerHTML=tn?`نقرؤها: <b style="color:#ffc83a;font-size:1.5em">${tanRead(txt)}</b> ← ثم اضغط التالي`:'اقرأ معي! ثم اضغط التالي'; $('#nextBtn').hidden=false; setTimeout(()=>{ try{$('#nextBtn').focus({preventScroll:true});}catch(e){} },50); Speech.say(txt,.7); }
 function nextMag(){ if(!GS.done||(GS.acting&&!GS.acting.fin)) return; hideProps(); hideBubble(); boardsOn(); GS.acting=null; GS.i++; if(GS.i>=GS.list.length) afterMag(); else setupMag(); }
 function afterMag(){ if(GS.L.kind==='sent') finishLesson(3,`قرأت ${AR(GS.list.length)} جمل ومثّلها ${H[GS.h].n}.`); else startRace(); }
-function updateMag(dt,t,I){ if(GS.acting) return updateAct(dt,t);
+function updateMag(dt,t,I){ if(isF()) return updateFahm(dt,t,I); if(GS.acting) return updateAct(dt,t);
  const L=GS.L, holding=L.kind!=='mixed'&&L.kind!=='car'&&(holdDown||keys.Space||keys.Enter||I.a);
  if(L.kind==='car'){ if(!GS.done){ if(I.downE) carChoose('go'); if(I.midE) carChoose('stop'); if(I.upE&&L.shadda) carChoose('shadda'); } updateCar(dt,t); return; }
  if(L.kind==='mixed'){ if(!GS.done){ if(I.upE) chooseHero('fa'); if(I.midE) chooseHero('da'); if(I.downE) chooseHero('ka'); updateMixed(dt,t); } }
@@ -652,6 +682,73 @@ function finishLesson(st,msg){ GS.on=false; RC.on=false; clearMag(); hideProps()
  const nx=nextOf(GS.li,GS.si), btns=[]; if(nx&&unlocked(nx[0],nx[1])) btns.push([nx.join(','),nx[0]===GS.li?'التالي: '+LESSONS[nx[0]].subs[nx[1]]:'الدرس التالي: '+LESSONS[nx[0]].t,'primary']); btns.push([GS.li+','+GS.si,'مرة أخرى',btns.length?'':'primary']); btns.push(['menu','القائمة']);
  endScreen(`${H[L.kind==='mixed'?hero===heroes.da?'da':hero===heroes.ka?'ka':'fa':GS.h].n} فخور بك! 🦸`,st,GS.medals,msg+` مجموع أوسمتك: ${AR(MEDALS)}.`,btns); }
 
+/* ---------- مسرح الفهم: three stages, the heroes act, the student shows he understood ---------- */
+const SX=[-4.6,0,4.6];
+const STAGE=(()=>{ const g=new THREE.Group(); SX.forEach((x,i)=>{ const p=new THREE.Group(); p.position.x=x; g.add(p); mk(G.cyl(1.75,1.9,.26,40),mat(['#ff5a5a','#3fa9ff','#3fd17a'][i],{r:.35,m:.25}),0,.13,0,p); mk(G.cyl(1.8,1.8,.05,40),mat('#ffffff',{e:'#fff3c0',ei:.8}),0,.27,0,p,1); const s=glow('#fff3c0',6,.3); s.position.set(0,4.6,0); p.add(s); }); g.visible=false; world.add(g); return g; })();
+let NAMETAG=null;
+function nameTags(on){ if(on&&!NAMETAG){ NAMETAG={}; HK.forEach(k=>{ const t=ctex(512,160,(x,w,h)=>{ x.fillStyle=H[k].suit; x.beginPath(); if(x.roundRect) x.roundRect(8,8,w-16,h-16,60); else x.rect(8,8,w-16,h-16); x.fill(); x.lineWidth=8; x.strokeStyle='#ffffff'; x.stroke(); x.font='800 92px "Baloo Bhaijaan 2", Tahoma, sans-serif'; x.textAlign='center'; x.textBaseline='middle'; x.fillStyle='#fff'; x.fillText(HNAME[k],w/2,h/2+14); },1,1); const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,fog:false,depthTest:false})); s.scale.set(2.4,.75,1); s.position.set(0,3.55,0); heroes[k].g.add(s); NAMETAG[k]=s; }); } if(NAMETAG) HK.forEach(k=>NAMETAG[k].visible=!!on); }
+const isF=()=>GS.L&&GS.L.track==='fahm';
+const sentTxt=s=>s.map(x=>x[0]).join(' ');
+const CONN=['وَ','فَ'];
+// a sentence of n different actions; 'first' fixes the first verb
+function genSent(n,pool,first){ const used=new Set(), out=[]; if(first){ out.push(first); used.add(first[1]); } let g=0; while(out.length<n&&g++<200){ const v=pick(pool); if(used.has(v[1])) continue; used.add(v[1]); out.push(v); } return out.map((v,i)=>[i?pick(CONN)+v[0]:v[0],v[1]]); }
+const actsOf=s=>s.map(x=>x[1]);
+const overlap=(a,b)=>actsOf(a).some(x=>actsOf(b).includes(x));
+function fahmShow(on){ STAGE.visible=on; $('#sceneBtns').hidden=true; $('#tfBtns').hidden=true; $('#wordBtns').hidden=true; if(on){ $('#hold').hidden=true; $('.meter').style.visibility='hidden'; $('#picks').hidden=true; $('#carbtns').hidden=true; $('#nextBtn').hidden=true; } nameTags(false); }
+function startFahm(){ const L=GS.L; GS.F={round:0,total:6,first:0,streak:0,best:0}; clearMag(); hideProps(); hideBubble(); boardsOn(); show('mag'); $('#cue').hidden=false; fahmShow(true); nextFahm(); }
+function fahmFinish(){ const F=GS.F; fahmShow(false); HK.forEach(k=>{ heroes[k].g.position.set(0,0,0); heroes[k].g.rotation.set(0,0,0); }); const r=F.first/F.total; finishLesson(r>=.85?3:r>=.6?2:1,`أجبت عن ${AR(F.total)} أسئلة، ${AR(F.first)} منها من أول محاولة. أطول سلسلة نجاح: 🔥 ${AR(F.best)}.`); }
+function nextFahm(){ const F=GS.F, L=GS.L; if(F.round>=F.total) return fahmFinish(); hideProps(); boardsOn();
+ const pool=FPOOL[L.lvl], book=FBOOK[L.lvl]; const kind=L.kind==='mix'?['watch','tf','cloze'][F.round%3]:L.kind;
+ Object.assign(F,{kind,pos:shuffle(HK.slice()),acts:[[],[],[]],ai:[0,0,0],tt:[0,.9,1.8],react:[null,null,null],show:[true,true,true],tries:0,done:false,sel:0,tap:0});
+ const sbs=$$('#sceneBtns .sb'); sbs.forEach(b=>{ b.classList.remove('hint','no','ok'); b.querySelector('.num').textContent=''; });
+ let q='';
+ if(kind==='watch'){ const hard=GS.si===1&&L.lvl==='fa'; const tgt=!hard&&rnd()<.6?pick(book):genSent(2,pool); const ds=[]; let g=0; while(ds.length<2&&g++<300){ const d=hard?genSent(2,pool,[tgt[0][0],tgt[0][1]]):rnd()<.5?pick(book):genSent(2,pool); if(hard?actsOf(d)[1]!==actsOf(tgt)[1]&&!ds.some(x=>actsOf(x)[1]===actsOf(d)[1]):!overlap(d,tgt)&&!ds.some(x=>overlap(x,d))) ds.push(d); }
+  F.ans=(rnd()*3)|0; const all=[ds[0],ds[1]]; all.splice(F.ans,0,tgt); F.sents=all; F.acts=all.map(actsOf); F.sent=tgt; F.say=sentTxt(tgt); $('#cW').innerHTML=`<span>${F.say}</span>`; q=hard?'انتبه للكلمة الثانية! أي بطل يمثّل الجملة كاملة؟':'اقرأ الجملة: أي بطل يمثّلها؟'; $('#sceneBtns').hidden=false; }
+ else if(kind==='tf'){ const tgt=rnd()<.5?pick(book):genSent(2,pool); const truth=rnd()<.5; let shown=tgt; if(!truth){ const j=(rnd()*tgt.length)|0; let v, g=0; do{ v=pick(pool); }while((actsOf(tgt).includes(v[1]))&&g++<100); shown=tgt.map((x,i)=>i===j?[(i?x[0].slice(0,2):'')+v[0],v[1]]:x); }
+  F.show=[false,true,false]; F.acts=[[],actsOf(tgt),[]]; F.truth=truth; F.sent=tgt; F.shown=shown; F.say=sentTxt(shown); $('#cW').innerHTML=`<span>${F.say}</span>`; q='شاهد البطل: هل الجملة صحيحة؟'; $('#tfBtns').hidden=false; }
+ else if(kind==='cloze'){ const tgt=rnd()<.5?pick(book):genSent(2,pool); const j=(rnd()*tgt.length)|0, pre=j?tgt[j][0].slice(0,2):''; const opts=[tgt[j][1]]; let g=0; while(opts.length<3&&g++<200){ const v=pick(pool); if(!opts.includes(v[1])&&!actsOf(tgt).includes(v[1])) opts.push(v[1]); }
+  const word=a=>pre+(pool.find(v=>v[1]===a)||tgt[j])[0]; F.words=shuffle(opts).map(a=>a===tgt[j][1]?tgt[j][0]:word(a)); F.ans=F.words.indexOf(tgt[j][0]); F.blank=j; F.show=[false,true,false]; F.acts=[[],actsOf(tgt),[]]; F.sent=tgt; F.say=sentTxt(tgt);
+  $('#cW').innerHTML=tgt.map((x,i)=>i===j?'<span style="color:#ffc83a">ـــــــ</span>':`<span>${x[0]}</span>`).join(' '); q='كلمة ناقصة! شاهد البطل واختر الكلمة'; wordBtns(F.words); }
+ else if(kind==='order'){ const tgt=rnd()<.35?pick(book.filter(s=>s.length===3).concat([genSent(3,pool)])):genSent(3,pool); F.perm=shuffle([0,1,2]); F.acts=F.perm.map(j=>[tgt[j][1]]); F.sent=tgt; F.say=sentTxt(tgt); F.next=0; $('#cW').innerHTML=orderHTML(); q='من فعل أولًا؟ اضغط الأبطال بترتيب الجملة: ١ ثم ٢ ثم ٣'; $('#sceneBtns').hidden=false; }
+ else { // story: each hero has a name and one action
+  const vs=[]; let g=0; while(vs.length<3&&g++<200){ const v=pick(pool); if(!vs.some(x=>x[1]===v[1])) vs.push(v); } F.vs=vs; F.acts=vs.map(v=>[v[1]]); nameTags(true); const who=rnd()<.5; F.ask=who?'who':'what'; F.ans=(rnd()*3)|0;
+  if(who){ F.say=`مَنْ ${vs[F.ans][0]}؟`; q='اقرأ السؤال واختر البطل'; $('#sceneBtns').hidden=false; }
+  else { const k=F.pos[F.ans]; F.say=`مَاذَا فَعَلَ ${HNAME[k]}؟`; F.words=shuffle(vs.map(v=>v[0])); F.wans=F.words.indexOf(vs[F.ans][0]); q='اقرأ السؤال واختر الجواب'; wordBtns(F.words); }
+  $('#cW').innerHTML=`<span>${F.say}</span>`; }
+ F.acts.forEach((a,i)=>{ if(a.length) showPropFor(F.pos[i],a[0]); });
+ $('#cQ').textContent=q; $('#sRound').textContent=`${AR(F.round+1)} / ${AR(F.total)}`; $('#sMedal').textContent='🏅 '+AR(GS.medals); }
+function orderHTML(){ const F=GS.F; return F.sent.map((x,i)=>`<span style="color:${i<F.next?'#3fd17a':i===F.next?'#ffc83a':'#ffffff'}">${x[0]}</span>`).join(' '); }
+function wordBtns(ws){ const b=$('#wordBtns'); b.innerHTML=ws.map((w,i)=>`<button class="pk wd" data-w="${i}"><span class="mk">${w}</span></button>`).join(''); b.hidden=false; }
+function showPropFor(k,act){ const P=PSET[k]; Object.values(P).forEach(p=>p.visible=false); heroes[k].head.rotation.set(0,0,0); const pk=PROPFOR[act]; if(pk) P[pk].visible=true; if(act==='plant') P.plant.scale.setScalar(.2); if(act==='grow') P.plant.scale.setScalar(1); if(act==='carry'){ P.carry.position.set(0,3.35,.05); P.carry.scale.setScalar(1); } if(act==='knock'||act==='opendoor') P.door.userData.hinge.rotation.y=0; if(act==='harvest') P.wheat.children.forEach(s=>s.scale.y=1); }
+function fahmGood(slot){ const F=GS.F; F.done=true; if(F.tries===0){ F.first++; F.streak++; F.best=Math.max(F.best,F.streak); } else F.streak=0;
+ if(slot!=null) F.react[slot]={type:'win',t:0}; GS.medals++; MEDALS++; store.set('medals',MEDALS); Snd.play('medal'); rumble(260,.35,.8); const x=slot!=null?SX[slot]:0; burst(V1.set(x,3,0),'#ffc83a',80); burst(V1.set(x,3,0),pick(['#ff5fa8','#3fc8ff','#3fd17a']),40); flyMedal(V1.set(x,3,0)); bumpMedal(GS.medals);
+ pop(`🎉 أحسنت!${F.streak>=2?` <b style="color:#ff9a1f">🔥×${AR(F.streak)}</b>`:''}<div class="big">${F.kind==='story'?F.say+' ← '+(F.ask==='who'?HNAME[F.pos[F.ans]]:F.vs[F.ans][0]):sentTxt(F.sent)}</div>`,2400);
+ if(F.kind==='cloze') $('#cW').innerHTML=F.sent.map((x,i)=>`<span style="color:${i===F.blank?'#3fd17a':'#fff'}">${x[0]}</span>`).join(' ');
+ Speech.say(F.kind==='story'?(F.ask==='who'?HNAME[F.pos[F.ans]]:F.vs[F.ans][0]):sentTxt(F.sent),.7); $('#sceneBtns').hidden=true; $('#tfBtns').hidden=true; $('#wordBtns').hidden=true;
+ setTimeout(()=>{ if(GS.F===F&&state==='mag'){ F.round++; nextFahm(); } },2700); }
+function fahmBad(msg,slot,hintSel){ const F=GS.F; F.tries++; F.streak=0; Snd.play('no'); rumble(90,.1,.1); if(slot!=null) F.react[slot]={type:'no',t:0}; pop(msg,3200); if(F.tries>=(S.diff==='easy'?1:2)&&hintSel){ const e=$(hintSel); if(e) e.classList.add('hint'); } }
+function fahmPick(v){ const F=GS.F; if(!F||F.done) return; const sb=i=>`#sceneBtns .sb[data-s="${i}"]`;
+ if(F.kind==='watch'){ if(v===F.ans) return fahmGood(v); const b=$(sb(v)); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); fahmBad(`هذا البطل يمثّل: <div class="big">${sentTxt(F.sents[v])}</div>اقرأ جملتك مرة أخرى 👀`,v,sb(F.ans)); }
+ else if(F.kind==='order'){ const j=F.perm[v]; if(j===F.next){ $(sb(v)).querySelector('.num').textContent=AR(F.next+1); $(sb(v)).classList.add('ok'); F.react[v]={type:'win',t:0}; Snd.play('place'); Speech.say(F.sent[j][0],.7); F.next++; $('#cW').innerHTML=orderHTML(); if(F.next>=3) fahmGood(null); }
+  else { const b=$(sb(v)); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); fahmBad(`اقرأ الكلمة رقم ${AR(F.next+1)}: <div class="big">${F.sent[F.next][0]}</div>من يمثّلها؟`,v,sb(F.perm.indexOf(F.next))); } }
+ else if(F.kind==='story'&&F.ask==='who'){ if(v===F.ans) return fahmGood(v); fahmBad(`هذا <b>${HNAME[F.pos[v]]}</b> وهو <div class="big">${F.vs[v][0]}</div>اقرأ السؤال مرة أخرى`,v,sb(F.ans)); } }
+function fahmTF(val){ const F=GS.F; if(!F||F.done||F.kind!=='tf') return; if(val===F.truth) return fahmGood(1);
+ fahmBad(F.truth?`بل صحيحة! البطل فعلًا: <div class="big">${sentTxt(F.sent)}</div>`:`انظر جيدًا: البطل لا يفعل هذا. هو: <div class="big">${sentTxt(F.sent)}</div>`,1,`#tfBtns [data-tf="${F.truth?1:0}"]`); }
+function fahmWord(i){ const F=GS.F; if(!F||F.done) return; const b=$(`#wordBtns [data-w="${i}"]`);
+ if(F.kind==='cloze'){ if(i===F.ans) return fahmGood(1); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); fahmBad(`«${F.words[i]}» ليست ما يفعله البطل. انظر إليه جيدًا 👀`,1,`#wordBtns [data-w="${F.ans}"]`); }
+ else if(F.kind==='story'){ if(i===F.wans) return fahmGood(F.ans); b.classList.remove('no'); void b.offsetWidth; b.classList.add('no'); fahmBad(`انظر إلى <b>${HNAME[F.pos[F.ans]]}</b>: ماذا يفعل؟`,null,`#wordBtns [data-w="${F.wans}"]`); } }
+function updateFahm(dt,t,I){ const F=GS.F; if(!F) return;
+ // gamepad / keyboard: move the choice with ← → and confirm with ✕
+ const opts=F.kind==='tf'?$$('#tfBtns .pk'):(F.kind==='cloze'||(F.kind==='story'&&F.ask==='what'))?$$('#wordBtns .pk'):$$('#sceneBtns .sb');
+ if(I.leftE||I.rightE){ F.sel=clamp(F.sel+(I.leftE?1:-1),0,opts.length-1); } if(I.pad||I.kl||I.kr) opts.forEach((b,i)=>b.classList.toggle('sel',i===F.sel)); if(I.aE&&!F.done&&opts[F.sel]) opts[F.sel].click();
+ HK.forEach(k=>heroes[k].g.visible=false); STAGE.children.forEach((p,i)=>p.visible=F.show[i]);
+ F.pos.forEach((k,i)=>{ const h=heroes[k], P=PSET[k]; if(!F.show[i]) return; h.g.visible=true; h.g.scale.setScalar(1); h.g.position.set(SX[i],.27,0); const seq=F.acts[i]; F.tt[i]+=dt;
+  if(seq.length>1&&F.tt[i]>2.8){ F.tt[i]=0; F.ai[i]=(F.ai[i]+1)%seq.length; showPropFor(k,seq[F.ai[i]]); }
+  const r=F.react[i]; if(r){ r.t+=dt; if(r.type==='win'){ h.pose('victory',t,0); if(h.board) h.board.visible=true; } else { h.pose('idle',t,0); h.head.rotation.y=Math.sin(r.t*16)*.45*Math.max(0,1-r.t); if(r.t>1.2) F.react[i]=null; } h.g.rotation.y+=(0-h.g.rotation.y)*Math.min(1,dt*5); return; }
+  const act=seq[F.ai[i]]; if(!act){ h.pose('idle',t,0); return; } actPose(act,Math.min(F.tt[i],2.75),h,P); const side=act==='bow'||act==='prostrate'; h.g.rotation.y+=((side?-1.35:0)-h.g.rotation.y)*Math.min(1,dt*5); });
+ // the choice buttons follow the heroes on screen
+ if(!$('#sceneBtns').hidden) $$('#sceneBtns .sb').forEach((b,i)=>{ V1.set(SX[i],-.35,1.2).project(camera); b.style.left=((V1.x+1)/2*innerWidth)+'px'; b.style.top=Math.min(innerHeight-90,(1-V1.y)/2*innerHeight)+'px'; }); }
+
 /* ---------- shared frame update ---------- */
 let CL=new THREE.Vector3(0,2,10);
 function endScreen(title,stars,medals,msg,btns){ $('#eTitle').textContent=title; $('#eStars').innerHTML=starsHTML(stars); $('#eMedals').textContent='🏅'.repeat(Math.min(medals,12)); $('#eMsg').textContent=msg; $('#eBtns').innerHTML=btns.map(([g,t,c],i)=>`<button class="btn ${c||''}" data-go="${g}">${i===0?`<i class="ps">${PS.x}</i>`:''}${t}</button>`).join(''); show('end'); Speech.say(title); }
@@ -662,6 +759,7 @@ function update(dt,t,I){ const racing=state==='play'&&RC.on; const sp=racing?SPE
  if(racing) updateRace(dt,t,I,sp);
  const k=Math.min(1,dt*3), inMag=state==='mag'||(state==='pause'&&resumeTo==='mag'), inRace=state==='play'||(state==='pause'&&resumeTo==='play');
  if(inMag&&GS.acting){ camera.position.lerp(V2.set(1.9,3.3,8.6),k); CL.lerp(V1.set(0,2.5,0),k); }
+ else if(inMag&&isF()){ const one=GS.F&&(GS.F.kind==='tf'||GS.F.kind==='cloze'); camera.position.lerp(V2.set(0,one?3.0:3.6,one?8.2:12.8),k); CL.lerp(V1.set(0,one?2.0:1.9,0),k); }
  else if(inMag&&GS.L&&GS.L.kind==='car'){ camera.position.lerp(V2.set(0,4.2,-12.5),k); CL.lerp(V1.set(0,3.2,4),k); }
  else if(inMag){ camera.position.lerp(V2.set(0,2.6,-10),k); CL.lerp(V1.set(0,4.8,4),k); }
  else if(inRace){ hero.g.position.set(RC.x,0,0); hero.g.rotation.y=0; if(state==='play'){ hero.pose('run',t,1); if(!hero.board) hero.rig.rotation.z=(LANEX[RC.lane]-RC.x)*-.04; } const near=RC.gate&&RC.gate.position.z<24; camera.position.lerp(V2.set(RC.x*.4,near?5.2:4.0,near?-11:-8.5),k); CL.lerp(V1.set(RC.x*.25,near?2.8:2.2,10),k); }
@@ -684,7 +782,7 @@ addEventListener('keyup',e=>{ keys[e.code]=false; });
 (function(){ let sx=null,sy=null; canvas.addEventListener('pointerdown',e=>{ sx=e.clientX; sy=e.clientY; }); canvas.addEventListener('pointerup',e=>{ if(sx==null||state!=='play') return; const dx=e.clientX-sx, dy=e.clientY-sy; if(Math.max(Math.abs(dx),Math.abs(dy))>40){ if(Math.abs(dx)>Math.abs(dy)) tq[dx<0?'l':'r']=1; else tq[dy<0?'u':'d']=1; } sx=null; }); })();
 
 function pauseGame(){ if(state!=='play'&&state!=='mag') return; resumeTo=state; show('pause'); }
-function goMenu(){ GS.on=false; RC.on=false; GS.acting=null; clearMag(); if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); hideProps(); hideBubble(); setHero('fa'); refreshMenu(); show('menu'); }
+function goMenu(){ fahmShow(false); GS.F=null; GS.on=false; RC.on=false; GS.acting=null; clearMag(); if(RC.gate){ dropObj(RC.gate); RC.gate=null; } clearStars(); hideProps(); hideBubble(); setHero('fa'); refreshMenu(); show('menu'); }
 function back(){ if(state==='settings'||state==='end') goMenu(); else if(state==='pause') show(resumeTo); }
 function go(code){ Snd.init(); if(code==='menu') return goMenu(); const [li,si]=code.split(',').map(Number); if(!unlocked(li,si)){ Snd.play('no'); toast('🔒 أكمل الدرس الذي قبله أولًا (كما في الكتاب)'); return; } startLesson(li,si); }
 (function(){ const h=$('#hold'); const on=e=>{ e.preventDefault(); holdDown=true; h.classList.add('down'); }, off=()=>{ holdDown=false; h.classList.remove('down'); }; h.addEventListener('pointerdown',on); h.addEventListener('pointerup',off); h.addEventListener('pointerleave',off); h.addEventListener('pointercancel',off); h.addEventListener('keydown',e=>{ if(e.code==='Enter'||e.code==='Space'){ e.preventDefault(); } }); })();
@@ -693,11 +791,14 @@ document.addEventListener('click',e=>{ Snd.init();
  const g=e.target.closest('[data-go]'); if(g){ Snd.play('click'); go(g.dataset.go); return; }
  const pk=e.target.closest('[data-pick]'); if(pk){ chooseHero(pk.dataset.pick); return; }
  const cb=e.target.closest('[data-car]'); if(cb){ carChoose(cb.dataset.car); return; }
+ const sb=e.target.closest('[data-s]'); if(sb){ fahmPick(+sb.dataset.s); return; }
+ const tf=e.target.closest('[data-tf]'); if(tf){ fahmTF(tf.dataset.tf==='1'); return; }
+ const wd=e.target.closest('[data-w]'); if(wd){ fahmWord(+wd.dataset.w); return; }
  const ln=e.target.closest('.lanes [data-lane]'); if(ln){ tq[ln.dataset.lane]=1; return; }
  if(e.target.closest('#hold')) return;
  const b=e.target.closest('[data-act]'); if(!b) return; const a=b.dataset.act; Snd.play('click');
  if(a==='settings'){ syncSet(); show('settings'); } else if(a==='back') back(); else if(a==='pause') pauseGame(); else if(a==='resume') show(resumeTo); else if(a==='menu') goMenu(); else if(a==='next') nextMag();
- else if(a==='repeat'){ if(state==='mag'){ const A=GS.acting; if(A&&!A.fin) Speech.say(A.words[A.k][0],.7); else if(GS.done) Speech.say(itemText(),.7); else sayParts(); } else if(RC.cur) Speech.say(RC.cur,.7); } });
+ else if(a==='repeat'){ if(state==='mag'&&isF()&&GS.F){ Speech.say(GS.F.say,.7); } else if(state==='mag'){ const A=GS.acting; if(A&&!A.fin) Speech.say(A.words[A.k][0],.7); else if(GS.done) Speech.say(itemText(),.7); else sayParts(); } else if(RC.cur) Speech.say(RC.cur,.7); } });
 function syncSet(){ $$('.seg').forEach(sg=>{ const k=sg.dataset.key; sg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v)===String(S[k]))); }); }
 $$('.seg').forEach(sg=>sg.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; let v=b.dataset.v; if(v==='true') v=true; else if(v==='false') v=false; S[sg.dataset.key]=v; store.set('settings',S); syncSet(); if(sg.dataset.key==='quality') applyQuality(); }));
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) pauseGame(); });
