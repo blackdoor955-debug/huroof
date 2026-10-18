@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>منصة مغامرات الحروف</title>
+<title>منصة التعلم باللعب</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Lalezar&display=swap">
@@ -84,6 +84,10 @@ td b{font-size:17px}
 .code{font-family:Consolas,'Courier New',monospace;font-size:16px;letter-spacing:1px;background:rgba(255,255,255,.08);padding:3px 8px;border-radius:8px;direction:ltr;display:inline-block}
 .bar{height:8px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;min-width:70px}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--good),var(--gold))}
+.sects{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sectbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 12px;border-radius:26px;border:3px solid rgba(255,255,255,.18);background:linear-gradient(160deg,var(--a),var(--b));color:#fff;cursor:pointer;box-shadow:inset 0 -40px 60px rgba(0,0,0,.25);opacity:.55;transition:transform .15s,opacity .15s}
+.sectbtn span{font-size:clamp(40px,8vw,56px);line-height:1.1}.sectbtn b{font-family:var(--display);font-weight:400;font-size:clamp(24px,5vw,38px);text-shadow:0 2px 0 rgba(0,0,0,.3)}.sectbtn small{font-size:14px;color:#f0f0ff}
+.sectbtn[aria-pressed="true"]{opacity:1;border-color:#ffd75e;transform:translateY(-3px);box-shadow:0 0 0 4px rgba(255,215,94,.35),inset 0 -40px 60px rgba(0,0,0,.25)}
 .games{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
 .game{position:relative;display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:right;padding:18px;border-radius:24px;border:2px solid rgba(255,255,255,.16);background:linear-gradient(160deg,var(--a),var(--b));cursor:pointer;min-width:0;box-shadow:inset 0 -50px 60px rgba(0,0,0,.25);transition:transform .15s}
 .game:hover,.game:focus-visible{transform:translateY(-4px)}
@@ -110,7 +114,7 @@ td b{font-size:17px}
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="brand"><span class="schoolbox"><img class="school" src="logo.png" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true;this.parentElement.nextElementSibling.hidden=false"></span><div class="logo" hidden>أ</div><div><b>مغامرات الحروف</b><small class="sch">مدارس الفيصلية الأهلية</small></div></div>
+    <div class="brand"><span class="schoolbox"><img class="school" src="logo.png" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true;this.parentElement.nextElementSibling.hidden=false"></span><div class="logo" hidden>أ</div><div><b>التعلم باللعب</b><small class="sch">مدارس الفيصلية الأهلية</small></div></div>
     <div class="who" id="who" hidden><span id="whoName"></span><button class="btn sm" id="btnHome">🏠 الرئيسية</button><button class="btn sm" id="btnAdmin" hidden>🛡️ الإدارة</button><button class="btn sm" id="btnLogout">خروج</button></div>
   </header>
   <p class="byline">إعداد المعلم: <b>أحمد حازم عبد الله</b> · تحت إشراف: <b>د. خالد محروس بكري</b></p>
@@ -119,7 +123,7 @@ td b{font-size:17px}
 
   <!-- sign in / sign up -->
   <section id="vAuth" hidden>
-    <div class="hero"><span class="schoolbox heroLogo"><img class="school" src="logo.png" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true"></span><h1>تعلّم الحروف باللعب</h1><p>ألعاب للغتي والرياضيات: الحروف والحركات و«نور البيان» والفهم القرائي والمفاهيم الرياضية. يُحفظ تقدّم كل طالب في السحابة ويظهر على أي جهاز.</p></div>
+    <div class="hero"><span class="schoolbox heroLogo"><img class="school" src="logo.png" alt="شعار مدارس الفيصلية الأهلية" onerror="this.parentElement.hidden=true"></span><h1>التعلم باللعب</h1><p>ألعاب للغة العربية والرياضيات: الحروف والحركات والقراءة والفهم القرائي، والأرقام والمفاهيم الرياضية. يُحفظ تقدّم كل طالب في السحابة ويظهر على أي جهاز.</p></div>
     <div class="auth panel form">
       <div class="tabs" role="tablist"><button role="tab" id="tabIn" aria-selected="true">تسجيل الدخول</button><button role="tab" id="tabUp" aria-selected="false">حساب جديد</button></div>
       <form id="fAuth" class="form" novalidate>
@@ -162,7 +166,7 @@ td b{font-size:17px}
     </div>
     <div class="panel">
       <div class="tbl-wrap"><table>
-        <thead><tr><th>الطالب</th><th>رمز الدعوة لولي الأمر</th><th>مغامرات الحروف</th><th>أين يسكن الحرف</th><th>أبطال الحركات</th><th>فتحة يقرأ</th><th>نور البيان</th><th>مسرح الفهم</th><th>الألوان</th><th>الأشكال</th><th>طويل وقصير</th><th>كبير وصغير</th><th>الأوسمة</th><th></th></tr></thead>
+        <thead><tr><th>الطالب</th><th>رمز الدعوة لولي الأمر</th><th>مغامرات الحروف</th><th>أين يسكن الحرف</th><th>أبطال الحركات</th><th>فتحة يقرأ</th><th>القراءة بالحركات</th><th>مسرح الفهم</th><th>الألوان</th><th>الأشكال</th><th>طويل وقصير</th><th>كبير وصغير</th><th>الأرقام</th><th>الأوسمة</th><th></th></tr></thead>
         <tbody id="tBody"></tbody>
       </table></div>
       <p class="note" id="teacherEmpty" hidden>أضف طلابك ليظهروا هنا. لكل طالب رمز دعوة ترسله لولي أمره ليتابع تقدّمه من البيت.</p>
@@ -186,20 +190,25 @@ td b{font-size:17px}
   <!-- the games hub for the chosen student -->
   <section id="vHub" hidden>
     <div class="panel player"><div class="av" id="pAv">🦁</div><div><b id="pName"></b><div class="sync" id="syncState"></div></div><span style="flex:1"></span><button class="btn sm" id="btnSwitch">تغيير الطالب</button></div>
-    <div class="sect">📚 اللغة العربية</div>
-    <div class="games">
+    <div class="sects" role="tablist"><button class="sectbtn" role="tab" data-sect="ar" style="--a:#e3262f;--b:#7a1fd6"><span>📚</span><b>اللغة العربية</b><small>الحروف والحركات والقراءة والفهم</small></button><button class="sectbtn" role="tab" data-sect="ma" style="--a:#1e88e5;--b:#0f9d8a"><span>🔢</span><b>الرياضيات</b><small>الألوان والأشكال والمفاهيم والأرقام</small></button></div>
+    <div class="games" id="g-ar">
       <button class="game" data-game="huroof" style="--a:#3f98ea;--b:#2f6b2a"><span class="ic">🦁</span><h3>مغامرات الحروف</h3><p>من الألف إلى الياء في ٢٨ عالمًا.</p><span class="pr" data-pr="huroof"></span></button>
       <button class="game" data-game="ayn" style="--a:#38d27a;--b:#1b3a8a"><span class="ic">🧩</span><h3>أين يسكن الحرف؟</h3><p>أول الكلمة ووسطها وآخرها.</p><span class="pr" data-pr="ayn"></span></button>
       <button class="game" data-game="harakat" style="--a:#e3262f;--b:#2457d6"><span class="ic">🦸</span><h3>أبطال الحركات</h3><p>فتحة وضمة وكسرة.</p><span class="pr" data-pr="harakat"></span></button>
       <button class="game" data-game="blend" style="--a:#ff8a3d;--b:#7a1fd6"><span class="ic">📖</span><h3>فتحة يقرأ</h3><p>ضم المقاطع وقراءة الكلمات.</p><span class="pr" data-pr="blend"></span></button>
-      <button class="game" data-game="noor" style="--a:#d81f2a;--b:#14934a"><span class="ic">🌟</span><h3>نور البيان</h3><p>على خطى الكتاب: حروف ثم كلمات ثم جمل بالفتحة، ثم الكسرة.</p><span class="pr" data-pr="noor"></span></button>
+      <button class="game" data-game="noor" data-u="fatha" style="--a:#ff5a5f;--b:#a8121c"><span class="ic">🔴</span><h3>الفتحة</h3><p>حروف ثم كلمات ثم جمل بالفتحة، ويمثّلها البطل فتحة.</p><span class="pr" data-pr="u-fatha"></span></button>
+      <button class="game" data-game="noor" data-u="kasra" style="--a:#2fd06a;--b:#0f6a35"><span class="ic">🟢</span><h3>الكسرة</h3><p>الحروف بالكسرة، والفتحة والكسرة معًا، وكلمات وجمل بالكسرة.</p><span class="pr" data-pr="u-kasra"></span></button>
+      <button class="game" data-game="noor" data-u="damma" style="--a:#5b8cff;--b:#1b3fae"><span class="ic">🔵</span><h3>الضمة والمراجعة</h3><p>الحروف بالضمة، والحركات الثلاث معًا، وجمل المراجعة.</p><span class="pr" data-pr="u-damma"></span></button>
+      <button class="game" data-game="noor" data-u="madd" style="--a:#ffb300;--b:#c2185b"><span class="ic">🎵</span><h3>المدود</h3><p>المد بالألف والياء والواو: بَا ، بِي ، بُو.</p><span class="pr" data-pr="u-madd"></span></button>
+      <button class="game" data-game="noor" data-u="sukun" style="--a:#ff5a5a;--b:#1d7a50"><span class="ic">🚦</span><h3>السكون والشدة</h3><p>سيارة المقاطع وإشارة المرور، والحرف التوأم.</p><span class="pr" data-pr="u-sukun"></span></button>
+      <button class="game" data-game="noor" data-u="tanween" style="--a:#c86adf;--b:#2155d6"><span class="ic">👯</span><h3>التنوين</h3><p>البطل وتوأمه يضعان علامتين: بٌ ← بُنْ.</p><span class="pr" data-pr="u-tanween"></span></button>
       <button class="game" data-game="fahm" style="--a:#ff9f1c;--b:#7a1fd6"><span class="ic">🎭</span><h3>مسرح الفهم</h3><p>الفهم القرائي: اقرأ الجملة واختر المشهد، صح أم خطأ، أكمل، رتّب، مَن وماذا؟</p><span class="pr" data-pr="fahm"></span></button>
     </div>
-    <div class="sect">🔢 الرياضيات</div>
-    <div class="games">
+    <div class="games" id="g-ma" hidden>
       <button class="game" data-game="math1" style="--a:#ff5a5a;--b:#1e88e5"><span class="ic">🎈</span><h3>عالم الألوان والأشكال</h3><p>المفاهيم ما قبل الأكاديمية: الألوان والأشكال الهندسية.</p><span class="pr" data-pr="math1"></span></button>
       <button class="game" data-game="math2" style="--a:#ff8a3d;--b:#14b8a6"><span class="ic">🦒</span><h3>طويل وقصير</h3><p>الثعبان، القطار السحري، الزرافة والسلحفاة، والولد المطاطي.</p><span class="pr" data-pr="math2"></span></button>
       <button class="game" data-game="math3" style="--a:#ff5a5a;--b:#14b8a6"><span class="ic">🐘</span><h3>كبير وصغير</h3><p>البالون، الفيل والفأر، ملابس بابا والطفل، والدمى المتداخلة.</p><span class="pr" data-pr="math3"></span></button>
+      <button class="game" data-game="num" style="--a:#fdd835;--b:#e53935"><span class="ic">🔢</span><h3>الأرقام</h3><p>لكل رقم لون مونتسوري وشكل يشبهه (٩ مصاصة 🍭)، وبرج المكعبات يبحث عن رقمه.</p><span class="pr" data-pr="num"></span></button>
     </div>
   </section>
 </div>
@@ -269,7 +278,9 @@ async function route(u){ view('vLoading'); let teacher=false, admin=false, block
 function home(){ if(!me){ view('vAuth'); return; } if(me.teacher){ view('vTeacher'); loadTeacher(); } else { view('vParent'); loadParent(); } }
 
 /* ---------- progress summaries ---------- */
-const GAMEKEYS={huroof:['huroof_progress'],ayn:['ayn_progress'],harakat:['hrk2_progress','hrk2_medals'],blend:['blend_progress','blend_medals'],math1:['math1_progress'],math2:['math2_progress'],math3:['math3_progress'],noor:['noor_progress','noor_medals'],fahm:['fahm_progress','fahm_medals']};
+const GAMEKEYS={huroof:['huroof_progress'],ayn:['ayn_progress'],harakat:['hrk2_progress','hrk2_medals'],blend:['blend_progress','blend_medals'],math1:['math1_progress'],math2:['math2_progress'],math3:['math3_progress'],noor:['noor_progress','noor_medals'],fahm:['fahm_progress','fahm_medals'],num:['num_progress','num_medals']};
+// the reading lessons, shown on the hub unit by unit (lesson id, number of stages)
+const UNITS={fatha:[['fl',5],['fw',3],['fs',2]],kasra:[['kl',5],['fk',2],['kw',2],['ks',2]],damma:[['dl',5],['mx',2],['dw',2],['rv',2]],madd:[['ma',2],['my',2],['mw',2]],sukun:[['sk',3],['sh',2],['ss',1]],tanween:[['tn',3],['tx',2],['tw',2]]};
 const parse=v=>{ try{ return v?JSON.parse(v):null; }catch(e){ return null; } };
 function summarize(data){ // data: {game:{key:jsonString}}
  const g=k=>data[k]||{}; const s={};
@@ -282,25 +293,27 @@ function summarize(data){ // data: {game:{key:jsonString}}
  const m3=parse(g('math3').math3_progress)||{}; s.bigsmall=['balloon','beasts','clothes','dolls'].filter(k=>m3[k]&&(m3[k].stars>0||m3[k].best>0)).length;
  const np=parse(g('noor').noor_progress)||{}; s.noor=Object.values(np).reduce((a,v)=>a+(Array.isArray(v)?v.filter(x=>x>0).length:0),0); s.nMedals=+(parse(g('noor').noor_medals)||0);
  const fp=parse(g('fahm').fahm_progress)||{}; s.fahm=Object.values(fp).reduce((a,v)=>a+(Array.isArray(v)?v.filter(x=>x>0).length:0),0);
+ const up=parse(g('num').num_progress)||{}; s.num=Object.values(up).reduce((a,v)=>a+(Array.isArray(v)?v.filter(x=>x>0).length:0),0);
+ s.units={}; for(const u in UNITS){ let d=0,n=0; for(const [id,k] of UNITS[u]){ n+=k; d+=Array.isArray(np[id])?np[id].filter(x=>x>0).length:0; } s.units[u]=[d,n]; }
  s.medals=s.hMedals+s.bMedals; return s; }
 const bar=(n,of)=>`<div class="bar" title="${AR(n)} من ${AR(of)}"><i style="width:${Math.round(100*Math.min(1,n/of))}%"></i></div><small>${AR(n)} / ${AR(of)}</small>`;
 async function readProgress(sid){ const out={}; const docs=await Promise.all(Object.keys(GAMEKEYS).map(g=>db.doc(`students/${sid}/progress/${g}`).get())); docs.forEach(d=>{ if(d.exists) out[d.id]=(d.data().data)||{}; }); return out; }
 
 /* ---------- teacher ---------- */
-async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="14"><div class="spin"></div></td></tr>';
+async function loadTeacher(){ const tb=$('#tBody'); tb.innerHTML='<tr><td colspan="15"><div class="spin"></div></td></tr>';
  try{ const qs=await db.collection('students').where('teacherUid','==',me.uid).get(); const rows=[]; for(const d of qs.docs){ const st=d.data(); const pr=await readProgress(d.id).catch(()=>({})); rows.push({id:d.id,name:st.name,parents:(st.parentUids||[]).length,s:summarize(pr)}); }
   rows.sort((a,b)=>a.name.localeCompare(b.name,'ar')); $('#teacherEmpty').hidden=rows.length>0;
   tb.innerHTML=rows.map(r=>{ const a=avatarOf(r.id); return `<tr><td><b>${a.e} ${esc(r.name)}</b><br><small class="note">${r.parents?`مرتبط بـ ${AR(r.parents)} ولي أمر`:'لم يرتبط ولي أمر بعد'}</small></td>
    <td><span class="code">${fmtCode(r.id)}</span> <button class="btn sm" data-copy="${r.id}">نسخ</button></td>
-   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.noor,51)}</td><td>${bar(r.s.fahm,14)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td>${bar(r.s.longshort,4)}</td><td>${bar(r.s.bigsmall,4)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
+   <td>${bar(r.s.huroof,28)}</td><td>${bar(r.s.aynLesson,4)}<small>سباق: ${AR(r.s.aynRace)} حرفًا</small></td><td>${bar(r.s.harakat,28)}</td><td>${bar(r.s.blend,3)}</td><td>${bar(r.s.noor,51)}</td><td>${bar(r.s.fahm,14)}</td><td>${bar(r.s.colors,10)}</td><td>${bar(r.s.shapes,9)}</td><td>${bar(r.s.longshort,4)}</td><td>${bar(r.s.bigsmall,4)}</td><td>${bar(r.s.num,12)}</td><td><b>🏅 ${AR(r.s.medals)}</b></td>
    <td style="white-space:nowrap"><button class="btn sm primary" data-play="${r.id}" data-name="${esc(r.name)}">▶ العب</button> <button class="btn sm danger" data-del="${r.id}" data-name="${esc(r.name)}">حذف</button></td></tr>`; }).join('');
- }catch(e){ tb.innerHTML=`<tr><td colspan="14"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
+ }catch(e){ tb.innerHTML=`<tr><td colspan="15"><div class="msg err">${esc(errText(e))}</div></td></tr>`; } }
 $('#fAdd').addEventListener('submit',async e=>{ e.preventDefault(); const name=$('#inStudent').value.trim(); if(!name){ msg($('#addMsg'),'اكتب اسم الطالب.'); return; } $('#btnAdd').disabled=true;
  try{ const id=genCode(10); await db.doc('students/'+id).set({name,teacherUid:me.uid,parentUids:[],createdAt:TS()}); $('#inStudent').value=''; msg($('#addMsg'),`أُضيف ${name}. رمز الدعوة لولي أمره: ${fmtCode(id)}`,true); loadTeacher(); }catch(err){ msg($('#addMsg'),errText(err)); }
  $('#btnAdd').disabled=false; });
 $('#btnRefresh').onclick=loadTeacher;
 $('#tBody').addEventListener('click',async e=>{ const c=e.target.closest('[data-copy]'), p=e.target.closest('[data-play]'), d=e.target.closest('[data-del]');
- if(c){ const t='رمز الدعوة لمنصة مغامرات الحروف: '+fmtCode(c.dataset.copy); try{ await navigator.clipboard.writeText(t); c.textContent='✓ نُسخ'; }catch(_){ c.textContent=fmtCode(c.dataset.copy); } setTimeout(()=>c.textContent='نسخ',2000); }
+ if(c){ const t='رمز الدعوة لمنصة التعلم باللعب: '+fmtCode(c.dataset.copy); try{ await navigator.clipboard.writeText(t); c.textContent='✓ نُسخ'; }catch(_){ c.textContent=fmtCode(c.dataset.copy); } setTimeout(()=>c.textContent='نسخ',2000); }
  if(p) startPlayer({sid:p.dataset.play,name:p.dataset.name});
  if(d){ if(await ask('حذف '+d.dataset.name+'؟','سيُحذف الطالب وكل تقدّمه، ولن يستطيع ولي الأمر رؤيته بعد ذلك. لا يمكن التراجع.')){ try{ for(const g of Object.keys(GAMEKEYS)) await db.doc(`students/${d.dataset.del}/progress/${g}`).delete(); await db.doc('students/'+d.dataset.del).delete(); loadTeacher(); }catch(err){ alertMsg(errText(err)); } } } });
 function ask(t,x){ return new Promise(res=>{ $('#cTitle').textContent=t; $('#cText').textContent=x; $('#confirmBox').hidden=false; $('#cNo').focus(); $('#cYes').onclick=()=>{ $('#confirmBox').hidden=true; res(true); }; $('#cNo').onclick=()=>{ $('#confirmBox').hidden=true; res(false); }; }); }
@@ -361,11 +374,15 @@ async function syncNow(){ if(!player||player.guest) return; const jobs=[]; for(c
 async function stopPlayer(){ closeGame(); if(!player) return; clearInterval(syncTimer); if(player.guest){ for(const k of ALLKEYS){ const v=localStorage.getItem(k); if(v!=null) localStorage.setItem('guest_'+k,v); } } else await syncNow(); clearKeys(); player=null; }
 function showHubProgress(){ const data={}; for(const g in GAMEKEYS) data[g]=snapshot(g); const s=summarize(data);
  const set=(g,t)=>{ const el=$(`[data-pr="${g}"]`); el.textContent=t; };
- set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math2',`📏 ${AR(s.longshort)}/٤ أنشطة`); set('math3',`🐘 ${AR(s.bigsmall)}/٤ أنشطة`); set('noor',`🌟 ${AR(s.noor)}/٥١ مرحلة · 🏅 ${AR(s.nMedals)}`); set('fahm',`🎭 ${AR(s.fahm)}/١٤ مرحلة`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
+ set('huroof',`⭐ ${AR(s.huroof)} / ٢٨ حرفًا`); set('ayn',`الدرس ${AR(s.aynLesson)}/٤ · سباق ${AR(s.aynRace)} حرفًا`); set('harakat',`⭐ ${AR(s.harakat)} حرفًا · 🏅 ${AR(s.hMedals)}`); set('math2',`📏 ${AR(s.longshort)}/٤ أنشطة`); set('math3',`🐘 ${AR(s.bigsmall)}/٤ أنشطة`); for(const u in s.units) set('u-'+u,`⭐ ${AR(s.units[u][0])}/${AR(s.units[u][1])} مرحلة`); set('num',`🔢 ${AR(s.num)}/١٢ مرحلة`); set('fahm',`🎭 ${AR(s.fahm)}/١٤ مرحلة`); set('math1',`🎨 ${AR(s.colors)}/١٠ ألوان · 🔷 ${AR(s.shapes)}/٩ أشكال`); set('blend',`${AR(s.blend)}/٣ مراحل · 🏅 ${AR(s.bMedals)}`); }
 $('#btnSwitch').onclick=async()=>{ const wasGuest=player&&player.guest; await stopPlayer(); if(wasGuest&&!me) view('vAuth'); else home(); };
 $('#btnGuest').onclick=()=>startPlayer({guest:true,name:'لاعب ضيف'});
-$$('.game').forEach(b=>b.onclick=()=>openGame(b.dataset.game));
-function openGame(g){ const f=$('#gameFrame'); f.src=g+'.html?v='+encodeURIComponent(VERSION); $('#gameWrap').hidden=false; frameOpen=true; document.body.style.overflow='hidden'; setTimeout(()=>{ try{ f.focus(); }catch(e){} },300); }
+$$('.game').forEach(b=>b.onclick=()=>openGame(b.dataset.game,b.dataset.u));
+// two sections only: اللغة العربية and الرياضيات
+function showSect(k){ $$('.sectbtn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sect===k))); $('#g-ar').hidden=k!=='ar'; $('#g-ma').hidden=k!=='ma'; try{ localStorage.setItem('hub_sect',k); }catch(e){} }
+$$('.sectbtn').forEach(b=>b.onclick=()=>showSect(b.dataset.sect));
+showSect((()=>{ try{ return localStorage.getItem('hub_sect')||'ar'; }catch(e){ return 'ar'; } })());
+function openGame(g,u){ const f=$('#gameFrame'); f.src=g+'.html?v='+encodeURIComponent(VERSION)+(u?'&u='+u:''); $('#gameWrap').hidden=false; frameOpen=true; document.body.style.overflow='hidden'; setTimeout(()=>{ try{ f.focus(); }catch(e){} },300); }
 function closeGame(){ if(!frameOpen) return; frameOpen=false; const f=$('#gameFrame'); f.src='about:blank'; $('#gameWrap').hidden=true; document.body.style.overflow=''; syncNow(); if(player) showHubProgress(); }
 addEventListener('message',e=>{ if(e.data==='ayn-close'&&e.source===$('#gameFrame').contentWindow) closeGame(); });
 addEventListener('pagehide',()=>{ syncNow(); });
