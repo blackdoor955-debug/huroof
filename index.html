@@ -1,8 +1,11 @@
 <!doctype html>
+<!-- © ٢٠٢٦ أحمد حازم عبد الله — جميع الحقوق محفوظة. لا يجوز نسخ أو استخدام أو إعادة نشر أي جزء من هذه المنصة أو ألعابها أو محتواها دون إذن مسبق من صاحبها. -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="author" content="أحمد حازم عبد الله">
+<meta name="copyright" content="© ٢٠٢٦ أحمد حازم عبد الله — جميع الحقوق محفوظة">
 <title>منصة التعلم باللعب</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +38,8 @@ button,input{font-family:var(--body);color:inherit}
 .sch{display:block;font-size:14px;color:var(--muted);font-weight:700}
 .credits{text-align:center;color:var(--muted);font-size:14px;line-height:1.8;padding-top:6px}
 .credits b{color:var(--ink)}
+.copyright{text-align:center;color:var(--muted);font-size:12px;line-height:1.7;padding:10px 14px 18px;border-top:1px solid var(--line);margin-top:4px}
+.copyright b{color:var(--ink)}
 .sect{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:clamp(24px,4vw,30px);color:var(--gold);margin-top:6px}
 .sect::after{content:"";flex:1;height:2px;background:var(--line)}
 .logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-family:var(--display);font-size:30px;background:radial-gradient(circle at 35% 30%,#ffe08a,#ff9a1f 70%);color:#fff;padding-top:6px}
@@ -213,7 +218,8 @@ td b{font-size:17px}
   </section>
 </div>
 
-<div class="wrap"><p class="credits">مدير إدارة قسم ذوي الإعاقة: <b>أ. فيصل بن صالح الزهراني</b><br>مدارس الفيصلية الأهلية</p></div>
+<div class="wrap"><p class="credits">مدير إدارة قسم ذوي الإعاقة: <b>أ. فيصل بن صالح الزهراني</b><br>مدارس الفيصلية الأهلية</p>
+<p class="copyright">© ٢٠٢٦ <b>أحمد حازم عبد الله</b> — جميع الحقوق محفوظة.<br>لا يجوز نسخ أو استخدام أو إعادة نشر أي جزء من هذه المنصة أو ألعابها أو محتواها أو أفكارها دون إذن مسبق من صاحبها.</p></div>
 <div id="gameWrap" hidden><iframe id="gameFrame" title="اللعبة" allow="gamepad; fullscreen; autoplay"></iframe></div>
 <div class="update" id="updateBar" hidden>🔄 يوجد تحديث جديد للألعاب <button class="btn sm" id="btnUpdate" style="background:#fff;color:#14532d">تحديث الآن</button></div>
 <div class="confirm" id="confirmBox" hidden><div class="panel"><h3 id="cTitle"></h3><p id="cText" class="note"></p><div style="display:flex;gap:10px;justify-content:center"><button class="btn danger" id="cYes">نعم، احذف</button><button class="btn" id="cNo">إلغاء</button></div></div></div>
